@@ -20,7 +20,7 @@ body {
 
 .headerMen {
 	position: fixed;
-	left: 325px;
+	left: 350px;
 	top: 0px;
 	width: 100px;
 	height: 50px;
@@ -33,7 +33,7 @@ body {
 
 .headerWomen {
 	position: fixed;
-	left: 450px;
+	left: 475px;
 	top: 0px;
 	width: 200px;
 	height: 50px;
