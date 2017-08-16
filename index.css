@@ -11,7 +11,7 @@
 	position: fixed;
 	left: 0px;
 	top: 0px;
-	width: 300px;
+	width: 250px;
 	height: 90px;
 	margin: 0px;
 	padding: 5px;
@@ -21,9 +21,9 @@
 
 .headerFactor {
 	position: fixed;
-	left: 300px;
+	left: 250px;
 	top: 0px;
-	width: 200px;
+	width: 250px;
 	height: 90px;
 	margin: 0px;
 	padding: 5px;
