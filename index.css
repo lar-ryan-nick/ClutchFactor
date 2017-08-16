@@ -40,12 +40,18 @@ body {
 	height: 100px;
 }
 
-.footerInfo {
-	alignment: center;
+.footerTop {
+	height: 150px;
+}
+
+.footerBottom {
+	margin: auto;
+	height: 50px;
 	border-top: solid;
 	width: 50%;
 }
 
 .footerCopyright {
 	margin: 0px;
+	font-size: 50px;
 }
