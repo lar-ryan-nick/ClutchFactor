@@ -32,6 +32,10 @@ body {
 
 .footer {
 	width: 100%;
-	height: 50%;
+	height: 200px;
 	background-color: #ffffff;
+}
+
+.footerLogo {
+	height: 200px;
 }
