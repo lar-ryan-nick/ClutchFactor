@@ -11,28 +11,11 @@ body {
 	background-color: #ffffff;
 }
 
-.headerClutch {
+.headerLogo {
 	position: fixed;
 	left: 0px;
 	top: 0px;
-	width: 240px;
-	height: 90px;
-	margin: 0px;
-	padding: 5px;
-	font-size: 90px;
-	color: #ff0000;
-}
-
-.headerFactor {
-	position: fixed;
-	left: 245px;
-	top: 0px;
-	width: 230px;
-	height: 90px;
-	margin: 0px;
-	padding: 5px;
-	font-size: 90px;
-	color: #0000ff;
+	height: 100px;
 }
 
 .headerFiller {
