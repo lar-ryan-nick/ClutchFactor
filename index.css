@@ -1,5 +1,5 @@
 .header {
-	position: "fixed";
+	position: fixed;
 	left: 0px;
 	top: 0px;
 	width: 100%;
@@ -7,7 +7,7 @@
 }
 
 .headerImage {
-	position: "fixed";
+	position: fixed;
 	left: 0px;
 	top: 0px;
 	width: 100px;
@@ -15,7 +15,7 @@
 }
 
 .headerText {
-	position: "fixed";
+	position: fixed;
 	left: 100px;
 	top: 0px;
 	width: 200px;
