@@ -30,3 +30,9 @@
 	font-size: 90px;
 	color: #0000ff;
 }
+
+.main {
+	width: 100%;
+	top: 100px;
+	background-color: #000000;
+}
