@@ -56,19 +56,26 @@ body {
 	background-color: #000000;
 }
 
-.backgroundImage {
+.landingImageDiv {
+	width: 100%;
+}
+
+.landingImage {
+	position: relative;
+	left: 0px;
+	top: 0px;
 	width: 100%;
 	z-index: -1;
 }
 
-.blueText {
+.landingText {
+	position: relative;
+	left: 0px;
+	top: 0px;
+	width: 100%;
 	font-size: 24px;
 	color: #0000ff;
-}
-
-.redText {
-	font-size: 24px;
-	color: #ff0000;
+	text-align: center;
 }
 
 .footer {
