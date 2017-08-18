@@ -1,12 +1,12 @@
 var http = require('http');
 var url = require('url');
-var fs= require('fs');
+var fs = require('fs');
 
 var server = http.createServer(function (request, response) {
 	var path = url.parse(request.url).pathname;
 	switch (path) {
 		case '/':
-			fs.readFile(__dirname + "index.html", function(error, data){
+			fs.readFile(__dirname + "/index.html", function(error, data){
 				if (error) {
 					response.writeHead(404);
 					response.write("Sorry this page does not exist")
@@ -16,7 +16,8 @@ var server = http.createServer(function (request, response) {
 					response.write(data, "utf8");
 					response.end();
 				}
-			}
+			});
+			break;
 		default:
 			fs.readFile(__dirname + path, function(error, data){
 				if (error) {
@@ -28,9 +29,9 @@ var server = http.createServer(function (request, response) {
 					response.write(data, "utf8");
 					response.end();
 				}
-			}
-		break;
+			});
+			break;
 	}
-})
+});
 
-server.listen(80, 'localhost');
+server.listen(8000);
