@@ -2,7 +2,7 @@ body {
 	margin: 0px;
 }
 
-.header {
+#header {
 	position: fixed;
 	left: 0px;
 	top: 0px;

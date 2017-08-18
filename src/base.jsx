@@ -14,7 +14,7 @@ class Header extends React.Component {
 
 	render() {
 		return (
-			<div class="header">
+			<div>
 				<img class="headerLogo" src="images/ClutchFactor.png" onClick={this.goToMain}/>
 				<a class="headerMerchandise" href="https://clutchfactor.herokuapp.com/merchandise.html">Merchandise</a>
 				<a class="headerAccount" href="https://clutchfactor.herokuapp.com/account.html">Log In/Create an Account</a>
