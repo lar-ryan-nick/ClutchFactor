@@ -43,13 +43,10 @@ body {
 	color: #000000;
 }
 
-.headerFiller {
-	height: 100px;
-	width: 100%;
-	background-color: #ffffff;
-}
-
 #main {
+	position: relative;
+	top: 100px;
+	left: 0px;
 	width: 100%;
 }
 
