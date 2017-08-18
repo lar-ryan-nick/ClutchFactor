@@ -32,6 +32,17 @@ body {
 	color: #000000;
 }
 
+.headerAccount {
+	position: fixed;
+	left: calc(100% - 500px);
+	top: 0px;
+	width: 500px;
+	height: 30px;
+	font-size: 30px;
+	text-decoration: none;
+	color: #000000;
+}
+
 .headerFiller {
 	height: 100px;
 	width: 100%;
