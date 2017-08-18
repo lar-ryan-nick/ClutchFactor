@@ -33,11 +33,11 @@ class Footer extends React.Component {
 	render() {
 		return (
 			<div>
-				<div class="footerTop">
-					<img class="footerLogo" src="images/CFLogo.png"/>
+				<div className="footerTop">
+					<img className="footerLogo" src="images/CFLogo.png"/>
 				</div>
-				<div class="footerBottom">
-					<p class="footerCopyright">© 2017 Clutch Factor, All Rights Reserved</p>
+				<div className="footerBottom">
+					<p className="footerCopyright">© 2017 Clutch Factor, All Rights Reserved</p>
 				</div>
 			</div>
 		);
