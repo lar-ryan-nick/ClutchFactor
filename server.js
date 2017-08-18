@@ -34,4 +34,4 @@ var server = http.createServer(function (request, response) {
 	}
 });
 
-server.listen(80, "clutchfactor.herokuapp.com");
+server.listen(8080, "clutchfactor.herokuapp.com");
