@@ -12,7 +12,7 @@ body {
 }
 
 .headerLogo {
-	position: fixed;
+	position: absolute;
 	left: 0px;
 	top: 0px;
 	height: 100px;
@@ -20,7 +20,7 @@ body {
 }
 
 .headerMerchandise {
-	position: fixed;
+	position: absolute;
 	left: 350px;
 	top: 0px;
 	width: 260px;
@@ -33,7 +33,7 @@ body {
 }
 
 .headerAccount {
-	position: fixed;
+	position: absolute;
 	left: calc(100% - 265px);
 	top: 0px;
 	width: 265px;
