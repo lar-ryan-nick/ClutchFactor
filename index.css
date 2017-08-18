@@ -34,9 +34,9 @@ body {
 
 .headerAccount {
 	position: fixed;
-	left: calc(100% - 260px);
+	left: calc(100% - 265px);
 	top: 0px;
-	width: 260px;
+	width: 265px;
 	height: 25px;
 	font-size: 25px;
 	text-decoration: none;
