@@ -5,10 +5,10 @@ var APP_DIR = path.resolve(__dirname, 'src');
 var BUILD_DIR = path.resolve(__dirname, 'bin');
 
 var config = {
-	entry: APP_DIR + '/account.jsx',
+	entry: APP_DIR + '/merchandise.jsx',
 	output: {
 		path: BUILD_DIR,
-		filename: 'account.js'
+		filename: 'merchandise.js'
 	},
 	module : {
 		loaders : [

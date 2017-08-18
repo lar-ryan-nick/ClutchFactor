@@ -9,14 +9,14 @@ class Header extends React.Component {
 	}
 
 	goToMain() {
-		window.location = "https://clutchfactor.herokuapp.com/index.html";
+		window.location = "index.html";
 	}
 
 	render() {
 		return (
 			<div>
 				<img className="headerLogo" src="images/ClutchFactor.png" onClick={this.goToMain}/>
-				<a className="headerMerchandise" href="https://clutchfactor.herokuapp.com/merchandise.html">Merchandise</a>
+				<a className="headerMerchandise" href="merchandise.html">Merchandise</a>
 				<a className="headerAccount" href="account.html">Log In/Create an Account</a>
 			</div>
 		)
