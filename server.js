@@ -1,24 +1,27 @@
 const http = require('http');
 const url = require('url');
 const fs = require('fs');
-const {checkUsername} = require('./databaseFunctions.js');
+const {checkUsername, checkPassword} = require('./databaseFunctions.js');
 
 const server = http.createServer(function (request, response) {
 	const path = url.parse(request.url).pathname;
-	const query = url.parse(request.url).query;
-	if (query) {
-		const splitQueries = query.split('&');
-		var parameters = [];
-		for (var i = 0; i < splitQueries.length; ++i) {
-			parameters[splitQueries[i].split('=')[0]] = splitQueries[i].split('=')[1];
-		}
-	}
 	switch (path) {
 		case '/checkUsername':
-			checkUsername(parameters["username"], (taken) => {
-				response.writeHead(200);
+			checkUsername(url.parse(request.url).query, (taken) => {
+				response.writeHead(200, {"Content-Type": "text/html"});
 				response.write("" + taken);
 				response.end();
+			});
+			break;
+		case '/checkPassword':
+			let body = "";
+			request.on("data", (data) => { body += data; });
+			request.on("end", function() {
+				checkPassword(body, (valid) => {
+					response.writeHead(200, {"Content-Type": "text/html"});
+					response.write("" + valid);
+					response.end();
+				});
 			});
 			break;
 		case '/':
