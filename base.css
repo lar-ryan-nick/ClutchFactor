@@ -48,6 +48,7 @@ body {
 	top: 100px;
 	left: 0px;
 	width: 100%;
+	min-height: calc(100% - 250px);
 }
 
 #footer {
@@ -55,6 +56,7 @@ body {
 	top: 100px;
 	left: 0px;
 	width: 100%;
+	height: 150px;
 	background-color: #ffffff;
 }
 
@@ -63,12 +65,14 @@ body {
 }
 
 .footerTop {
+	height: 130px;
 }
 
 .footerBottom {
-	margin: auto;
-	border-top: solid;
+	margin: 0px auto 0px auto;
+	border-top: solid 1px #000000;
 	width: 50%;
+	height:20px;
 }
 
 .footerCopyright {

@@ -1,4 +1,48 @@
+form {
+	margin: 0px;
+}
+
+.label {
+	position: relative;
+	left: calc(50% - 200px);
+	top: 0px;
+	width: 400px;
+	font-size: 2em;
+}
+
+.textInput {
+	display: inline-block;
+	position: relative;
+	left: calc(50% - 200px);
+	top: 0px;
+	width: 400px;
+	font-size: 2em;
+}
+
 .logInButton {
 	display: block;
+	position: relative;
+	left: calc(50% - 100px);
+	top: 0px;
+	width: 200px;
+	font-size: 2em;
 	margin: 1em 0em 0em 0em;
+}
+
+.icon {
+	display: inline-block;
+	position: relative;
+	left: calc(50% - 200px);
+	top: 0px;
+	height: 1em;
+	margin: 0px 5px 0px 5px;
+}
+
+.errorLabel {
+	display: inline-block;
+	position: relative;
+	left: calc(50% - 200px);
+	top: 0px;
+	margin: .7em 0em 0em 0em;
+	color: #ff0000;
 }

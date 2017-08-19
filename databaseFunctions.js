@@ -56,7 +56,6 @@ function checkUsername(parameterString, cb) {
 function checkPassword(parameterString, cb) {
 	let parameters = parseBody(parameterString);
 	if (parameters) {
-		console.log(parameters);
 		let client = new pg.Client(config);
 		client.connect((error) => {
 			if (error) {
