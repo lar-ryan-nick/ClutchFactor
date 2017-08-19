@@ -5,10 +5,13 @@ const {checkUsername} = require('./databaseFunctions.js');
 
 const server = http.createServer(function (request, response) {
 	const path = url.parse(request.url).pathname;
-	const query = url.parse(request.url).query.split('&');
-	const parameters = [];
-	for (var i = 0; i < query.length; ++i) {
-		parameters[query[i].split('=')[0]] = query[i].split('=')[1];
+	const query = url.parse(request.url).query;
+	if (query) {
+		const splitQueries = query.split('&');
+		var parameters = [];
+		for (var i = 0; i < splitQueries.length; ++i) {
+			parameters[splitQueries[i].split('=')[0]] = splitQueries[i].split('=')[1];
+		}
 	}
 	switch (path) {
 		case '/checkUsername':
