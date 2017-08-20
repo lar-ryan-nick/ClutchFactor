@@ -11,7 +11,7 @@ class LandingPage extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<div className="landingImageDivWrapper">
 				<div className="landingImageDiv">
 					<img className="landingImage" src="images/LandingPageImage.jpg"/>
 					<p className="landingText">Let's cut the bullshit here's our shit</p>
