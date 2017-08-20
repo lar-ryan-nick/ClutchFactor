@@ -9,7 +9,8 @@ class AccountPage extends React.Component {
 		this.state = {
 			username: "",
 			password: "",
-			usernameTaken: -1
+			usernameTaken: -1,
+			passwordError: false
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.checkUsername = this.checkUsername.bind(this);
@@ -28,6 +29,9 @@ class AccountPage extends React.Component {
 				} else {
 					this.checkUsername();
 				}
+			} else if (event.target.name == "password") {
+				newState.passwordError = false;
+				this.setState(newState);
 			}
 		}
 	}
@@ -50,9 +54,12 @@ class AccountPage extends React.Component {
 		let xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == 4 && xhttp.status == 200) {
-				console.log(xhttp.responseText);
 				if (xhttp.responseText == "true") {
 					window.location = "index.html";
+				} else if (this.state.usernameTaken == true) {
+					let newState = this.state;
+					newState.passwordError = true;
+					this.setState(newState);
 				}
 			}
 		}.bind(this);
@@ -63,11 +70,17 @@ class AccountPage extends React.Component {
 
 	render() {
 		let usernameError = [];
+		let passwordError = [];
+		//keep == so -1 does not count as true
 		if (this.state.usernameTaken == false) {
-			usernameError.push(<img className="icon" src="images/RedXIcon.png"/>);
-			usernameError.push(<p className="errorLabel">That username does not exist</p>);
+			usernameError.push(<img key="1" className="icon" src="images/RedXIcon.png"/>);
+			usernameError.push(<p key="2" className="errorLabel">That username does not exist</p>);
 		} else if (this.state.usernameTaken == true) {
-			usernameError.push(<img className="icon" src="images/GreenCheckIcon.png"/>);
+			usernameError.push(<img key="1" className="icon" src="images/GreenCheckIcon.png"/>);
+			if (this.state.passwordError) {
+				passwordError.push(<img key="1" className="icon" src="images/RedXIcon.png"/>);
+				passwordError.push(<p key="2" className="errorLabel">That password is incorrect</p>);
+			}
 		}
 		return (
 			<div>
@@ -80,6 +93,7 @@ class AccountPage extends React.Component {
 					<p className="label">Password:</p>
 					<div>
 						<input className="textInput" type="password" name="password" value={this.state.password} onChange={this.handleChange}/>
+						{passwordError}
 					</div>
 					<input className="logInButton" type="submit" name="logIn" value="Log In"/>
 				</form>
