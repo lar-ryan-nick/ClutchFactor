@@ -67,16 +67,42 @@ function checkPassword(parameterString, cb) {
 				console.log(error);
 			} else {
 				if (parseInt(result.rowCount) > 0) {
-					cb(true);
+					cb(parameters.username, true);
 				} else {
-					cb(false);
+					cb(parameters.username, false);
 				}
 			}
 			client.end();
 		});
 	} else {
-		cb(false);
+		cb(parameters.username, false);
 	}
 }
 
-module.exports =  {checkUsername, checkPassword};
+function getUserInfo(userID, cb) {
+	userID = parseInt(userID);
+	if (userID != NaN) {
+		let client = new pg.Client(config);
+		client.connect((error) => {
+			if (error) {
+				console.log(error);
+			}
+		});
+		client.query("SELECT username, timeCreated FROM Users WHERE ID = " + userID + ";", (error, result) => {
+			if (error) {
+				console.log(error);
+			} else {
+				if (parseInt(result.rowCount) > 0) {
+					cb(result.rows[0]);
+				} else {
+					cb(null);
+				}
+			}
+			client.end();
+		});
+	} else {
+		cb(null);
+	}
+}
+
+module.exports =  {checkUsername, checkPassword, getUserInfo};
