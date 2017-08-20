@@ -13,16 +13,9 @@ class LandingPage extends React.Component {
 		return (
 			<div>
 				<div className="landingImageDiv">
-					<img className="landingImage" src="images/LandingPageImage1.jpg"/>
-					<p className="landingText1">Revolutionary to the fashion industry</p>
-				</div>
-				<div className="landingImageDiv">
-					<img className="landingImage" src="images/LandingPageImage2.jpg"/>
-					<p className="landingText2">A style everyone can share</p>
-				</div>
-				<div className="LandingImageDiv">
-					<img className="landingImage" src="images/LandingPageImage3.jpg"/>
-					<p className="landingText3">Encorporating family values into our very fabric</p>
+					<img className="landingImage" src="images/LandingPageImage.jpg"/>
+					<p className="landingText">Let's cut the bullshit here's our shit</p>
+					<a className="merchandiseLink" href="/merchandise.html">Start Shopping</a>
 				</div>
 			</div>
 		);

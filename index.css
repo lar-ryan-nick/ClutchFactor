@@ -10,35 +10,25 @@
 	z-index: -1;
 }
 
-.landingText1 {
+.landingText {
 	position: absolute;
 	left: 0px;
 	top: 0px;
 	width: 100%;
 	font-size: 5vw;
-	color: #000000;
+	color: #0000ff;
 	text-align: center;
 	margin: 0px;
 }
 
-.landingText2 {
+.merchandiseLink {
 	position: absolute;
-	left: 0px;
-	top: 0px;
-	width: 100%;
-	font-size: 6vw;
-	color: #000000;
-	text-align: right;
-	margin: 0px;
-}
-
-.landingText3 {
-	position: absolute;
-	left: 0px;
-	top: 0px;
-	width: 100%;
-	font-size: 3.3vw;
-	color: #000000;
-	text-align: left;
-	margin: 0px;
+	left: 37.5%;
+	top: 16vw;
+	width: 25%;
+	margin: auto;
+	font-size: 4vw;
+	text-align: center;
+	color: #ff0000;
+	text-decoration: none;
 }

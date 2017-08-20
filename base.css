@@ -26,20 +26,37 @@ body {
 	width: 260px;
 	height: 50px;
 	font-size: 50px;
-	padding-top: 20px;
-	padding-bottom: 30px;
+	margin-top: 20px;
+	margin-bottom: 30px;
 	text-decoration: none;
 	color: #000000;
 }
 
-.headerAccount {
+.headerAccountLink {
 	position: absolute;
-	left: calc(100% - 265px);
+	left: calc(100% - 175px);
 	top: 0px;
-	width: 265px;
-	height: 25px;
-	font-size: 25px;
+	width: 170px;
+	margin: 5px 0px 0px 0px;
 	text-decoration: none;
+	color: #000000;
+}
+
+.headerGreeting {
+	position: absolute;
+	left: calc(100% - 240px);
+	top: 0px;
+	width: 125px;
+	margin: 7px 0px 0px 0px;
+	color: #000000;
+}
+
+.headerLogOutButton {
+	position: absolute;
+	left: calc(100% - 105px);
+	top: 0px;
+	width: 100px;
+	margin: 5px 0px 0px 0px;
 	color: #000000;
 }
 
@@ -48,7 +65,8 @@ body {
 	top: 100px;
 	left: 0px;
 	width: 100%;
-	min-height: calc(100% - 250px);
+	background-color: #000000;
+	min-height: calc(100% - 251px);
 }
 
 #footer {

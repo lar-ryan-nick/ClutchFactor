@@ -13,7 +13,7 @@ const config = {
 function parseQuery(parameterString) {
 	if (parameterString) {
 		let params = parameterString.split('&');
-		let parameters = [];
+		let parameters = {};
 		for (let i = 0; i < params.length; ++i) {
 			parameters[params[i].split('=')[0]] = params[i].split('=')[1];
 		}
@@ -36,11 +36,11 @@ function checkUsername(parameterString, cb) {
 				console.log(error);
 			}
 		});
-		client.query("SELECT * FROM Users WHERE Username = '" + parameters.username + "';", (error, result) => {
+		client.query("SELECT ID FROM Users WHERE Username = '" + parameters.username + "';", (error, result) => {
 			if (error) {
 				console.log(error);
 			} else {
-				if (parseInt(result.rowCount) > 0) {
+				if (parseInt(result.rowCount) == 1) {
 					cb(true);
 				} else {
 					cb(false);
@@ -62,20 +62,20 @@ function checkPassword(parameterString, cb) {
 				console.log(error);
 			}
 		});
-		client.query("SELECT * FROM Users WHERE Username = '" + parameters.username + "' AND Password = '" + parameters.password + "';", (error, result) => {
+		client.query("SELECT ID FROM Users WHERE Username = '" + parameters.username + "' AND Password = '" + parameters.password + "';", (error, result) => {
 			if (error) {
 				console.log(error);
 			} else {
-				if (parseInt(result.rowCount) > 0) {
-					cb(parameters.username, true);
+				if (parseInt(result.rowCount) == 1) {
+					cb(result.rows[0].id, true);
 				} else {
-					cb(parameters.username, false);
+					cb(0, false);
 				}
 			}
 			client.end();
 		});
 	} else {
-		cb(parameters.username, false);
+		cb(0, false);
 	}
 }
 
@@ -92,16 +92,16 @@ function getUserInfo(userID, cb) {
 			if (error) {
 				console.log(error);
 			} else {
-				if (parseInt(result.rowCount) > 0) {
+				if (parseInt(result.rowCount) == 1) {
 					cb(result.rows[0]);
 				} else {
-					cb(null);
+					cb({});
 				}
 			}
 			client.end();
 		});
 	} else {
-		cb(null);
+		cb({});
 	}
 }
 
