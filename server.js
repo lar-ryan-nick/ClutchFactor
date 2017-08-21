@@ -57,17 +57,20 @@ const server = http.createServer(function (request, response) {
 	const path = url.parse(request.url).pathname;
 	switch (path) {
 		case '/createAccount':
-			if (cookies != null && parameters != null && parameters.accountID == cookies.accountid) {
-				createAccount(parameters, function(success) {
+			request.on("end", function() {
+				body = parseBody(body);
+				if (cookies != null && body != null && body.accountID == cookies.accountid) {
+					createAccount(body, function(success) {
+						response.writeHead(200, {"Content-Type": "text/plain"});
+						response.write("" + success);
+						response.end();				
+					});
+				} else {
 					response.writeHead(200, {"Content-Type": "text/plain"});
-					response.write("" + success);
+					response.write("Sorry this link has expired please try creating an account again");
 					response.end();				
-				});
-			} else {
-				response.writeHead(200, {"Content-Type": "text/plain"});
-				response.write("Sorry this link has expired please try creating an account again");
-				response.end();				
-			}
+				}
+			});
 			break;
 		case '/sendAccountCreationEmail':
 			request.on("end", function() {
@@ -78,7 +81,16 @@ const server = http.createServer(function (request, response) {
 						from: 'ryanl.wiener@gmail.com',
 						to: body.email,
 						subject: 'Creating your ClutchFactor Account',
-						html: "<a href=\"https://clutchfactor.herokuapp.com/createAccount?accountID=" + accountID + "&email=" + body.email + "&password=" + body.password + "&firstName=" + body.firstName + "&lastName=" + body.lastName + "\">Click here to finish creating your account</a>"
+						html: `
+							<form action=\"https://` + url.parse(request.url).host + `/createAccount\" method=\"POST\">
+								<input type=\"hidden\" name=\"accountID\" value=\"` + accountID + `\"/>
+								<input type=\"hidden\" name=\"email\" value=\"` + body.email + `\"/>
+								<input type=\"hidden\" name=\"password\" value=\"` + body.password + `\"/>
+								<input type=\"hidden\" name=\"firstName\" value=\"` + body.firstName + `\"/>
+								<input type=\"hidden\" name=\"lastName\" value=\"` + body.lastName + `\"/>
+								<input type=\"submit\" name=\"submit\" value=\"Click here to finish making your account\"/>
+							</form>
+						`
 					}
 					transporter.sendMail(mailOptions, function(error, info){
 						if (error) {
@@ -90,8 +102,8 @@ const server = http.createServer(function (request, response) {
 								"Set-Cookie": "accountid=" + accountID + "; HttpOnly; Max-Age=1800;"
 							});
 							console.log('Email sent: ' + info.response);
-							response.end();
 						}
+						response.end();
 					});
 				} else {
 					response.writeHead(404);
