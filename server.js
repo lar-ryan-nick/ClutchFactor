@@ -63,7 +63,15 @@ const server = http.createServer(function (request, response) {
 				console.log(body);
 				if (cookies != null && body != null && body.accountID == cookies.accountid) {
 					createAccount(body, function(success) {
-						response.writeHead(200, {"Content-Type": "text/plain"});
+						let sessionID = crypto.randomBytes(Math.floor(Math.random() * 50 + 5)).toString('hex');
+						while (sessions[sessionID] != null) {
+							sessionID = crypto.randomBytes(Math.floor(Math.random() * 50 + 5)).toString('hex');
+						}
+						response.writeHead(200, {
+							"Content-Type": "text/plain",
+							"Set-Cookie": "sessionid=" + sessionID + "; HttpOnly" 
+						});
+						sessions[sessionID] = userID;
 						response.write("" + success);
 						response.end();				
 					});
@@ -83,15 +91,8 @@ const server = http.createServer(function (request, response) {
 						from: 'ryanl.wiener@gmail.com',
 						to: body.email,
 						subject: 'Creating your ClutchFactor Account',
-						html: `
-							<form action=\"https://clutchfactor.herokuapp.com/createAccount\" method=\"post\" target=\"_blank\">
-								<input type=\"text\" name=\"accountID\" value=\"` + accountID + `\"/>
-								<input type=\"text\" name=\"email\" value=\"` + body.email + `\"/>
-								<input type=\"text\" name=\"password\" value=\"` + body.password + `\"/>
-								<input type=\"text\" name=\"firstName\" value=\"` + body.firstName + `\"/>
-								<input type=\"text\" name=\"lastName\" value=\"` + body.lastName + `\"/>
-								<input type=\"submit\" name=\"submit\" value=\"Click here to finish making your account\"/>
-							</form>
+						text: `
+							<a href=\"http://localhost:8000/createAccount?accountID=` + accountID + `&email=` + body.email + `&password=` + body.password + `&firstName=` + body.firstName + `&lastName=` + body.lastName + `\">Click here to finish creating your account</button>
 						`
 					}
 					transporter.sendMail(mailOptions, function(error, info){
