@@ -59,15 +59,9 @@ const server = http.createServer(function (request, response) {
 		case '/createAccount':
 			if (cookies != null && parameters != null && parameters.accountID == cookies.accountid) {
 				createAccount(parameters, function(success) {
-					let sessionID = crypto.randomBytes(Math.floor(Math.random() * 50 + 5)).toString('hex');
-					while (sessions[sessionID] != null) {
-						sessionID = crypto.randomBytes(Math.floor(Math.random() * 50 + 5)).toString('hex');
-					}
 					response.writeHead(200, {
 						"Content-Type": "text/plain",
-						"Set-Cookie": "sessionid=" + sessionID + "; HttpOnly" 
 					});
-					sessions[sessionID] = userID;
 					response.write("" + success);
 					response.end();				
 				});
