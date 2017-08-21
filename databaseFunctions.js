@@ -93,7 +93,7 @@ function createAccount(parameters, cb) {
 				console.log(error);
 			}
 		});
-		client.query("INSERT INTO Users (Email, Username, Password, FirstName, LastName) VALUES ('" + parameters.email + "', '" + parameters.username + "', '" + parameters.password + "', '" + parameters.firstName + "', '" + parameters.lastName + "');", (error, result) => {
+		client.query("INSERT INTO Users (Email, Password, FirstName, LastName) VALUES ('" + parameters.email + "', '" + parameters.password + "', '" + parameters.firstName + "', '" + parameters.lastName + "');", (error, result) => {
 			if (error) {
 				console.log(error);
 				cb(false);
