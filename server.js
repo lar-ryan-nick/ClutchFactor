@@ -58,7 +58,9 @@ const server = http.createServer(function (request, response) {
 	switch (path) {
 		case '/createAccount':
 			request.on("end", function() {
+				console.log(body);
 				body = parseBody(body);
+				console.log(body);
 				if (cookies != null && body != null && body.accountID == cookies.accountid) {
 					createAccount(body, function(success) {
 						response.writeHead(200, {"Content-Type": "text/plain"});
@@ -74,20 +76,20 @@ const server = http.createServer(function (request, response) {
 			break;
 		case '/sendAccountCreationEmail':
 			request.on("end", function() {
-				if (cookies == null) {
+				if (cookies == null || cookies.sessionid == null) {
 					body = parseBody(body);
-					let accountID = crypto.randomBytes(Math.floor(Math.random() * 50 + 1)).toString('hex');
+					let accountID = crypto.randomBytes(Math.floor(Math.random() * 50 + 5)).toString('hex');
 					let mailOptions = {
 						from: 'ryanl.wiener@gmail.com',
 						to: body.email,
 						subject: 'Creating your ClutchFactor Account',
 						html: `
-							<form action=\"https://` + url.parse(request.url).host + `/createAccount\" method=\"POST\">
-								<input type=\"hidden\" name=\"accountID\" value=\"` + accountID + `\"/>
-								<input type=\"hidden\" name=\"email\" value=\"` + body.email + `\"/>
-								<input type=\"hidden\" name=\"password\" value=\"` + body.password + `\"/>
-								<input type=\"hidden\" name=\"firstName\" value=\"` + body.firstName + `\"/>
-								<input type=\"hidden\" name=\"lastName\" value=\"` + body.lastName + `\"/>
+							<form action=\"https://clutchfactor.herokuapp.com/createAccount\" method=\"post\" target=\"_blank\">
+								<input type=\"text\" name=\"accountID\" value=\"` + accountID + `\"/>
+								<input type=\"text\" name=\"email\" value=\"` + body.email + `\"/>
+								<input type=\"text\" name=\"password\" value=\"` + body.password + `\"/>
+								<input type=\"text\" name=\"firstName\" value=\"` + body.firstName + `\"/>
+								<input type=\"text\" name=\"lastName\" value=\"` + body.lastName + `\"/>
 								<input type=\"submit\" name=\"submit\" value=\"Click here to finish making your account\"/>
 							</form>
 						`
@@ -120,12 +122,14 @@ const server = http.createServer(function (request, response) {
 			break;
 		case '/checkPassword':
 			request.on("end", function() {
+				console.log(body);
 				body = parseBody(body);
+				console.log(body);
 				checkPassword(body, (userID, valid) => {
 					if ((cookies == null || (cookies != null && cookies.sessionid == null) || (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] == null)) && parseInt(userID) > 0 && valid) {
-						let sessionID = crypto.randomBytes(Math.floor(Math.random() * 50 + 1)).toString('hex');
+						let sessionID = crypto.randomBytes(Math.floor(Math.random() * 50 + 5)).toString('hex');
 						while (sessions[sessionID] != null) {
-							sessionID = crypto.randomBytes(Math.floor(Math.random() * 50 + 1)).toString('hex');
+							sessionID = crypto.randomBytes(Math.floor(Math.random() * 50 + 5)).toString('hex');
 						}
 						response.writeHead(200, {
 							"Content-Type": "text/plain",

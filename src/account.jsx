@@ -89,7 +89,7 @@ class LogInForm extends React.Component {
 					<div>
 						{emailError}
 					</div>
-					<input className="textInput" type="text" name="email" value={this.state.email} onChange={this.handleChange}/>
+					<input className="textInput" type="email" name="email" value={this.state.email} onChange={this.handleChange}/>
 					<p className="label">Password:</p>
 					<div>
 						{passwordError}
@@ -198,7 +198,7 @@ class CreateAccountForm extends React.Component {
 					<div>
 						{emailError}
 					</div>
-					<input className="textInput" type="text" name="email" value={this.state.email} onChange={this.handleChange}/>
+					<input className="textInput" type="email" name="email" value={this.state.email} onChange={this.handleChange}/>
 					<p className="label">Password:</p>
 					<div>
 						{passwordError}
