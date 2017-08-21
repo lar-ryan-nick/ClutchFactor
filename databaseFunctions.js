@@ -1,5 +1,4 @@
 const pg = require('pg');
-const qs = require('querystring');
 
 const config = {
 	"user": "abkqttfnvdbkyi",
@@ -10,25 +9,7 @@ const config = {
 	"ssl": true
 }
 
-function parseQuery(parameterString) {
-	if (parameterString) {
-		let params = parameterString.split('&');
-		let parameters = {};
-		for (let i = 0; i < params.length; ++i) {
-			parameters[params[i].split('=')[0]] = params[i].split('=')[1];
-		}
-		return parameters;
-	}
-}
-
-function parseBody(parameterString) {
-	if (parameterString) {
-		return qs.parse(parameterString);
-	}
-}
-
-function checkUsername(parameterString, cb) {
-	let parameters = parseQuery(parameterString);
+function checkEmail(parameters, cb) {
 	if (parameters) {
 		let client = new pg.Client(config);
 		client.connect((error) => {
@@ -36,7 +17,7 @@ function checkUsername(parameterString, cb) {
 				console.log(error);
 			}
 		});
-		client.query("SELECT ID FROM Users WHERE Username = '" + parameters.username + "';", (error, result) => {
+		client.query("SELECT ID FROM Users WHERE Email = '" + parameters.email + "';", (error, result) => {
 			if (error) {
 				console.log(error);
 			} else {
@@ -53,8 +34,7 @@ function checkUsername(parameterString, cb) {
 	}
 }
 
-function checkPassword(parameterString, cb) {
-	let parameters = parseBody(parameterString);
+function checkPassword(parameters, cb) {
 	if (parameters) {
 		let client = new pg.Client(config);
 		client.connect((error) => {
@@ -62,7 +42,7 @@ function checkPassword(parameterString, cb) {
 				console.log(error);
 			}
 		});
-		client.query("SELECT ID FROM Users WHERE Username = '" + parameters.username + "' AND Password = '" + parameters.password + "';", (error, result) => {
+		client.query("SELECT ID FROM Users WHERE Email = '" + parameters.email + "' AND Password = '" + parameters.password + "';", (error, result) => {
 			if (error) {
 				console.log(error);
 			} else {
@@ -88,7 +68,7 @@ function getUserInfo(userID, cb) {
 				console.log(error);
 			}
 		});
-		client.query("SELECT username, timeCreated FROM Users WHERE ID = " + userID + ";", (error, result) => {
+		client.query("SELECT Email, TimeCreated FROM Users WHERE ID = " + userID + ";", (error, result) => {
 			if (error) {
 				console.log(error);
 			} else {
@@ -105,4 +85,26 @@ function getUserInfo(userID, cb) {
 	}
 }
 
-module.exports =  {checkUsername, checkPassword, getUserInfo};
+function createAccount(parameters, cb) {
+	if (parameters != null) {
+		let client = new pg.Client(config);
+		client.connect((error) => {
+			if (error) {
+				console.log(error);
+			}
+		});
+		client.query("INSERT INTO Users (Email, Username, Password, FirstName, LastName) VALUES ('" + parameters.email + "', '" + parameters.username + "', '" + parameters.password + "', '" + parameters.firstName + "', '" + parameters.lastName + "');", (error, result) => {
+			if (error) {
+				console.log(error);
+				cb(false);
+			} else {
+				cb(true);
+			}
+			client.end();
+		});
+	} else {
+		cb(false);
+	}
+}
+
+module.exports =  {checkEmail, checkPassword, getUserInfo, createAccount};

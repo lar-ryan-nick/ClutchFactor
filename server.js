@@ -1,8 +1,18 @@
 const http = require('http');
 const url = require('url');
 const fs = require('fs');
+const qs = require('querystring');
 const crypto = require('crypto');
-const {checkUsername, checkPassword, getUserInfo} = require('./databaseFunctions.js');
+const nodemailer = require('nodemailer');
+const {checkEmail, checkPassword, getUserInfo, createAccount} = require('./databaseFunctions.js');
+
+const transporter = nodemailer.createTransport({
+	service: 'gmail',
+	auth: {
+		user: 'ryanl.wiener@gmail.com',
+		pass: 'Patrick4'
+	}
+});
 
 function parseCookie(cookie) {
 	if (cookie) {
@@ -16,6 +26,23 @@ function parseCookie(cookie) {
 	return null;
 }
 
+function parseQuery(parameterString) {
+	if (parameterString) {
+		let params = parameterString.split('&');
+		let parameters = {};
+		for (let i = 0; i < params.length; ++i) {
+			parameters[params[i].split('=')[0]] = params[i].split('=')[1];
+		}
+		return parameters;
+	}
+}
+
+function parseBody(parameterString) {
+	if (parameterString) {
+		return qs.parse(parameterString);
+	}
+}
+
 var sessions = {};
 //keep cookies as a global var to prevent scoping issues within the switch statement
 var cookies = null;
@@ -23,23 +50,71 @@ var cookies = null;
 const server = http.createServer(function (request, response) {
 	console.log(request.headers.cookie);
 	console.log(sessions);
-	const path = url.parse(request.url).pathname;
 	cookies = parseCookie(request.headers.cookie);
+	let parameters = parseQuery(url.parse(request.url).query);
+	let body = "";
+	request.on("data", (data) => { body += data; });
+	const path = url.parse(request.url).pathname;
 	switch (path) {
-		case '/checkUsername':
-			checkUsername(url.parse(request.url).query, (taken) => {
+		case '/createAccount':
+			if (cookies != null && parameters != null && parameters.accountID == cookies.accountid) {
+				createAccount(parameters, function(success) {
+					response.writeHead(200, {"Content-Type": "text/plain"});
+					response.write("" + success);
+					response.end();				
+				});
+			} else {
+				response.writeHead(200, {"Content-Type": "text/plain"});
+				response.write("Sorry this link has expired please try creating an account again");
+				response.end();				
+			}
+			break;
+		case '/sendAccountCreationEmail':
+			request.on("end", function() {
+				if (cookies == null) {
+					body = parseBody(body);
+					let accountID = crypto.randomBytes(Math.floor(Math.random() * 50 + 1)).toString('hex');
+					let mailOptions = {
+						from: 'ryanl.wiener@gmail.com',
+						to: body.email,
+						subject: 'Creating your ClutchFactor Account',
+						html: "<a href=\"https://clutchfactor.herokuapp.com/createAccount?accountID=" + accountID + "&email=" + body.email + "&password=" + body.password + "&firstName=" + body.firstName + "&lastName=" + body.lastName + "\">Click here to finish creating your account</a>"
+					}
+					transporter.sendMail(mailOptions, function(error, info){
+						if (error) {
+							response.writeHead(404);
+							console.log(error);
+						} else {
+							response.writeHead(200, {
+								"Content-Type": "text/plain",
+								"Set-Cookie": "accountid=" + accountID + "; HttpOnly; Max-Age=1800;"
+							});
+							console.log('Email sent: ' + info.response);
+							response.end();
+						}
+					});
+				} else {
+					response.writeHead(404);
+					response.end();
+				}
+			});
+			break;
+		case '/checkEmail':
+			checkEmail(parameters, (taken) => {
 				response.writeHead(200, {"Content-Type": "text/plain"});
 				response.write("" + taken);
 				response.end();
 			});
 			break;
 		case '/checkPassword':
-			let body = "";
-			request.on("data", (data) => { body += data; });
 			request.on("end", function() {
+				body = parseBody(body);
 				checkPassword(body, (userID, valid) => {
 					if ((cookies == null || (cookies != null && cookies.sessionid == null) || (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] == null)) && parseInt(userID) > 0 && valid) {
 						let sessionID = crypto.randomBytes(Math.floor(Math.random() * 50 + 1)).toString('hex');
+						while (sessions[sessionID] != null) {
+							sessionID = crypto.randomBytes(Math.floor(Math.random() * 50 + 1)).toString('hex');
+						}
 						response.writeHead(200, {
 							"Content-Type": "text/plain",
 							"Set-Cookie": "sessionid=" + sessionID + "; HttpOnly" 

@@ -5,7 +5,7 @@ class Header extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			username: "",
+			email: "",
 			timecreated: "",
 		};
 		this.goToMain = this.goToMain.bind(this);
@@ -26,7 +26,7 @@ class Header extends React.Component {
 					this.setState(JSON.parse(xhttp.responseText));
 				} else {
 					this.setState({
-						username: "",
+						email: "",
 						timecreated: ""
 					});
 				}
@@ -41,7 +41,7 @@ class Header extends React.Component {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == 4 && xhttp.status == 200) {
 				this.setState({
-					username: "",
+					email: "",
 					timecreated: "",
 				});
 			}
@@ -52,10 +52,10 @@ class Header extends React.Component {
 
 	render() {
 		let accountStuff = [];
-		if (this.state.username == "") {
+		if (this.state.email == "") {
 			accountStuff.push(<a className="headerAccountLink" key="1" href="account.html">Log In/Create an Account</a>);
 		} else {
-			accountStuff.push(<p className="headerGreeting" key ="1">{"Hello " + this.state.username}</p>);
+			accountStuff.push(<p className="headerGreeting" key ="1">{"Hello " + this.state.email}</p>);
 			accountStuff.push(<button className="headerLogOutButton" key="2" onClick={this.logOut}>Log Out</button>);
 		}
 		return (
