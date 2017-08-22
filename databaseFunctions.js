@@ -1,5 +1,5 @@
 const pg = require('pg');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt-nodejs');
 const saltRounds = 10;
 
 const config = {
@@ -111,19 +111,26 @@ function createAccount(parameters, cb) {
 				console.log(error);
 				cb(false);
 			} else {
-				bcrypt.hash(parameters.password, saltRounds, function(err, hash) {
-					if (error) {
-						console.log(error);
+				bcrypt.genSalt(saltRounds, function(err, salt) {
+					if (err) {
+						console.log(err);
 						cb(false);
 					} else {
-						client.query("INSERT INTO Users (Email, Password, FirstName, LastName) VALUES ('" + parameters.email + "', '" + hash + "', '" + parameters.firstName + "', '" + parameters.lastName + "');", (error, result) => {
-							if (error) {
-								console.log(error);
+						bcrypt.hash(parameters.password, salt, () => {}, function(er, hash) {
+							if (er) {
+								console.log(er);
 								cb(false);
 							} else {
-								cb(true);
+								client.query("INSERT INTO Users (Email, Password, FirstName, LastName) VALUES ('" + parameters.email + "', '" + hash + "', '" + parameters.firstName + "', '" + parameters.lastName + "');", (e, result) => {
+									if (e) {
+										console.log(error);
+										cb(false);
+									} else {
+										cb(true);
+									}
+									client.end();
+								});
 							}
-							client.end();
 						});
 					}
 				});
