@@ -118,7 +118,7 @@ const server = http.createServer(function (request, response) {
 					});
 				} else {
 					response.writeHead(404);
-					console.log("Email and password not valid\nBody: " + JSON.stringify(body));
+					console.log("Email and password not valid\nPassword Length: " + body.password.length);
 					response.end();
 				}
 			});
