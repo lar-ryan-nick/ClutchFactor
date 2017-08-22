@@ -11,9 +11,9 @@ class LandingPage extends React.Component {
 
 	render() {
 		return (
-			<div className="landingImageDivWrapper">
-				<div className="landingImageDiv">
-					<img className="landingImage" src="images/LandingPageImage.jpg"/>
+			<div className="backgroundImageDivWrapper">
+				<div className="backgroundImageDiv">
+					<img className="backgroundImage" src="images/BackgroundImage.jpg"/>
 					<p className="landingText">Let's cut the bullshit here's our shit</p>
 					<a className="merchandiseLink" href="/merchandise.html">Start Shopping</a>
 				</div>

@@ -41,12 +41,14 @@ function parseQuery(parameterString) {
 		}
 		return parameters;
 	}
+	return null;
 }
 
 function parseBody(parameterString) {
 	if (parameterString) {
 		return qs.parse(parameterString);
 	}
+	return null;
 }
 
 var sessions = {};
@@ -65,34 +67,40 @@ const server = http.createServer(function (request, response) {
 		case '/createAccount':
 			if (cookies != null && parameters != null && parameters.accountID == cookies.accountid) {
 				createAccount(parameters, function(success) {
-					response.writeHead(200, {
-						"Content-Type": "text/plain",
-					});
 					if (success) {
-						response.write("You're account has been created!");
+						response.writeHead(301, {"Location": "/account.html"});
 					} else {
+						response.writeHead(200, {"Content-Type": "text/plain",});
 						response.write("Sorry your account was not created properly please try again.");
 					}
-					response.end();				
+					response.end();
 				});
 			} else {
 				response.writeHead(200, {"Content-Type": "text/plain"});
-				response.write("Sorry this link has expired please try creating an account again. If you're default browser is different than the one you used to register your account please change your default browser such that it matches with the one you register your account on. Thank you");
-				response.end();				
+				response.write("Sorry this link has either expired or if you're default browser is different than the one you used to register your account please change your default browser such that it matches with the one you register your account on. Thank you.");
+				response.end();
 			}
 			break;
 		case '/sendAccountCreationEmail':
 			request.on("end", function() {
-				if (cookies == null || cookies.sessionid == null) {
-					body = parseBody(body);
+				body = parseBody(body);
+				if (body != null && body.email != null && body.password != null && body.password.length >= 8 && (cookies == null || cookies.sessionid == null)) {
 					let accountID = crypto.randomBytes(Math.floor(Math.random() * 50 + 5)).toString('hex');
+					let firstName = body.firstName;
+					if (firstName == null) {
+						firstName = "";
+					}
+					let lastName = body.lastName;
+					if (lastName == null) {
+						lastName = "";
+					}
 					let mailOptions = {
 						from: 'ryanl.wiener@gmail.com',
 						to: body.email,
 						subject: 'Creating your ClutchFactor Account',
 						html: `
-							<p>Hello ` + body.firstName + ` ` + body.lastName + `,</P>
-							<a href=\"http://localhost:8000/createAccount?accountID=` + accountID + `&email=` + body.email + `&password=` + body.password + `&firstName=` + body.firstName + `&lastName=` + body.lastName + `\">Click here to finish creating your account</button>
+							<p>Hello ` + firstName + ` ` + lastName + `,</P>
+							<a href=\"https://clutchfactor.herokuapp.com/createAccount?accountID=` + accountID + `&email=` + body.email + `&password=` + body.password + `&firstName=` + firstName + `&lastName=` + lastName + `\">Click here to finish creating your account</button>
 						`
 					}
 					transporter.sendMail(mailOptions, function(error, info){
@@ -115,17 +123,25 @@ const server = http.createServer(function (request, response) {
 			});
 			break;
 		case '/checkEmail':
-			checkEmail(parameters, (taken) => {
-				response.writeHead(200, {"Content-Type": "text/plain"});
-				response.write("" + taken);
+			response.writeHead(200, {"Content-Type": "text/plain"});
+			let pattern = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+			if (parameters != null && pattern.test(parameters.email)) {
+				checkEmail(parameters, (taken) => {
+					if (taken) {
+						response.write("That email has already been registered");
+					} else {
+						response.write("That email has not been registered yet");
+					}
+					response.end();
+				});
+			} else {
+				response.write("Please enter a valid email address");
 				response.end();
-			});
+			}
 			break;
 		case '/checkPassword':
 			request.on("end", function() {
-				console.log(body);
 				body = parseBody(body);
-				console.log(body);
 				checkPassword(body, (userID, valid) => {
 					if ((cookies == null || (cookies != null && cookies.sessionid == null) || (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] == null)) && parseInt(userID) > 0 && valid) {
 						let sessionID = crypto.randomBytes(Math.floor(Math.random() * 50 + 5)).toString('hex');
@@ -147,7 +163,6 @@ const server = http.createServer(function (request, response) {
 			break;
 		case '/getUserInfo':
 			response.writeHead(200, {"Content-Type": "text/plain"});
-			//keep response.end() separate to take care of callback function
 			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null) {
 				getUserInfo(sessions[cookies.sessionid], (info) => {
 					response.write(JSON.stringify(info));

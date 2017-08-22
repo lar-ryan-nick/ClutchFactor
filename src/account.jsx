@@ -9,7 +9,7 @@ class LogInForm extends React.Component {
 		this.state = {
 			email: "",
 			password: "",
-			emailError: -1,
+			emailError: "",
 			passwordError: false
 		};
 		this.handleChange = this.handleChange.bind(this);
@@ -23,12 +23,7 @@ class LogInForm extends React.Component {
 			newState[event.target.name] = event.target.value;
 			this.setState(newState);
 			if (event.target.name == "email") {
-				if (event.target.value == "") {
-					newState.emailError = -1;
-					this.setState(newState);
-				} else {
-					this.checkEmail();
-				}
+				this.checkEmail();
 			} else if (event.target.name == "password") {
 				newState.passwordError = false;
 				this.setState(newState);
@@ -37,16 +32,28 @@ class LogInForm extends React.Component {
 	}
 
 	checkEmail() {
-		let xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (xhttp.readyState == 4 && xhttp.status == 200) {
-				let newState = this.state;
-				newState.emailError = (xhttp.responseText == "true");
-				this.setState(newState);
-			}
-		}.bind(this);
-		xhttp.open("GET", "/checkEmail?email=" + this.state.email, true);
-		xhttp.send();
+		let pattern = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+		if (this.state.email == "") {
+			let newState = this.state;
+			newState.emailError = "";
+			this.setState(newState);
+		} else if (!pattern.test(this.state.email)) {
+			let newState = this.state;
+			newState.emailError = "Please enter a valid email address";
+			this.setState(newState);
+		} else {
+			let originalEmail = this.state.email;
+			let xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (xhttp.readyState == 4 && xhttp.status == 200 && originalEmail == this.state.email) {
+					let newState = this.state;
+					newState.emailError = xhttp.responseText;
+					this.setState(newState);
+				}
+			}.bind(this);
+			xhttp.open("GET", "/checkEmail?email=" + this.state.email, true);
+			xhttp.send();
+		}
 	}
 
 	checkPassword(event) {
@@ -72,15 +79,15 @@ class LogInForm extends React.Component {
 		let emailError = [];
 		let passwordError = [];
 		//keep == so -1 does not count as true
-		if (this.state.emailError == false) {
-			emailError.push(<img key="1" className="icon" src="images/RedXIcon.png"/>);
-			emailError.push(<p key="2" className="errorLabel">That email is not registered with an account</p>);
-		} else if (this.state.emailError == true) {
+		if (this.state.emailError == "That email has already been registered") {
 			emailError.push(<img key="1" className="icon" src="images/GreenCheckIcon.png"/>);
 			if (this.state.passwordError) {
 				passwordError.push(<img key="1" className="icon" src="images/RedXIcon.png"/>);
 				passwordError.push(<p key="2" className="errorLabel">That password is incorrect</p>);
 			}
+		} else if (this.state.emailError != "") {
+			emailError.push(<img key="1" className="icon" src="images/RedXIcon.png"/>);
+			emailError.push(<p key="2" className="errorLabel">{this.state.emailError}</p>);
 		}
 		return (
 			<div>
@@ -111,8 +118,10 @@ class CreateAccountForm extends React.Component {
 			password: "",
 			firstName: "",
 			lastName: "",
-			emailError: -1,
-			passwordError: -1
+			emailError: "",
+			passwordError: -1,
+			submitDisabled: false,
+			sentEmail: false
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.checkEmail = this.checkEmail.bind(this);
@@ -126,12 +135,7 @@ class CreateAccountForm extends React.Component {
 			newState[event.target.name] = event.target.value;
 			this.setState(newState);
 			if (event.target.name == "email") {
-				if (event.target.value == "") {
-					newState.emailError = -1;
-					this.setState(newState);
-				} else {
-					this.checkEmail();
-				}
+				this.checkEmail();
 			} else if (event.target.name == "password") {
 				this.checkPassword();
 			}
@@ -139,16 +143,28 @@ class CreateAccountForm extends React.Component {
 	}
 
 	checkEmail() {
-		let xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (xhttp.readyState == 4 && xhttp.status == 200) {
-				let newState = this.state;
-				newState.emailError = (xhttp.responseText == "true");
-				this.setState(newState);
-			}
-		}.bind(this);
-		xhttp.open("GET", "/checkEmail?email=" + this.state.email, true);
-		xhttp.send();
+		let pattern = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+		if (this.state.email == "") {
+			let newState = this.state;
+			newState.emailError = "";
+			this.setState(newState);
+		} else if (!pattern.test(this.state.email)) {
+			let newState = this.state;
+			newState.emailError = "Please enter a valid email address";
+			this.setState(newState);
+		} else {
+			let originalEmail = this.state.email;
+			let xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (xhttp.readyState == 4 && xhttp.status == 200 && originalEmail == this.state.email) {
+					let newState = this.state;
+					newState.emailError = xhttp.responseText;
+					this.setState(newState);
+				}
+			}.bind(this);
+			xhttp.open("GET", "/checkEmail?email=" + this.state.email, true);
+			xhttp.send();
+		}
 	}
 
 	checkPassword() {
@@ -165,53 +181,78 @@ class CreateAccountForm extends React.Component {
 
 	createAccount(event) {
 		event.preventDefault();
-		let xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (xhttp.readyState == 4 && xhttp.status == 200) {
-				console.log("Done:)");
-			}
-		}.bind(this);
-		xhttp.open("POST", "/sendAccountCreationEmail", true);
-		xhttp.send("email=" + this.state.email + "&password=" + this.state.password + "&firstName=" + this.state.firstName + "&lastName=" + this.state.lastName);
+		if (this.state.emailError == "That email has not been registered yet" && this.state.passwordError == false && this.state.password != "") {
+			let newState = this.state;
+			newState.submitDisabled = true;
+			this.setState(newState);
+			let xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (xhttp.readyState == 4 && xhttp.status == 200) {
+					newState = this.state;
+					newState.sentEmail = true;
+					this.setState(newState);
+				} else if (xhttp.status == 404) {
+					newState = this.state;
+					newState.submitDisabled = false;
+					this.setState(newState);
+				}
+			}.bind(this);
+			xhttp.open("POST", "/sendAccountCreationEmail", true);
+			xhttp.send("email=" + this.state.email + "&password=" + this.state.password + "&firstName=" + this.state.firstName + "&lastName=" + this.state.lastName);
+		}
 	}
 
 	render() {
-		let emailError = [];
-		let passwordError = [];
-		//keep == so -1 does not count as true
-		if (this.state.emailError == true) {
-			emailError.push(<img key="1" className="icon" src="images/RedXIcon.png"/>);
-			emailError.push(<p key="2" className="errorLabel">That email has already been registered</p>);
-		} else if (this.state.emailError == false) {
-			emailError.push(<img key="1" className="icon" src="images/GreenCheckIcon.png"/>);
+		if (this.state.sentEmail) {
+			return (
+				<div>
+					<img className="largeIcon" src="images/GreenCheckIcon.png"/>
+					<p className="emailSentNotfication">An email has been sent to the address that you supplied</p>
+				</div>
+			);
+		} else {
+			let emailError = [];
+			if (this.state.emailError == "That email has not been registered yet") {
+				emailError.push(<img key="1" className="icon" src="images/GreenCheckIcon.png"/>);
+			} else if (this.state.emailError != "") {
+				emailError.push(<img key="1" className="icon" src="images/RedXIcon.png"/>);
+				emailError.push(<p key="2" className="errorLabel">{this.state.emailError}</p>);
+			}
+			let passwordError = [];
+			if (this.state.passwordError == true) {
+				passwordError.push(<img key="1" className="icon" src="images/RedXIcon.png"/>);
+				passwordError.push(<p key="2" className="errorLabel">Password must be at least 8 characters</p>);
+			} else if (this.state.passwordError == false) {
+				passwordError.push(<img key="1" className="icon" src="images/GreenCheckIcon.png"/>);
+			}
+			let submit = [];
+			if (this.state.submitDisabled) {
+				submit.push(<input className="logInButton" key="1" type="submit" name="createAccount" value="Create Account" disabled/>);
+			} else {
+				submit.push(<input className="logInButton" key="1" type="submit" name="createAccount" value="Create Account"/>);
+			}
+			return (
+				<div>
+					<form onSubmit={this.createAccount}>
+						<p className="label">Email:</p>
+						<div>
+							{emailError}
+						</div>
+						<input className="textInput" type="email" name="email" value={this.state.email} onChange={this.handleChange}/>
+						<p className="label">Password:</p>
+						<div>
+							{passwordError}
+						</div>
+						<input className="textInput" type="password" name="password" value={this.state.password} onChange={this.handleChange}/>
+						<p className="label">First Name:</p>
+						<input className="textInput" type="text" name="firstName" value={this.state.firstName} onChange={this.handleChange}/>
+						<p className="label">Last Name:</p>
+						<input className="textInput" type="text" name="lastName" value={this.state.lastName} onChange={this.handleChange}/>
+						{submit}
+					</form>
+				</div>
+			);
 		}
-		if (this.state.passwordError == true) {
-			passwordError.push(<img key="1" className="icon" src="images/RedXIcon.png"/>);
-			passwordError.push(<p key="2" className="errorLabel">That password is not valid</p>);
-		} else if (this.state.passwordError == false) {
-			passwordError.push(<img key="1" className="icon" src="images/GreenCheckIcon.png"/>);
-		}
-		return (
-			<div>
-				<form onSubmit={this.createAccount}>
-					<p className="label">Email:</p>
-					<div>
-						{emailError}
-					</div>
-					<input className="textInput" type="email" name="email" value={this.state.email} onChange={this.handleChange}/>
-					<p className="label">Password:</p>
-					<div>
-						{passwordError}
-					</div>
-					<input className="textInput" type="password" name="password" value={this.state.password} onChange={this.handleChange}/>
-					<p className="label">First Name:</p>
-					<input className="textInput" type="text" name="firstName" value={this.state.firstName} onChange={this.handleChange}/>
-					<p className="label">Last Name:</p>
-					<input className="textInput" type="text" name="lastName" value={this.state.lastName} onChange={this.handleChange}/>
-					<input className="logInButton" type="submit" name="createAccount" value="Create Account"/>
-				</form>
-			</div>
-		);
 	}
 }
 
@@ -252,9 +293,14 @@ class AccountPage extends React.Component {
 			topButtons.push(<p className="changeFormLabel" key="2">Create Account</p>);
 		}
 		return (
-			<div className="AccountContainer">
-				{topButtons}
-				{form}
+			<div className="mainDiv">
+				<div className="backgroundImageDiv">
+					<img className="backgroundImage" src="images/BackgroundImage.jpg"/>
+				</div>
+				<div className="AccountContainer">
+					{topButtons}
+					{form}
+				</div>
 			</div>
 		);
 	}
