@@ -118,6 +118,7 @@ const server = http.createServer(function (request, response) {
 					});
 				} else {
 					response.writeHead(404);
+					console.log("Email and password not valid\nBody: " + body);
 					response.end();
 				}
 			});
