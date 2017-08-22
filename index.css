@@ -1,4 +1,4 @@
-.landingImageDivWrapper {
+.backgroundImageDivWrapper {
 	display: flex;
 	flex-direction: column-reverse;
 	width: 100%;
@@ -6,14 +6,14 @@
 	background-color: #000000;
 }
 
-.landingImageDiv {
+.backgroundImageDiv {
 	position: relative;
 	left: 0px;
 	top: 0px;
 	width: 100%;
 }
 
-.landingImage {
+.backgroundImage {
 	width: 100%;
 	z-index: -1;
 }

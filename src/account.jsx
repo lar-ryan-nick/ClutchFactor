@@ -252,9 +252,14 @@ class AccountPage extends React.Component {
 			topButtons.push(<p className="changeFormLabel" key="2">Create Account</p>);
 		}
 		return (
-			<div className="AccountContainer">
-				{topButtons}
-				{form}
+			<div className="mainDiv">
+				<div className="backgroundImageDiv">
+					<img className="backgroundImage" src="images/BackgroundImage.jpg"/>
+				</div>
+				<div className="AccountContainer">
+					{topButtons}
+					{form}
+				</div>
 			</div>
 		);
 	}

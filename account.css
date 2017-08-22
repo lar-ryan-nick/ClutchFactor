@@ -2,9 +2,29 @@ form {
 	margin: 0px;
 }
 
+.mainDiv {
+	position: relative;
+	top: 0px;
+	left:0px;
+}
+
+.backgroundImageDiv {
+	display: flex;
+	flex-direction: column-reverse;
+	width: 100%;
+	min-height: calc(100% - 251px);
+	background-color: #000000;
+}
+
+.backgroundImage {
+	width: 100%;
+}
+
 .accountContainer {
+	position: absolute;
+	top: 1em;
+	left: 25%;
 	width: 50%;
-	margin: auto;
 	border: solid 1px #000000;
 	background-color: #ffffff;
 }
