@@ -19,7 +19,7 @@ function parseCookie(cookie) {
 		let vals = cookie.split(";");
 		let parsed = {};
 		for (let i = 0; i < vals.length; ++i) {
-			parsed[vals[i].split("=")[0]] = vals[i].split("=")[1];
+			parsed[vals[i].split("=")[0].substr(1)] = vals[i].split("=")[1];
 		}
 		return parsed;
 	}
