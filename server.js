@@ -63,6 +63,8 @@ const server = http.createServer(function (request, response) {
 			if (parameters != null && accountIDs[parameters.accountID] != null) {
 				createAccount(accountIDs[parameters.accountID], function(success) {
 					if (success) {
+						inverseAcoountIDs[accountIDs[parameters.accountID].email] = null;
+						accountIDs[parameters.accountID] = null;
 						response.writeHead(301, {"Location": "/account.html"});
 					} else {
 						response.writeHead(200, {"Content-Type": "text/plain",});
@@ -72,7 +74,7 @@ const server = http.createServer(function (request, response) {
 				});
 			} else {
 				response.writeHead(200, {"Content-Type": "text/plain"});
-				response.write("Sorry this link has either expired or if you're default browser is different than the one you used to register your account please change your default browser such that it matches with the one you register your account on. Thank you.");
+				response.write("Sorry this link has either expired please try creating your account again");
 				response.end();
 			}
 			break;
@@ -90,6 +92,12 @@ const server = http.createServer(function (request, response) {
 					}
 					accountIDs[accountID] = body;
 					inverseAccountIDs[body.email] = accountID;
+					setTimeout((id) => {
+						if (accountIDs[id] != null) {
+							inverseAccountIDs[accountIDs[id].email] = null;
+							accountIDs[id] = null;
+						}
+					}, 1800000, accountID);
 					let firstName = body.firstName;
 					if (firstName == null) {
 						firstName = "";
