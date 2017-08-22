@@ -1,4 +1,6 @@
 const pg = require('pg');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
 const config = {
 	"user": "abkqttfnvdbkyi",
@@ -15,19 +17,22 @@ function checkEmail(parameters, cb) {
 		client.connect((error) => {
 			if (error) {
 				console.log(error);
-			}
-		});
-		client.query("SELECT ID FROM Users WHERE Email = '" + parameters.email + "';", (error, result) => {
-			if (error) {
-				console.log(error);
+				cb(false);
 			} else {
-				if (parseInt(result.rowCount) == 1) {
-					cb(true);
-				} else {
-					cb(false);
-				}
+				client.query("SELECT ID FROM Users WHERE Email = '" + parameters.email + "';", (error, result) => {
+					if (error) {
+						console.log(error);
+						cb(false);
+					} else {
+						if (parseInt(result.rowCount) == 1) {
+							cb(true);
+						} else {
+							cb(false);
+						}
+					}
+					client.end();
+				});
 			}
-			client.end();
 		});
 	} else {
 		cb(false);
@@ -40,19 +45,29 @@ function checkPassword(parameters, cb) {
 		client.connect((error) => {
 			if (error) {
 				console.log(error);
-			}
-		});
-		client.query("SELECT ID FROM Users WHERE Email = '" + parameters.email + "' AND Password = '" + parameters.password + "';", (error, result) => {
-			if (error) {
-				console.log(error);
+				cb(0, false);
 			} else {
-				if (parseInt(result.rowCount) == 1) {
-					cb(result.rows[0].id, true);
-				} else {
-					cb(0, false);
-				}
+				client.query("SELECT ID, Password FROM Users WHERE Email = '" + parameters.email + "';", (error, result) => {
+					if (error) {
+						console.log(error);
+						cb(0, false);
+					} else {
+						if (parseInt(result.rowCount) == 1) {
+							bcrypt.compare(parameters.password, result.rows[0].password, function(err, res) {
+								if (err) {
+									console.log(error);
+									cb(0, false);
+								} else {
+									cb(parseInt(result.rows[0].id), res);
+								}
+							});
+						} else {
+							cb(0, false);
+						}
+					}
+					client.end();
+				});
 			}
-			client.end();
 		});
 	} else {
 		cb(0, false);
@@ -66,19 +81,22 @@ function getUserInfo(userID, cb) {
 		client.connect((error) => {
 			if (error) {
 				console.log(error);
-			}
-		});
-		client.query("SELECT Email, FirstName, LastName, TimeCreated FROM Users WHERE ID = " + userID + ";", (error, result) => {
-			if (error) {
-				console.log(error);
+				cb({});
 			} else {
-				if (parseInt(result.rowCount) == 1) {
-					cb(result.rows[0]);
-				} else {
-					cb({});
-				}
+				client.query("SELECT Email, FirstName, LastName, TimeCreated FROM Users WHERE ID = " + userID + ";", (error, result) => {
+					if (error) {
+						console.log(error);
+						cb({});
+					} else {
+						if (parseInt(result.rowCount) == 1) {
+							cb(result.rows[0]);
+						} else {
+							cb({});
+						}
+					}
+					client.end();
+				});
 			}
-			client.end();
 		});
 	} else {
 		cb({});
@@ -91,16 +109,25 @@ function createAccount(parameters, cb) {
 		client.connect((error) => {
 			if (error) {
 				console.log(error);
-			}
-		});
-		client.query("INSERT INTO Users (Email, Password, FirstName, LastName) VALUES ('" + parameters.email + "', '" + parameters.password + "', '" + parameters.firstName + "', '" + parameters.lastName + "');", (error, result) => {
-			if (error) {
-				console.log(error);
 				cb(false);
 			} else {
-				cb(true);
+				bcrypt.hash(parameters.password, saltRounds, function(err, hash) {
+					if (error) {
+						console.log(error);
+						cb(false);
+					} else {
+						client.query("INSERT INTO Users (Email, Password, FirstName, LastName) VALUES ('" + parameters.email + "', '" + hash + "', '" + parameters.firstName + "', '" + parameters.lastName + "');", (error, result) => {
+							if (error) {
+								console.log(error);
+								cb(false);
+							} else {
+								cb(true);
+							}
+							client.end();
+						});
+					}
+				});
 			}
-			client.end();
 		});
 	} else {
 		cb(false);
