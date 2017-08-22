@@ -68,7 +68,7 @@ function getUserInfo(userID, cb) {
 				console.log(error);
 			}
 		});
-		client.query("SELECT Email, TimeCreated FROM Users WHERE ID = " + userID + ";", (error, result) => {
+		client.query("SELECT Email, FirstName, LastName, TimeCreated FROM Users WHERE ID = " + userID + ";", (error, result) => {
 			if (error) {
 				console.log(error);
 			} else {

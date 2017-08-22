@@ -59,20 +59,18 @@ const server = http.createServer(function (request, response) {
 		case '/createAccount':
 			if (cookies != null && parameters != null && parameters.accountID == cookies.accountid) {
 				createAccount(parameters, function(success) {
-					response.writeHead(200, {
-						"Content-Type": "text/plain",
-					});
 					if (success) {
-						response.write("You're account has been created!");
+						response.writeHead(301, {"Location": "/account.html"});
 					} else {
+						response.writeHead(200, {"Content-Type": "text/plain",});
 						response.write("Sorry your account was not created properly please try again.");
 					}
-					response.end();				
+					response.end();
 				});
 			} else {
 				response.writeHead(200, {"Content-Type": "text/plain"});
 				response.write("Sorry this link has expired please try creating an account again. If you're default browser is different than the one you used to register your account please change your default browser such that it matches with the one you register your account on. Thank you");
-				response.end();				
+				response.end();
 			}
 			break;
 		case '/sendAccountCreationEmail':
