@@ -62,12 +62,16 @@ const server = http.createServer(function (request, response) {
 					response.writeHead(200, {
 						"Content-Type": "text/plain",
 					});
-					response.write("" + success);
+					if (success) {
+						response.write("You're account has been created!");
+					} else {
+						response.write("Sorry your account was not created properly please try again.");
+					}
 					response.end();				
 				});
 			} else {
 				response.writeHead(200, {"Content-Type": "text/plain"});
-				response.write("Sorry this link has expired please try creating an account again");
+				response.write("Sorry this link has expired please try creating an account again. If you're default browser is different than the one you used to register your account please change your default browser such that it matches with the one you register your account on. Thank you");
 				response.end();				
 			}
 			break;
@@ -81,6 +85,7 @@ const server = http.createServer(function (request, response) {
 						to: body.email,
 						subject: 'Creating your ClutchFactor Account',
 						html: `
+							<p>Hello ` + body.firstName + ` ` + body.lastName + `,</P>
 							<a href=\"http://localhost:8000/createAccount?accountID=` + accountID + `&email=` + body.email + `&password=` + body.password + `&firstName=` + body.firstName + `&lastName=` + body.lastName + `\">Click here to finish creating your account</button>
 						`
 					}
