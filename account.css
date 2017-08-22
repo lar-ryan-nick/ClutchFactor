@@ -2,24 +2,6 @@ form {
 	margin: 0px;
 }
 
-.mainDiv {
-	position: relative;
-	top: 0px;
-	left:0px;
-}
-
-.backgroundImageDiv {
-	display: flex;
-	flex-direction: column-reverse;
-	width: 100%;
-	min-height: calc(100% - 251px);
-	background-color: #000000;
-}
-
-.backgroundImage {
-	width: 100%;
-}
-
 .accountContainer {
 	position: absolute;
 	top: 1em;

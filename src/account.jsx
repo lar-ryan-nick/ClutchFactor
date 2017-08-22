@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import {Header, Footer} from './base.jsx';
+import {Header, Footer, MainBackground} from './base.jsx';
 
 class LogInForm extends React.Component {
 
@@ -293,10 +293,8 @@ class AccountPage extends React.Component {
 			topButtons.push(<p className="changeFormLabel" key="2">Create Account</p>);
 		}
 		return (
-			<div className="mainDiv">
-				<div className="backgroundImageDiv">
-					<img className="backgroundImage" src="images/BackgroundImage.jpg"/>
-				</div>
+			<div>
+				<MainBackground/>
 				<div className="AccountContainer">
 					{topButtons}
 					{form}

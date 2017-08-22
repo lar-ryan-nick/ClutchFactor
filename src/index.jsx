@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import {Header, Footer} from './base.jsx';
+import {Header, Footer, MainBackground} from './base.jsx';
 
 class LandingPage extends React.Component {
 
@@ -11,12 +11,10 @@ class LandingPage extends React.Component {
 
 	render() {
 		return (
-			<div className="backgroundImageDivWrapper">
-				<div className="backgroundImageDiv">
-					<img className="backgroundImage" src="images/BackgroundImage.jpg"/>
-					<p className="landingText">Let's cut the bullshit here's our shit</p>
-					<a className="merchandiseLink" href="/merchandise.html">Start Shopping</a>
-				</div>
+			<div>
+				<MainBackground/>
+				<p className="landingText">Let's cut the bullshit here's our shit</p>
+				<a className="merchandiseLink" href="/merchandise.html">Start Shopping</a>
 			</div>
 		);
 	}

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import {Header, Footer} from './base.jsx';
+import {Header, Footer, MainBackground} from './base.jsx';
 
 class ShoppingPage extends React.Component {
 
@@ -12,6 +12,7 @@ class ShoppingPage extends React.Component {
 	render() {
 		return (
 			<div>
+				<MainBackground/>
 			</div>
 		);
 	}

@@ -68,6 +68,22 @@ body {
 	min-height: calc(100% - 251px);
 }
 
+.backgroundImageDiv {
+	display: flex;
+	flex-direction: column-reverse;
+	positon: absolute;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	min-height: calc(100% - 251px);
+	background-color: #000000;
+	z-index: -1;
+}
+
+.backgroundImage {
+	width: 100%;
+}
+
 #footer {
 	position: relative;
 	top: 100px;
