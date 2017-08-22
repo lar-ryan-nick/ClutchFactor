@@ -46,7 +46,8 @@ function parseBody(parameterString) {
 }
 
 var sessions = {};
-//keep cookies as a global var to prevent scoping issues within the switch statement
+var accountIDs ={};
+var inverseAccountIDs = {};
 var cookies = null;
 
 const server = http.createServer(function (request, response) {
@@ -59,8 +60,8 @@ const server = http.createServer(function (request, response) {
 	const path = url.parse(request.url).pathname;
 	switch (path) {
 		case '/createAccount':
-			if (cookies != null && parameters != null && parameters.accountID == cookies.accountid) {
-				createAccount(parameters, function(success) {
+			if (parameters != null && accountIDs[parameters.accountID] != null) {
+				createAccount(accountIDs[parameters.accountID], function(success) {
 					if (success) {
 						response.writeHead(301, {"Location": "/account.html"});
 					} else {
@@ -79,22 +80,35 @@ const server = http.createServer(function (request, response) {
 			request.on("end", function() {
 				body = parseBody(body);
 				if (body != null && body.email != null && body.password != null && body.password.length >= 8 && (cookies == null || cookies.sessionid == null || sessions[cookies.sessionid] == null)) {
+					if (inverseAccountIDs[body.email] != null) {
+						accoundIDs[inverseAccountIDs[body.email]] = null;
+						inverseAccountIDs[body.email] = null;
+					}
 					let accountID = crypto.randomBytes(Math.floor(Math.random() * 50 + 5)).toString('hex');
+					while (accountIDs[accountID] != null) {
+						accountID = crypto.randomBytes(Math.floor(Math.random() * 50 + 5)).toString('hex');
+					}
+					accountIDs[accountID] = body;
+					inverseAccountIDs[body.email] = accountID;
 					let firstName = body.firstName;
 					if (firstName == null) {
 						firstName = "";
+					} else {
+						firstName = " " + firstName;
 					}
 					let lastName = body.lastName;
 					if (lastName == null) {
 						lastName = "";
+					} else {
+						lastName = " " + lastName;
 					}
 					let mailOptions = {
 						from: 'ryanl.wiener@gmail.com',
 						to: body.email,
 						subject: 'Creating your ClutchFactor Account',
 						html: `
-							<p>Hello ` + firstName + ` ` + lastName + `,</P>
-							<a href=\"https://clutchfactor.herokuapp.com/createAccount?accountID=` + accountID + `&email=` + body.email + `&password=` + body.password + `&firstName=` + firstName + `&lastName=` + lastName + `\">Click here to finish creating your account</button>
+							<p>Hello` + firstName + lastName + `,</P>
+							<a href=\"https://clutchfactor.herokuapp.com/createAccount?accountID=` + accountID + `\">Click here to finish creating your account</button>
 						`
 					}
 					transporter.sendMail(mailOptions, function(error, info){
@@ -102,17 +116,14 @@ const server = http.createServer(function (request, response) {
 							response.writeHead(404);
 							console.log(error);
 						} else {
-							response.writeHead(200, {
-								"Content-Type": "text/plain",
-								"Set-Cookie": "accountid=" + accountID + "; HttpOnly; Max-Age=1800;"
-							});
+							response.writeHead(200, {"Content-Type": "text/plain",});
 							console.log('Email sent: ' + info.response);
 						}
 						response.end();
 					});
 				} else {
 					response.writeHead(404);
-					console.log("Email and password not valid\nPassword Length: " + body.password.length);
+					console.log("Email and password not valid");
 					response.end();
 				}
 			});
