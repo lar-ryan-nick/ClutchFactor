@@ -84,7 +84,7 @@ const server = http.createServer(function (request, response) {
 		case '/sendAccountCreationEmail':
 			request.on("end", function() {
 				body = parseBody(body);
-				if (body != null && body.email != null && body.password != null && body.password.length >= 8 && (cookies == null || cookies.sessionid == null)) {
+				if (body != null && body.email != null && body.password != null && body.password.length >= 8 && (cookies == null || cookies.sessionid == null || sessions[cookies.sessionid] == null)) {
 					let accountID = crypto.randomBytes(Math.floor(Math.random() * 50 + 5)).toString('hex');
 					let firstName = body.firstName;
 					if (firstName == null) {
@@ -144,7 +144,7 @@ const server = http.createServer(function (request, response) {
 			request.on("end", function() {
 				body = parseBody(body);
 				checkPassword(body, (userID, valid) => {
-					if ((cookies == null || (cookies != null && cookies.sessionid == null) || (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] == null)) && parseInt(userID) > 0 && valid) {
+					if ((cookies == null || cookies.sessionid == null || sessions[cookies.sessionid] == null) && parseInt(userID) > 0 && valid) {
 						let sessionID = crypto.randomBytes(Math.floor(Math.random() * 50 + 5)).toString('hex');
 						while (sessions[sessionID] != null) {
 							sessionID = crypto.randomBytes(Math.floor(Math.random() * 50 + 5)).toString('hex');
