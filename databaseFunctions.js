@@ -10,7 +10,7 @@ const config = {
 }
 
 function checkEmail(parameters, cb) {
-	if (parameters) {
+	if (parameters != null) {
 		let client = new pg.Client(config);
 		client.connect((error) => {
 			if (error) {
@@ -35,7 +35,7 @@ function checkEmail(parameters, cb) {
 }
 
 function checkPassword(parameters, cb) {
-	if (parameters) {
+	if (parameters != null) {
 		let client = new pg.Client(config);
 		client.connect((error) => {
 			if (error) {

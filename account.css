@@ -77,3 +77,17 @@ form {
 	margin: 0em 0em 0em .5em;
 	color: #ff0000;
 }
+
+.largeIcon {
+	position: relative;
+	left: 35%;
+	top: 0px;
+	width: 30%;
+	margin: 1em 0em 0em 0em;
+}
+
+.emailSentNotfication {
+	font-size: 3vw;
+	text-align: center;
+	color: #000000;
+}
