@@ -7,16 +7,10 @@ const nodemailer = require('nodemailer');
 const {checkEmail, checkPassword, getUserInfo, createAccount} = require('./databaseFunctions.js');
 
 const transporter = nodemailer.createTransport({
-	host: 'smtp.gmail.com',
-	port: 465,
-	secure: true,
+	service: 'Gmail',
 	auth: {
 		user: 'ryanl.wiener@gmail.com',
 		pass: 'Patrick4'
-	},
-	tls: {
-		// do not fail on invalid certs
-		rejectUnauthorized: false
 	}
 });
 
