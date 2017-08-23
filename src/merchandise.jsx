@@ -33,6 +33,18 @@ class ShoppingPage extends React.Component {
 				<MerchandiseItem articleType="Hat" color="Black"/>
 				<MerchandiseItem articleType="Polo" color="White"/>
 				<MerchandiseItem articleType="TShirt" color="White"/>
+				<MerchandiseItem articleType="Hat" color="White"/>
+				<MerchandiseItem articleType="Hat" color="Black"/>
+				<MerchandiseItem articleType="Polo" color="White"/>
+				<MerchandiseItem articleType="TShirt" color="White"/>
+				<MerchandiseItem articleType="Hat" color="White"/>
+				<MerchandiseItem articleType="Hat" color="Black"/>
+				<MerchandiseItem articleType="Polo" color="White"/>
+				<MerchandiseItem articleType="TShirt" color="White"/>
+				<MerchandiseItem articleType="Hat" color="White"/>
+				<MerchandiseItem articleType="Hat" color="Black"/>
+				<MerchandiseItem articleType="Polo" color="White"/>
+				<MerchandiseItem articleType="TShirt" color="White"/>
 			</div>
 		);
 	}
