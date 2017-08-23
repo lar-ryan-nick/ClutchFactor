@@ -5,5 +5,17 @@ function fixMainMinHeight() {
 		document.getElementById("main").style.minHeight = "calc(100% - 251px)";
 	}
 }
-window.onresize = fixMainMinHeight;
+
+function logOut() {
+	let xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (xhttp.readyState == 4 && xhttp.status == 200) {
+		}
+	};
+	xhttp.open("GET", "/logOut", true);
+	xhttp.send();
+}
+
 fixMainMinHeight();
+window.onresize = fixMainMinHeight;
+window.onbeforeunload = logOut;
