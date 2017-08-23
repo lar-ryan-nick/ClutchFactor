@@ -63,7 +63,7 @@ const server = http.createServer(function (request, response) {
 			if (parameters != null && accountIDs[parameters.accountID] != null) {
 				createAccount(accountIDs[parameters.accountID], function(success) {
 					if (success) {
-						inverseAcoountIDs[accountIDs[parameters.accountID].email] = null;
+						inverseAccountIDs[accountIDs[parameters.accountID].email] = null;
 						accountIDs[parameters.accountID] = null;
 						response.writeHead(301, {"Location": "/account.html"});
 					} else {
