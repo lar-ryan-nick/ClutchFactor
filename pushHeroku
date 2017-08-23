@@ -1,4 +1,4 @@
 #!/bin/bash
 git add .;
-git commit -am "Setting up Accounts";
+git commit -am "Clean up accounts and set up merchandise";
 git push heroku master;
