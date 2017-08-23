@@ -11,6 +11,7 @@ class MerchandiseItem extends React.Component {
 		}
 		this.handleOnMouseOver = this.handleOnMouseOver.bind(this);
 		this.handleOnMouseExit = this.handleOnMouseExit.bind(this);
+		this.handleOnClick = this.handleOnClick.bind(this);
 	}
 
 	handleOnMouseOver() {
@@ -25,6 +26,10 @@ class MerchandiseItem extends React.Component {
 		this.setState(newState);
 	}
 
+	handleOnClick() {
+		window.location = "/product.html?articleType=" + this.props.articleType + "&color=" + this.props.color;
+	}
+
 	render() {
 		let merchandiseDivClass = "merchandiseDiv";
 		let merchandiseTitleClass = "merchandiseTitle";
@@ -33,7 +38,7 @@ class MerchandiseItem extends React.Component {
 			merchandiseTitleClass = "merchandiseTitleHovered";
 		}
 		return (
-			<div className={merchandiseDivClass} onMouseOver={this.handleOnMouseOver} onMouseLeave={this.handleOnMouseExit}>
+			<div className={merchandiseDivClass} onMouseOver={this.handleOnMouseOver} onMouseLeave={this.handleOnMouseExit} onClick={this.handleOnClick}>
 				<img className="merchandiseImage" src={"images/" + this.props.articleType + this.props.color + ".png"}/>
 				<p className={merchandiseTitleClass}>{this.props.articleType}</p>
 			</div>

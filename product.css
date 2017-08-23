@@ -1,0 +1,22 @@
+.productPreviewDiv {
+	display: inline-block;
+	width: 50%;
+	vertical-align: top;
+}
+
+.productPreviewImage {
+	width: 100%;
+}
+
+.productInfoDiv {
+	display: inline-block;
+	width: 50%;
+	vertical-align: top;
+}
+
+.productInfoTitle {
+	font-size: 5vw;
+	color: #ffffff;
+	margin: 0px;
+	text-align: center;
+}

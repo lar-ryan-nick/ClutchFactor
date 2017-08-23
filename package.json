@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cp webpack.config1.js webpack.config.js; ./node_modules/.bin/webpack -d; cp webpack.config2.js webpack.config.js; ./node_modules/.bin/webpack -d; cp webpack.config3.js webpack.config.js; ./node_modules/.bin/webpack -d; node server.js"
+    "start": "cp webpack.config1.js webpack.config.js; ./node_modules/.bin/webpack -d; cp webpack.config2.js webpack.config.js; ./node_modules/.bin/webpack -d; cp webpack.config3.js webpack.config.js; ./node_modules/.bin/webpack -d; cp webpack.config4.js webpack.config.js; ./node_modules/.bin/webpack -d; node server.js"
   },
   "author": "",
   "license": "ISC",
