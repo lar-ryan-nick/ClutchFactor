@@ -1,7 +1,8 @@
 .productPreviewDiv {
 	display: inline-block;
-	width: 50%;
+	width: calc(50% - 4em);
 	vertical-align: top;
+	padding: 2em;
 }
 
 .productPreviewImage {
