@@ -2,6 +2,10 @@ body {
 	margin: 0px;
 }
 
+* {
+	font-family: Times, Serif;
+}
+
 #header {
 	position: fixed;
 	left: 0px;
@@ -71,11 +75,11 @@ body {
 .backgroundImageDiv {
 	display: flex;
 	flex-direction: column-reverse;
-	positon: absolute;
+	position: absolute;
 	left: 0px;
 	top: 0px;
 	width: 100%;
-	min-height: calc(100% - 251px);
+	height: inherit;
 	background-color: #000000;
 	z-index: -1;
 }

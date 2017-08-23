@@ -3,10 +3,8 @@ form {
 }
 
 .accountContainer {
-	position: absolute;
-	top: 1em;
-	left: 25%;
 	width: 50%;
+	margin: 1em auto;
 	border: solid 1px #000000;
 	background-color: #ffffff;
 }
@@ -15,7 +13,6 @@ form {
 	display: inline-block;
 	width: 50%;
 	font-size: 3vw;
-	font-family: Times, serif;
 	margin: 0px;
 	-webkit-appearance: button;
 }
