@@ -3,6 +3,8 @@ form {
 }
 
 .accountContainer {
+	position: relative;
+	top: 1em;
 	width: 50%;
 	margin: 1em auto;
 	border: solid 1px #000000;

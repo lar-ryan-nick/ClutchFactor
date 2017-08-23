@@ -69,7 +69,6 @@ body {
 	top: 100px;
 	left: 0px;
 	width: 100%;
-	min-height: calc(100% - 251px);
 }
 
 .backgroundImageDiv {
@@ -79,7 +78,7 @@ body {
 	left: 0px;
 	top: 0px;
 	width: 100%;
-	height: inherit;
+	height: 100%;
 	background-color: #000000;
 	z-index: -1;
 }
