@@ -1,0 +1,15 @@
+.merchandiseDiv {
+	display: inline-block;
+	width: 10%;
+	margin: .5em;
+	background-color: #ffffff;
+}
+
+.merchandiseImage {
+	width: 100%;
+}
+
+.merchandiseTitle {
+	width: 100%;
+	margin: 0px;
+}
