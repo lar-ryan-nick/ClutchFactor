@@ -19,7 +19,11 @@ function parseCookie(cookie) {
 		let vals = cookie.split(";");
 		let parsed = {};
 		for (let i = 0; i < vals.length; ++i) {
-			parsed[vals[i].split("=")[0].substr(1)] = vals[i].split("=")[1];
+			if (i > 0) {
+				parsed[vals[i].split("=")[0].substr(1)] = vals[i].split("=")[1];
+			} else {
+				parsed[vals[i].split("=")[0]] = vals[i].split("=")[1];
+			}
 		}
 		return parsed;
 	}
@@ -51,9 +55,9 @@ var inverseAccountIDs = {};
 var cookies = null;
 
 const server = http.createServer(function (request, response) {
-	console.log(request.headers.cookie);
 	console.log(sessions);
 	cookies = parseCookie(request.headers.cookie);
+	console.log(cookies);
 	let parameters = parseQuery(url.parse(request.url).query);
 	let body = "";
 	request.on("data", (data) => { body += data; });
