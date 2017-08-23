@@ -1,11 +1,27 @@
+.merchandiseContainer {
+	padding: 1em;
+}
+
 .merchandiseDiv {
 	display: inline-block;
 	width: 200px;
 	height: 225px;
-	margin: 2em 0em 0em 2em;
+	margin: 1em;
 	padding: 1em;
 	vertical-align: top;
 	background-color: #000000;
+	cursor: pointer;
+}
+
+.merchandiseDivHovered {
+	display: inline-block;
+	width: 200px;
+	height: 225px;
+	margin: 1em;
+	padding: 1em;
+	vertical-align: top;
+	background-color: #ffffff;
+	cursor: pointer;
 }
 
 .merchandiseImage {
@@ -19,4 +35,12 @@
 	font-size: 1.2em;
 	text-align: center;
 	color: #ffffff;
+}
+
+.merchandiseTitleHovered {
+	width: 100%;
+	margin: 0px;
+	font-size: 1.2em;
+	text-align: center;
+	color: #000000;
 }
