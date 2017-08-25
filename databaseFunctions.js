@@ -141,4 +141,39 @@ function createAccount(parameters, cb) {
 	}
 }
 
-module.exports =  {checkEmail, checkPassword, getUserInfo, createAccount};
+function getProductInfo(parameters, cb) {
+	if (parameters != null && parameters.modelName != null) {
+		let client = new pg.Client(config);
+		client.connect((error) => {
+			if (error) {
+				console.log(error);
+				cb({});
+			} else {
+				client.query("SELECT * FROM Merchandise WHERE modelname = '" + parameters.modelName + "';", (error, result) => {
+					if (error) {
+						console.log(error);
+						cb({});
+					} else {
+						if (parseInt(result.rowCount) > 0) {
+							let data = result.rows[0];
+							let colors = [];
+							for (let i = 0; i < result.rows.length; ++i) {
+								colors[i] = result.rows[i].color;
+							}
+							data.colors = colors;
+							delete data.color;
+							cb(data);
+						} else {
+							cb({});
+						}
+					}
+					client.end();
+				});
+			}
+		});
+	} else {
+		cb({});
+	}
+}
+
+module.exports =  {checkEmail, checkPassword, getUserInfo, createAccount, getProductInfo};

@@ -5,7 +5,7 @@ function fixMainMinHeight() {
 		document.getElementById("main").style.minHeight = "calc(100% - 251px)";
 	}
 }
-
+/*
 function logOut() {
 	let xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
@@ -15,7 +15,7 @@ function logOut() {
 	xhttp.open("GET", "/logOut", true);
 	xhttp.send();
 }
-
+*/
 fixMainMinHeight();
 window.onresize = fixMainMinHeight;
-window.onbeforeunload = logOut;
+//window.onbeforeunload = logOut;

@@ -7,11 +7,27 @@ class MerchandiseItem extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			hovered: false
+			hovered: false,
+			data: null
 		}
 		this.handleOnMouseOver = this.handleOnMouseOver.bind(this);
 		this.handleOnMouseExit = this.handleOnMouseExit.bind(this);
 		this.handleOnClick = this.handleOnClick.bind(this);
+		this.getProductInfo = this.getProductInfo.bind(this);
+		this.getProductInfo();
+	}
+
+	getProductInfo() {
+		let xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				let newState = this.state;
+				newState.data = JSON.parse(xhttp.responseText);
+				this.setState(newState);
+			}
+		}.bind(this);
+		xhttp.open("GET", "/getProductInfo?modelName=" + this.props.modelName, true);
+		xhttp.send();
 	}
 
 	handleOnMouseOver() {
@@ -27,10 +43,15 @@ class MerchandiseItem extends React.Component {
 	}
 
 	handleOnClick() {
-		window.location = "/product.html?articleType=" + this.props.articleType + "&color=" + this.props.color;
+		window.location = "/product.html?articleType=" + this.state.articletype + "&color=" + this.state.colors[0];
 	}
 
 	render() {
+		if (this.state.data == null) {
+			return (
+				<div className={merchandiseDivClass} onMouseOver={this.handleOnMouseOver} onMouseLeave={this.handleOnMouseExit}></div>
+			);
+		}
 		let merchandiseDivClass = "merchandiseDiv";
 		let merchandiseTitleClass = "merchandiseTitle";
 		if (this.state.hovered == true) {
@@ -39,8 +60,8 @@ class MerchandiseItem extends React.Component {
 		}
 		return (
 			<div className={merchandiseDivClass} onMouseOver={this.handleOnMouseOver} onMouseLeave={this.handleOnMouseExit} onClick={this.handleOnClick}>
-				<img className="merchandiseImage" src={"images/" + this.props.articleType + this.props.color + ".png"}/>
-				<p className={merchandiseTitleClass}>{this.props.articleType}</p>
+				<img className="merchandiseImage" src={"images/" + this.state.data.modelname + this.state.data.articletype + this.state.data.colors[0] + ".png"}/>
+				<p className={merchandiseTitleClass}>{this.state.data.modelname + " " + this.state.data.articletype}</p>
 			</div>
 		);
 	}
@@ -58,22 +79,7 @@ class ShoppingPage extends React.Component {
 			<div>
 				<MainBackground/>
 				<div className="merchandiseContainer">
-					<MerchandiseItem articleType="Hat" color="White"/>
-					<MerchandiseItem articleType="Hat" color="Black"/>
-					<MerchandiseItem articleType="Polo" color="White"/>
-					<MerchandiseItem articleType="TShirt" color="White"/>
-					<MerchandiseItem articleType="Hat" color="White"/>
-					<MerchandiseItem articleType="Hat" color="Black"/>
-					<MerchandiseItem articleType="Polo" color="White"/>
-					<MerchandiseItem articleType="TShirt" color="White"/>
-					<MerchandiseItem articleType="Hat" color="White"/>
-					<MerchandiseItem articleType="Hat" color="Black"/>
-					<MerchandiseItem articleType="Polo" color="White"/>
-					<MerchandiseItem articleType="TShirt" color="White"/>
-					<MerchandiseItem articleType="Hat" color="White"/>
-					<MerchandiseItem articleType="Hat" color="Black"/>
-					<MerchandiseItem articleType="Polo" color="White"/>
-					<MerchandiseItem articleType="TShirt" color="White"/>
+					<MerchandiseItem modelName="Daddy"/>
 				</div>
 			</div>
 		);

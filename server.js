@@ -4,7 +4,7 @@ const fs = require('fs');
 const qs = require('querystring');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const {checkEmail, checkPassword, getUserInfo, createAccount} = require('./databaseFunctions.js');
+const {checkEmail, checkPassword, getUserInfo, createAccount, getProductInfo} = require('./databaseFunctions.js');
 
 const transporter = nodemailer.createTransport({
 	service: 'Gmail',
@@ -188,6 +188,18 @@ const server = http.createServer(function (request, response) {
 				});
 			} else {
 				response.write(JSON.stringify({}));
+				response.end();
+			}
+			break;
+		case '/getProductInfo':
+			response.writeHead(200, {"Content-Type": "text/plain"});
+			if (parameters != null && parameters.modelName != null) {
+				getProductInfo(parameters, (info) => {
+					response.write(JSON.stringify(info));
+					response.end();
+				});
+			} else {
+				response.write("Please enter a model name");
 				response.end();
 			}
 			break;
