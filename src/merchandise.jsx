@@ -8,26 +8,10 @@ class MerchandiseItem extends React.Component {
 		super(props);
 		this.state = {
 			hovered: false,
-			data: null
 		}
 		this.handleOnMouseOver = this.handleOnMouseOver.bind(this);
 		this.handleOnMouseExit = this.handleOnMouseExit.bind(this);
 		this.handleOnClick = this.handleOnClick.bind(this);
-		this.getProductInfo = this.getProductInfo.bind(this);
-		this.getProductInfo();
-	}
-
-	getProductInfo() {
-		let xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (xhttp.readyState == 4 && xhttp.status == 200) {
-				let newState = this.state;
-				newState.data = JSON.parse(xhttp.responseText);
-				this.setState(newState);
-			}
-		}.bind(this);
-		xhttp.open("GET", "/getProductInfo?modelName=" + this.props.modelName, true);
-		xhttp.send();
 	}
 
 	handleOnMouseOver() {
@@ -43,11 +27,11 @@ class MerchandiseItem extends React.Component {
 	}
 
 	handleOnClick() {
-		window.location = "/product.html?articleType=" + this.state.articletype + "&color=" + this.state.colors[0];
+		window.location = "/product.html?modelName=" + this.props.data.modelname + "&articleType=" + this.props.data.articletype + "&color=" + this.props.data.colors[0];
 	}
 
 	render() {
-		if (this.state.data == null) {
+		if (this.props.data == null) {
 			return (
 				<div className={merchandiseDivClass} onMouseOver={this.handleOnMouseOver} onMouseLeave={this.handleOnMouseExit}></div>
 			);
@@ -60,8 +44,8 @@ class MerchandiseItem extends React.Component {
 		}
 		return (
 			<div className={merchandiseDivClass} onMouseOver={this.handleOnMouseOver} onMouseLeave={this.handleOnMouseExit} onClick={this.handleOnClick}>
-				<img className="merchandiseImage" src={"images/" + this.state.data.modelname + this.state.data.articletype + this.state.data.colors[0] + ".png"}/>
-				<p className={merchandiseTitleClass}>{this.state.data.modelname + " " + this.state.data.articletype}</p>
+				<img className="merchandiseImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[0] + ".png"}/>
+				<p className={merchandiseTitleClass}>{this.props.data.modelname + " " + this.props.data.articletype}</p>
 			</div>
 		);
 	}
@@ -71,15 +55,39 @@ class ShoppingPage extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {};
+		this.state = {
+			data: []
+		};
+		this.getProductInfo = this.getProductInfo.bind(this);
+		for (let i = 0; i < 3; ++i) {
+			this.getProductInfo(i);
+		}
+	}
+
+	getProductInfo(index) {
+		let xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				console.log(xhttp.responseText);
+				let newState = this.state;
+				newState.data[index] = JSON.parse(xhttp.responseText);
+				this.setState(newState);
+			}
+		}.bind(this);
+		xhttp.open("GET", "/getProductInfo?index=" + index, true);
+		xhttp.send();
 	}
 
 	render() {
+		let products = [];
+		for (let i = 0; i < this.state.data.length; ++i) {
+			products.push(<MerchandiseItem key={i} data={this.state.data[i]}/>);
+		}
 		return (
 			<div>
 				<MainBackground/>
 				<div className="merchandiseContainer">
-					<MerchandiseItem modelName="Daddy"/>
+					{products}
 				</div>
 			</div>
 		);

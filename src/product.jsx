@@ -12,7 +12,7 @@ class ProductPreview extends React.Component {
 	render() {
 		return (
 			<div className="productPreviewDiv">
-				<img className="productPreviewImage" src={"images/" + this.props.articleType + this.props.color + ".png"}/>
+				<img className="productPreviewImage" src={"images/" + this.props.modelName + this.props.articleType + this.props.color + ".png"}/>
 			</div>
 		);
 	}
@@ -28,7 +28,7 @@ class ProductInfo extends React.Component {
 	render() {
 		return (
 			<div className="productInfoDiv">
-				<p className="productInfoTitle">{this.props.articleType + " - " + this.props.color}</p>
+				<p className="productInfoTitle">{this.props.modelName + " " + this.props.articleType + " - " + this.props.color}</p>
 			</div>
 		);
 	}
@@ -51,8 +51,8 @@ class ProductPage extends React.Component {
 		return (
 			<div>
 				<MainBackground/>
-				<ProductPreview articleType={this.state.articleType} color={this.state.color}/>
-				<ProductInfo articleType={this.state.articleType} color={this.state.color}/>
+				<ProductPreview modelName={this.state.modelName} articleType={this.state.articleType} color={this.state.color}/>
+				<ProductInfo modelName={this.state.modelName} articleType={this.state.articleType} color={this.state.color}/>
 			</div>
 		);
 	}

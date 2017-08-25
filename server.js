@@ -193,13 +193,13 @@ const server = http.createServer(function (request, response) {
 			break;
 		case '/getProductInfo':
 			response.writeHead(200, {"Content-Type": "text/plain"});
-			if (parameters != null && parameters.modelName != null) {
+			if (parameters != null) {
 				getProductInfo(parameters, (info) => {
 					response.write(JSON.stringify(info));
 					response.end();
 				});
 			} else {
-				response.write("Please enter a model name");
+				response.write("Please enter the correct information");
 				response.end();
 			}
 			break;

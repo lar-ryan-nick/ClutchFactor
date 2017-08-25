@@ -142,36 +142,49 @@ function createAccount(parameters, cb) {
 }
 
 function getProductInfo(parameters, cb) {
-	if (parameters != null && parameters.modelName != null) {
+	if (parameters != null && parameters.index != null) {
 		let client = new pg.Client(config);
 		client.connect((error) => {
 			if (error) {
 				console.log(error);
 				cb({});
 			} else {
-				client.query("SELECT * FROM Merchandise WHERE modelname = '" + parameters.modelName + "';", (error, result) => {
-					if (error) {
+				client.query("SELECT DISTINCT modelname FROM Merchandise;", (err, result) => {
+					if (err) {
 						console.log(error);
 						cb({});
 					} else {
-						if (parseInt(result.rowCount) > 0) {
-							let data = result.rows[0];
-							let colors = [];
-							for (let i = 0; i < result.rows.length; ++i) {
-								colors[i] = result.rows[i].color;
-							}
-							data.colors = colors;
-							delete data.color;
-							cb(data);
+						if (parseInt(result.rowCount) > parameters.index) {
+							client.query("SELECT * FROM Merchandise WHERE modelname = '" + result.rows[parameters.index].modelname + "';", (er, res) => {
+								if (er) {
+									console.log(error);
+									cb({});
+								} else {
+									if (parseInt(res.rowCount) > 0) {
+										let data = res.rows[0];
+										let colors = [];
+										for (let i = 0; i < res.rows.length; ++i) {
+											colors[i] = res.rows[i].color;
+										}
+										data.colors = colors;
+										delete data.color;
+										cb(data);
+									} else {
+										cb({});
+									}
+								}
+								client.end();
+							});
 						} else {
+							console.log("Fuck");
 							cb({});
 						}
 					}
-					client.end();
 				});
 			}
 		});
 	} else {
+		console.log("Ass");
 		cb({});
 	}
 }
