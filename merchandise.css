@@ -5,7 +5,6 @@
 .merchandiseDiv {
 	display: inline-block;
 	width: 200px;
-	height: 225px;
 	margin: 1em;
 	padding: 1em;
 	vertical-align: top;
@@ -16,7 +15,6 @@
 .merchandiseDivHovered {
 	display: inline-block;
 	width: 200px;
-	height: 225px;
 	margin: 1em;
 	padding: 1em;
 	vertical-align: top;
@@ -26,7 +24,6 @@
 
 .merchandiseImage {
 	width: 100%;
-	height: calc(100% - 22px);
 }
 
 .merchandiseTitle {
@@ -35,6 +32,7 @@
 	font-size: 1.2em;
 	text-align: center;
 	color: #ffffff;
+	border-bottom: solid .5px #ffffff;
 }
 
 .merchandiseTitleHovered {
@@ -42,5 +40,42 @@
 	margin: 0px;
 	font-size: 1.2em;
 	text-align: center;
+	color: #000000;
+	border-bottom: solid .5px #000000;
+}
+
+.numColorsTitle {
+	display: inline-block;
+	width: 50%;
+	margin: 0px;
+	font-size: 1em;
+	text-align: left;
+	color: #ffffff;
+}
+
+.numColorsTitleHovered {
+	display: inline-block;
+	width: 50%;
+	margin: 0px;
+	font-size: 1em;
+	text-align: left;
+	color: #000000;
+}
+
+.priceTitle {
+	display: inline-block;
+	width: 50%;
+	margin: 0px;
+	font-size: 1em;
+	text-align: right;
+	color: #ffffff;
+}
+
+.priceTitleHovered {
+	display: inline-block;
+	width: 50%;
+	margin: 0px;
+	font-size: 1em;
+	text-align: right;
 	color: #000000;
 }
