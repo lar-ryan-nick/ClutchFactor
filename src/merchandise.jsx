@@ -7,7 +7,8 @@ class MerchandiseItem extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			hovered: false,
+			color: 0,
+			hovered: false
 		}
 		this.handleOnMouseOver = this.handleOnMouseOver.bind(this);
 		this.handleOnMouseExit = this.handleOnMouseExit.bind(this);
@@ -27,7 +28,7 @@ class MerchandiseItem extends React.Component {
 	}
 
 	handleOnClick() {
-		window.location = "/product.html?modelName=" + this.props.data.modelname + "&articleType=" + this.props.data.articletype + "&color=" + this.props.data.colors[0];
+		window.location = "/product.html?modelName=" + this.props.data.modelname + "&articleType=" + this.props.data.articletype + "&color=" + this.props.data.colors[this.state.color];
 	}
 
 	render() {
@@ -44,18 +45,23 @@ class MerchandiseItem extends React.Component {
 		let merchandiseTitleClass = "merchandiseTitle";
 		let numColorsTitleClass = "numColorsTitle";
 		let priceTitleClass = "priceTitle";
+		let otherColors = [];
 		if (this.state.hovered == true) {
 			merchandiseDivClass = "merchandiseDivHovered";
 			merchandiseTitleClass = "merchandiseTitleHovered";
 			numColorsTitleClass = "numColorsTitleHovered";
 			priceTitleClass = "priceTitleHovered";
+			for (let i = 0; i < this.props.data.colors.length; ++i) {
+				otherColors.push(<img key={i} className="previewImage" style={{width: 100 / this.props.data.colors.length + "%"}} src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + ".png"} onMouseOver={function() {let newState = this.state; newState.color = i; this.setState(newState);}.bind(this)}/>);
+			}
 		}
 		return (
 			<div className={merchandiseDivClass} onMouseOver={this.handleOnMouseOver} onMouseLeave={this.handleOnMouseExit} onClick={this.handleOnClick}>
-				<img className="merchandiseImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[0] + ".png"}/>
+				<img className="merchandiseImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[this.state.color] + ".png"}/>
 				<p className={merchandiseTitleClass}>{this.props.data.modelname + " " + this.props.data.articletype}</p>
 				<p className={numColorsTitleClass}>{this.props.data.colors.length + colorText}</p>
 				<p className={priceTitleClass}>{"$" + this.props.data.price}</p>
+				{otherColors}
 			</div>
 		);
 	}
