@@ -90,12 +90,29 @@
 .previewDiv {
 	display: inline-block;
 	height: 100%;
-	overflow-y: auto;
+	margin-left: .5em;
+}
+
+.previewImageDiv {
+	position: relative;
+	top: 0px;
+	left: 0px;
+	margin: .25em 0em .25em 0em;
 }
 
 .previewImage {
 	display: block;
 	width: 50px;
-	margin-left: .5em;
 	vertical-align: top;
+}
+
+.colorText {
+	position: absolute;
+	left: 55px;
+	top: 0px;
+	padding: 5px;
+	border-radius: 5px;
+	margin: 0px;
+	background-color: #000000;
+	color: #ffffff;
 }
