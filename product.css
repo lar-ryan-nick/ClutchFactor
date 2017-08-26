@@ -26,6 +26,7 @@
 	display: inline-block;
 	font-size: 3vw;
 	color: #ffffff;
+	vertical-align: top;
 }
 
 .colorPreview {
