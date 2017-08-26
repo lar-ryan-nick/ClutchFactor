@@ -5,10 +5,10 @@ class Header extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			email: "",
-			firstname: "",
-			lastname: "",
-			timecreated: ""
+			email: null,
+			firstname: null,
+			lastname: null,
+			timecreated: null
 		};
 		this.goToMain = this.goToMain.bind(this);
 		this.getUserInfo = this.getUserInfo.bind(this);
@@ -60,7 +60,7 @@ class Header extends React.Component {
 		let accountStuff = [];
 		if (this.state.email == "") {
 			accountStuff.push(<a className="headerAccountLink" key="1" href="account.html">Log In/Create an Account</a>);
-		} else {
+		} else if (this.state.email != null) {
 			let name = this.state.email;
 			if (this.state.firstname != "") {
 				name = this.state.firstname;
