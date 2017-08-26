@@ -18,7 +18,7 @@
 .productInfoTitle {
 	font-size: 5vw;
 	color: #ffffff;
-	margin: 0px;
+	margin: 0px 0px .5em 0px;
 	text-align: center;
 }
 
@@ -27,6 +27,7 @@
 	font-size: 3vw;
 	color: #ffffff;
 	vertical-align: top;
+	margin: calc(50px - 1.5vw) 0px 0px 0px;
 }
 
 .colorPreview {
