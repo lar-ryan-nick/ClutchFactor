@@ -1,0 +1,35 @@
+.productPreviewDiv {
+	display: inline-block;
+	width: calc(50% - 4em);
+	vertical-align: top;
+	padding: 2em;
+}
+
+.productPreviewImage {
+	width: 100%;
+}
+
+.productInfoDiv {
+	display: inline-block;
+	width: 50%;
+	vertical-align: top;
+}
+
+.productInfoTitle {
+	font-size: 5vw;
+	color: #ffffff;
+	margin: 0px;
+	text-align: center;
+}
+
+.numColorsTitle {
+	display: inline-block;
+	font-size: 3vw;
+	color: #ffffff;
+	vertical-align: top;
+}
+
+.colorPreview {
+	height: 100px;
+	margin: .5em;
+}
