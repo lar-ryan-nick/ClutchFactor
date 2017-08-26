@@ -141,7 +141,7 @@ function createAccount(parameters, cb) {
 	}
 }
 
-function getProductInfo(parameters, cb) {
+function getMerchandiseInfo(parameters, cb) {
 	if (parameters != null && parameters.index != null) {
 		let client = new pg.Client(config);
 		client.connect((error) => {
@@ -189,4 +189,4 @@ function getProductInfo(parameters, cb) {
 	}
 }
 
-module.exports =  {checkEmail, checkPassword, getUserInfo, createAccount, getProductInfo};
+module.exports =  {checkEmail, checkPassword, getUserInfo, createAccount, getMerchandiseInfo};

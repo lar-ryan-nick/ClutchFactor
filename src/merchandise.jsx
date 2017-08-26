@@ -10,9 +10,16 @@ class MerchandiseItem extends React.Component {
 			color: 0,
 			hovered: false
 		}
+		this.changeImage = this.changeImage.bind(this);
 		this.handleOnMouseOver = this.handleOnMouseOver.bind(this);
 		this.handleOnMouseExit = this.handleOnMouseExit.bind(this);
 		this.handleOnClick = this.handleOnClick.bind(this);
+	}
+
+	changeImage(index) {
+		let newState = this.state;
+		newState.color = index;
+		this.setState(newState);
 	}
 
 	handleOnMouseOver() {
@@ -28,13 +35,13 @@ class MerchandiseItem extends React.Component {
 	}
 
 	handleOnClick() {
-		window.location = "/product.html?modelName=" + this.props.data.modelname + "&articleType=" + this.props.data.articletype + "&color=" + this.props.data.colors[this.state.color];
+		window.location = "/product.html?index=" + this.props.index;
 	}
 
 	render() {
 		if (this.props.data == null) {
 			return (
-				<div className={merchandiseDivClass} onMouseOver={this.handleOnMouseOver} onMouseLeave={this.handleOnMouseExit}></div>
+				<div></div>
 			);
 		}
 		let colorText = " colors";
@@ -51,11 +58,9 @@ class MerchandiseItem extends React.Component {
 			merchandiseTitleClass = "merchandiseTitleHovered";
 			numColorsTitleClass = "numColorsTitleHovered";
 			priceTitleClass = "priceTitleHovered";
-		//	if (this.props.data.colors.length > 1) {
-				for (let i = 0; i < this.props.data.colors.length; ++i) {
-					otherColors.push(<img key={i} className="previewImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + ".png"} onMouseOver={function() {let newState = this.state; newState.color = i; this.setState(newState);}.bind(this)}/>);
-				}
-		//	}
+			for (let i = 0; i < this.props.data.colors.length; ++i) {
+				otherColors.push(<img key={i} className="previewImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + ".png"} onMouseOver={this.changeImage.bind(this, i)}/>);
+			}
 		}
 		return (
 			<div className={merchandiseDivClass} onMouseOver={this.handleOnMouseOver} onMouseLeave={this.handleOnMouseExit} onClick={this.handleOnClick}>
@@ -96,14 +101,14 @@ class ShoppingPage extends React.Component {
 				this.setState(newState);
 			}
 		}.bind(this);
-		xhttp.open("GET", "/getProductInfo?index=" + index, true);
+		xhttp.open("GET", "/getMerchandiseInfo?index=" + index, true);
 		xhttp.send();
 	}
 
 	render() {
 		let products = [];
 		for (let i = 0; i < this.state.data.length; ++i) {
-			products.push(<MerchandiseItem key={i} data={this.state.data[i]}/>);
+			products.push(<MerchandiseItem key={i} index={i} data={this.state.data[i]}/>);
 		}
 		return (
 			<div>

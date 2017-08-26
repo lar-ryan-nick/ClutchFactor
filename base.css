@@ -48,9 +48,8 @@ body {
 
 .headerGreeting {
 	position: absolute;
-	left: calc(100% - 240px);
 	top: 0px;
-	width: 125px;
+	right: 110px;
 	margin: 7px 0px 0px 0px;
 	color: #000000;
 }

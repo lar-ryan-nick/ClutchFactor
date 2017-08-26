@@ -21,3 +21,14 @@
 	margin: 0px;
 	text-align: center;
 }
+
+.numColorsTitle {
+	display: inline-block;
+	font-size: 3vw;
+	color: #ffffff;
+}
+
+.colorPreview {
+	height: 100px;
+	margin: .5em;
+}
