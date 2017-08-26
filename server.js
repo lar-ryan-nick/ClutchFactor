@@ -52,12 +52,15 @@ function parseBody(parameterString) {
 var sessions = {};
 var accountIDs ={};
 var inverseAccountIDs = {};
-var cookies = null;
 
 const server = http.createServer(function (request, response) {
-	console.log(sessions);
-	cookies = parseCookie(request.headers.cookie);
-	console.log(cookies);
+	//console.log(sessions);
+	let cookies = parseCookie(request.headers.cookie);
+	//console.log(cookies);
+	if (cookies != null && sessions[cookies.sessionid] != null) {
+		clearTimeout(sessions[cookies.sessionid].timeout);
+		sessions[cookies.sessionid].timeout = setTimeout(function(sessionid) { delete sessions[sessionid]; }, 3600000, cookies.sessionid);
+	}
 	let parameters = parseQuery(url.parse(request.url).query);
 	let body = "";
 	request.on("data", (data) => { body += data; });
@@ -170,7 +173,11 @@ const server = http.createServer(function (request, response) {
 							"Content-Type": "text/plain",
 							"Set-Cookie": "sessionid=" + sessionID + "; HttpOnly" 
 						});
-						sessions[sessionID] = userID;
+						let timeOut = setTimeout(function(sessionid) {delete sessions[sessionid];}, 3600000, sessionID);
+						sessions[sessionID] = {
+							userID: userID,
+							timeout: timeOut
+						};
 					} else {
 						response.writeHead(200, {"Content-Type": "text/plain"});
 					}
@@ -182,7 +189,7 @@ const server = http.createServer(function (request, response) {
 		case '/getUserInfo':
 			response.writeHead(200, {"Content-Type": "text/plain"});
 			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null) {
-				getUserInfo(sessions[cookies.sessionid], (info) => {
+				getUserInfo(sessions[cookies.sessionid].userID, (info) => {
 					response.write(JSON.stringify(info));
 					response.end();
 				});
@@ -206,7 +213,7 @@ const server = http.createServer(function (request, response) {
 		case '/logOut':
 			response.writeHead(200, {"Content-Type": "text/plain"});
 			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null) {
-				sessions[cookies.sessionid] = null;
+				delete sessions[cookies.sessionid];
 				response.write("Logged Out");
 			} else {
 				response.write("Not Logged in. Can't Log out");
