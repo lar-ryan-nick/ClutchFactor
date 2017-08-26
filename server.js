@@ -67,8 +67,8 @@ const server = http.createServer(function (request, response) {
 			if (parameters != null && accountIDs[parameters.accountID] != null) {
 				createAccount(accountIDs[parameters.accountID], function(success) {
 					if (success) {
-						inverseAccountIDs[accountIDs[parameters.accountID].email] = null;
-						accountIDs[parameters.accountID] = null;
+						delete inverseAccountIDs[accountIDs[parameters.accountID].email];
+						delete accountIDs[parameters.accountID];
 						response.writeHead(301, {"Location": "/account.html"});
 					} else {
 						response.writeHead(200, {"Content-Type": "text/plain",});
@@ -87,8 +87,8 @@ const server = http.createServer(function (request, response) {
 				body = parseBody(body);
 				if (body != null && body.email != null && body.password != null && body.password.length >= 8 && (cookies == null || cookies.sessionid == null || sessions[cookies.sessionid] == null)) {
 					if (inverseAccountIDs[body.email] != null) {
-						accoundIDs[inverseAccountIDs[body.email]] = null;
-						inverseAccountIDs[body.email] = null;
+						delete accoundIDs[inverseAccountIDs[body.email]];
+						delete inverseAccountIDs[body.email];
 					}
 					let accountID = crypto.randomBytes(Math.floor(Math.random() * 50 + 5)).toString('hex');
 					while (accountIDs[accountID] != null) {
@@ -98,8 +98,8 @@ const server = http.createServer(function (request, response) {
 					inverseAccountIDs[body.email] = accountID;
 					setTimeout((id) => {
 						if (accountIDs[id] != null) {
-							inverseAccountIDs[accountIDs[id].email] = null;
-							accountIDs[id] = null;
+							delete inverseAccountIDs[accountIDs[id].email];
+							delete accountIDs[id];
 						}
 					}, 1800000, accountID);
 					let firstName = body.firstName;
@@ -194,7 +194,7 @@ const server = http.createServer(function (request, response) {
 		case '/logOut':
 			response.writeHead(200, {"Content-Type": "text/plain"});
 			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null) {
-				sessions[cookies.sessionid] = null;
+				delete sessions[cookies.sessionid];
 				response.write("Logged Out");
 			} else {
 				response.write("Not Logged in. Can't Log out");
