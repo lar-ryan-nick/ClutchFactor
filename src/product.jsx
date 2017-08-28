@@ -49,6 +49,10 @@ class ProductInfo extends React.Component {
 				<p className="productInfoTitle">{this.props.data.modelname + " " + this.props.data.articletype + " - " + this.props.data.color}</p>
 				<p className="numColorsTitle">{this.props.data.colors.length + colorText}</p>
 				{colors}
+				<div>
+					<p className="priceTitle">{"Price: $" + this.props.data.price}</p>
+					<button className="addToCartButton">Add to Cart</button>
+				</div>
 			</div>
 		);
 	}

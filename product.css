@@ -34,3 +34,19 @@
 	height: 100px;
 	margin: .5em;
 }
+
+.priceTitle {
+	display: inline-block;
+	font-size: 3vw;
+	color: #ffffff;
+}
+
+.addToCartButton {
+	font-size: 3vw;
+	margin: 1em;
+	padding: 10px;
+	background-color: navy;
+	color: #ff0000;
+	border-radius: 10px;
+	float: right
+}
