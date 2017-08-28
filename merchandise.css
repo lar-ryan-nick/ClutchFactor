@@ -18,7 +18,7 @@
 	margin: 1em;
 	padding: 1em;
 	vertical-align: top;
-	background-color: #ffffff;
+	background-color: #aaaaaa;
 	cursor: pointer;
 }
 
@@ -38,8 +38,8 @@
 	margin: 0px;
 	font-size: 1.2em;
 	text-align: center;
-	color: #ffffff;
-	border-bottom: solid .5px #ffffff;
+	color: #aaaaaa;
+	border-bottom: solid .5px #aaaaaa;
 }
 
 .merchandiseTitleHovered {
@@ -57,7 +57,7 @@
 	margin: 0px;
 	font-size: 1em;
 	text-align: left;
-	color: #ffffff;
+	color: #aaaaaa;
 }
 
 .numColorsTitleHovered {
@@ -75,7 +75,7 @@
 	margin: 0px;
 	font-size: 1em;
 	text-align: right;
-	color: #ffffff;
+	color: #aaaaaa;
 }
 
 .priceTitleHovered {
