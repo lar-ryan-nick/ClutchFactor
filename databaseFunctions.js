@@ -221,7 +221,6 @@ function getProductInfo(parameters, cb) {
 										}
 										data.colors = colors;
 										data.ids = ids;
-										delete data.color;
 										cb(data);
 									} else {
 										cb({});

@@ -8,7 +8,7 @@ class MerchandiseItem extends React.Component {
 		super(props);
 		this.state = {
 			index: 0,
-			hovered: false
+			hovered: false,
 			indexHovered: -1
 		}
 		this.changeImage = this.changeImage.bind(this);

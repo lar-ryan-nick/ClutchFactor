@@ -69,7 +69,7 @@ class ProductPage extends React.Component {
 		}
 		this.changeImage = this.changeImage.bind(this);
 		this.getProductInfo = this.getProductInfo.bind(this);
-		this.getProductInfo(parameters.index);
+		this.getProductInfo(parameters.id);
 	}
 
 	changeImage(index) {
@@ -89,7 +89,7 @@ class ProductPage extends React.Component {
 				this.setState(newState);
 			}
 		}.bind(this);
-		xhttp.open("GET", "/getProductInfo?id=" + parameters.id, true);
+		xhttp.open("GET", "/getProductInfo?id=" + id, true);
 		xhttp.send();
 	}
 
