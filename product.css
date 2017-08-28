@@ -36,17 +36,16 @@
 }
 
 .priceTitle {
-	display: inline-block;
 	font-size: 3vw;
 	color: #ffffff;
 }
 
 .addToCartButton {
+	display: block;
 	font-size: 3vw;
-	margin: 1em;
+	margin: auto;
 	padding: 10px;
-	background-color: navy;
-	color: #ff0000;
+	background-color: #000000;
+	color: #ffffff;
 	border-radius: 10px;
-	float: right
 }

@@ -242,4 +242,28 @@ function getProductInfo(parameters, cb) {
 	}
 }
 
-module.exports =  {checkEmail, checkPassword, getUserInfo, createAccount, getMerchandiseInfo, getProductInfo};
+function addToCart(userID, parameters, cb) {
+	if (parseInt(userID) > 0 && parameters != null) {
+		let client = new pg.Client(config);
+		client.connect((error) => {
+			if (error) {
+				console.log(error);
+				cb("Sorry an error occured please try adding to your cart again");
+			} else {
+				client.query("INSERT INTO Orders (userid, productid) VALUES ('" + userID + "', '" + parameters.product + "');", (err, result) => {
+					if (err) {
+						console.log(err);
+						cb("Sorry an error occured please try adding to your cart again");
+					} else {
+						cb("The item was successfully added to your cart");
+					}
+					client.end();
+				});
+			}
+		});
+	} else {
+		cb(false);
+	}
+}
+
+module.exports =  {checkEmail, checkPassword, getUserInfo, createAccount, getMerchandiseInfo, getProductInfo, addToCart};

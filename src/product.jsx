@@ -28,6 +28,18 @@ class ProductInfo extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {};
+		this.addToCart = this.addToCart.bind(this);
+	}
+
+	addToCart() {
+		let xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				console.log(xhttp.responseText);
+			}
+		}.bind(this);
+		xhttp.open("GET", "/addToCart?product=" + this.props.data.id, true);
+		xhttp.send();
 	}
 
 	render() {
@@ -49,10 +61,8 @@ class ProductInfo extends React.Component {
 				<p className="productInfoTitle">{this.props.data.modelname + " " + this.props.data.articletype + " - " + this.props.data.color}</p>
 				<p className="numColorsTitle">{this.props.data.colors.length + colorText}</p>
 				{colors}
-				<div>
-					<p className="priceTitle">{"Price: $" + this.props.data.price}</p>
-					<button className="addToCartButton">Add to Cart</button>
-				</div>
+				<p className="priceTitle">{"Price: $" + this.props.data.price}</p>
+				<button className="addToCartButton" onClick={this.addToCart}>Add to Cart</button>
 			</div>
 		);
 	}
