@@ -9,11 +9,14 @@ class MerchandiseItem extends React.Component {
 		this.state = {
 			index: 0,
 			hovered: false
+			indexHovered: -1
 		}
 		this.changeImage = this.changeImage.bind(this);
-		this.handleOnMouseOver = this.handleOnMouseOver.bind(this);
-		this.handleOnMouseExit = this.handleOnMouseExit.bind(this);
+		this.handleDivOnMouseOver = this.handleDivOnMouseOver.bind(this);
+		this.handleDivOnMouseLeave = this.handleDivOnMouseLeave.bind(this);
 		this.handleOnClick = this.handleOnClick.bind(this);
+		this.handlePreviewOnMouseOver = this.handlePreviewOnMouseOver.bind(this);
+		this.handlePreviewOnMouseLeave = this.handlePreviewOnMouseLeave.bind(this);
 	}
 
 	changeImage(index) {
@@ -22,13 +25,13 @@ class MerchandiseItem extends React.Component {
 		this.setState(newState);
 	}
 
-	handleOnMouseOver() {
+	handleDivOnMouseOver() {
 		let newState = this.state;
 		newState.hovered = true;
 		this.setState(newState);
 	}
 
-	handleOnMouseExit() {
+	handleDivOnMouseLeave() {
 		let newState = this.state;
 		newState.hovered = false;
 		this.setState(newState);
@@ -36,6 +39,19 @@ class MerchandiseItem extends React.Component {
 
 	handleOnClick() {
 		window.location = "/product.html?id=" + this.props.data.ids[this.state.index];
+	}
+
+	handlePreviewOnMouseOver(index) {
+		let newState = this.state;
+		newState.indexHovered = index;
+		this.setState(newState);
+		this.changeImage(index);
+	}
+
+	handlePreviewOnMouseLeave() {
+		let newState = this.state;
+		newState.indexHovered = -1;
+		this.setState(newState);
 	}
 
 	render() {
@@ -59,11 +75,24 @@ class MerchandiseItem extends React.Component {
 			numColorsTitleClass = "numColorsTitleHovered";
 			priceTitleClass = "priceTitleHovered";
 			for (let i = 0; i < this.props.data.colors.length; ++i) {
-				otherColors.push(<img key={i} className="previewImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + ".png"} onMouseOver={this.changeImage.bind(this, i)}/>);
+				if (this.state.indexHovered == i) {
+					otherColors.push(
+						<div key={-i - 1} className="previewImageDiv">
+							<img key={i} className="previewImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + ".png"} onMouseOver={this.handlePreviewOnMouseOver.bind(this, i)} onMouseLeave={this.handlePreviewOnMouseLeave}/>
+							<p key={this.props.data.colors.length} className="colorText">{this.props.data.colors[i]}</p>
+						</div>
+					);
+				} else {
+					otherColors.push(
+						<div key={-i - 1} className="previewImageDiv">
+							<img key={i} className="previewImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + ".png"} onMouseOver={this.handlePreviewOnMouseOver.bind(this, i)} onMouseLeave={this.handlePreviewOnMouseLeave}/>
+						</div>
+					);
+				}
 			}
 		}
 		return (
-			<div className={merchandiseDivClass} onMouseOver={this.handleOnMouseOver} onMouseLeave={this.handleOnMouseExit} onClick={this.handleOnClick}>
+			<div className={merchandiseDivClass} onMouseOver={this.handleDivOnMouseOver} onMouseLeave={this.handleDivOnMouseLeave} onClick={this.handleOnClick}>
 				<div className="productDiv">
 					<img className="merchandiseImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[this.state.index] + ".png"}/>
 					<p className={merchandiseTitleClass}>{this.props.data.modelname + " " + this.props.data.articletype}</p>

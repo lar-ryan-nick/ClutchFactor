@@ -89,7 +89,7 @@ class ProductPage extends React.Component {
 				this.setState(newState);
 			}
 		}.bind(this);
-		xhttp.open("GET", "/getProductInfo?id=" + id, true);
+		xhttp.open("GET", "/getProductInfo?id=" + parameters.id, true);
 		xhttp.send();
 	}
 
