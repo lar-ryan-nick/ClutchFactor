@@ -163,10 +163,13 @@ function getMerchandiseInfo(parameters, cb) {
 									if (parseInt(res.rowCount) > 0) {
 										let data = res.rows[0];
 										let colors = [];
+										let ids = [];
 										for (let i = 0; i < res.rows.length; ++i) {
 											colors[i] = res.rows[i].color;
+											ids[i] = res.rows[i].id;
 										}
 										data.colors = colors;
+										data.ids = ids;
 										delete data.color;
 										cb(data);
 									} else {
@@ -189,4 +192,55 @@ function getMerchandiseInfo(parameters, cb) {
 	}
 }
 
-module.exports =  {checkEmail, checkPassword, getUserInfo, createAccount, getMerchandiseInfo};
+function getProductInfo(parameters, cb) {
+	if (parameters != null && parameters.id != null) {
+		let client = new pg.Client(config);
+		client.connect((error) => {
+			if (error) {
+				console.log(error);
+				cb({});
+			} else {
+				client.query("SELECT * FROM Merchandise WHERE id = " + parameters.id + ";", (err, result) => {
+					if (err) {
+						console.log(error);
+						cb({});
+					} else {
+						if (parseInt(result.rowCount) > 0) {
+							client.query("SELECT id, color FROM Merchandise WHERE modelname = '" + result.rows[0].modelname + "';", (er, res) => {
+								if (er) {
+									console.log(error);
+									cb({});
+								} else {
+									if (parseInt(res.rowCount) > 0) {
+										let data = result.rows[0];
+										let colors = [];
+										let ids = [];
+										for (let i = 0; i < res.rows.length; ++i) {
+											colors[i] = res.rows[i].color;
+											ids[i] = res.rows[i].id;
+										}
+										data.colors = colors;
+										data.ids = ids;
+										delete data.color;
+										cb(data);
+									} else {
+										cb({});
+									}
+								}
+								client.end();
+							});
+						} else {
+							console.log("Fuck");
+							cb({});
+						}
+					}
+				});
+			}
+		});
+	} else {
+		console.log("Ass");
+		cb({});
+	}
+}
+
+module.exports =  {checkEmail, checkPassword, getUserInfo, createAccount, getMerchandiseInfo, getProductInfo};

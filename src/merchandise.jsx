@@ -7,7 +7,7 @@ class MerchandiseItem extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			color: 0,
+			index: 0,
 			hovered: false
 		}
 		this.changeImage = this.changeImage.bind(this);
@@ -18,7 +18,7 @@ class MerchandiseItem extends React.Component {
 
 	changeImage(index) {
 		let newState = this.state;
-		newState.color = index;
+		newState.index = index;
 		this.setState(newState);
 	}
 
@@ -35,7 +35,7 @@ class MerchandiseItem extends React.Component {
 	}
 
 	handleOnClick() {
-		window.location = "/product.html?index=" + this.props.index;
+		window.location = "/product.html?id=" + this.props.data.ids[this.state.index];
 	}
 
 	render() {
@@ -65,7 +65,7 @@ class MerchandiseItem extends React.Component {
 		return (
 			<div className={merchandiseDivClass} onMouseOver={this.handleOnMouseOver} onMouseLeave={this.handleOnMouseExit} onClick={this.handleOnClick}>
 				<div className="productDiv">
-					<img className="merchandiseImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[this.state.color] + ".png"}/>
+					<img className="merchandiseImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[this.state.index] + ".png"}/>
 					<p className={merchandiseTitleClass}>{this.props.data.modelname + " " + this.props.data.articletype}</p>
 					<p className={numColorsTitleClass}>{this.props.data.colors.length + colorText}</p>
 					<p className={priceTitleClass}>{"$" + this.props.data.price}</p>

@@ -17,7 +17,7 @@ class ProductPreview extends React.Component {
 		}
 		return (
 			<div className="productPreviewDiv">
-				<img className="productPreviewImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[this.props.color] + ".png"}/>
+				<img className="productPreviewImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.color + ".png"}/>
 			</div>
 		);
 	}
@@ -46,7 +46,7 @@ class ProductInfo extends React.Component {
 		}
 		return (
 			<div className="productInfoDiv">
-				<p className="productInfoTitle">{this.props.data.modelname + " " + this.props.data.articletype + " - " + this.props.data.colors[this.props.color]}</p>
+				<p className="productInfoTitle">{this.props.data.modelname + " " + this.props.data.articletype + " - " + this.props.data.color}</p>
 				<p className="numColorsTitle">{this.props.data.colors.length + colorText}</p>
 				{colors}
 			</div>
@@ -59,7 +59,6 @@ class ProductPage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			color: 0,
 			data: null
 		}
 		let query = window.location.search.substring(1);
@@ -75,11 +74,12 @@ class ProductPage extends React.Component {
 
 	changeImage(index) {
 		let newState = this.state;
-		newState.color = index;
+		newState.data.color = this.state.data.colors[index];
+		newState.data.id = this.state.data.ids[index];
 		this.setState(newState);
 	}
 
-	getProductInfo(index) {
+	getProductInfo(id) {
 		let xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == 4 && xhttp.status == 200) {
@@ -89,7 +89,7 @@ class ProductPage extends React.Component {
 				this.setState(newState);
 			}
 		}.bind(this);
-		xhttp.open("GET", "/getMerchandiseInfo?index=" + index, true);
+		xhttp.open("GET", "/getProductInfo?id=" + id, true);
 		xhttp.send();
 	}
 
@@ -102,8 +102,8 @@ class ProductPage extends React.Component {
 		return (
 			<div>
 				<MainBackground/>
-				<ProductPreview data={this.state.data} color={this.state.color}/>
-				<ProductInfo data={this.state.data} color={this.state.color} parent={this} changeImage={this.changeImage}/>
+				<ProductPreview data={this.state.data}/>
+				<ProductInfo data={this.state.data} parent={this} changeImage={this.changeImage}/>
 			</div>
 		);
 	}
