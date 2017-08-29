@@ -74,7 +74,7 @@ class CartPage extends React.Component {
 	render() {
 		let cartItems = [];
 		for (let i = 0; i < this.state.data.length; ++i) {
-			cartItems.push(<CartItem key={i} data={this.state.data[i]} removeItem={this.removeCart.bind(this, this.state.data[i].id)}/>);
+			cartItems.push(<CartItem key={i} data={this.state.data[i]} removeItem={this.removeCartItem.bind(this, this.state.data[i].id)}/>);
 		}
 		return (
 			<div>
