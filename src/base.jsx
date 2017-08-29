@@ -13,6 +13,7 @@ class Header extends React.Component {
 		this.goToMain = this.goToMain.bind(this);
 		this.getUserInfo = this.getUserInfo.bind(this);
 		this.logOut = this.logOut.bind(this);
+		this.goToCart = this.goToCart.bind(this);
 		this.getUserInfo();
 	}
 
@@ -56,6 +57,10 @@ class Header extends React.Component {
 		xhttp.send();
 	}
 
+	goToCart() {
+		window.location = "/cart.html";
+	}
+
 	render() {
 		let accountStuff = [];
 		if (this.state.email == "") {
@@ -67,8 +72,9 @@ class Header extends React.Component {
 			} else if (this.state.lastname != "") {
 				name = this.state.lastname;
 			}
-			accountStuff.push(<p className="headerGreeting" key ="1">{"Hello " + name}</p>);
-			accountStuff.push(<button className="headerLogOutButton" key="2" onClick={this.logOut}>Log Out</button>);
+			accountStuff.push(<p key ="1" className="headerGreeting">{"Hello " + name}</p>);
+			accountStuff.push(<img key="2" className="cartIcon" src="images/CartIcon.png" onClick={this.goToCart}/>);
+			accountStuff.push(<button key="3" className="headerLogOutButton" onClick={this.logOut}>Log Out</button>);
 		}
 		return (
 			<div>

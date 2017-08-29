@@ -1,0 +1,29 @@
+.productImage {
+	margin: 2em;
+	width: 15%;
+}
+
+.titleAndOptionsDiv {
+	display: inline-block;
+	margin: 2em;
+	vertical-align: top;
+}
+
+.productTitle {
+	font-size: 3vw;
+	color: #ffffff;
+}
+
+.removeProductButton {
+	display: block;
+	webkit-appearance: button;
+	font-size: 2vw
+}
+
+.priceTitle {
+	display: inline-block;
+	font-size: 3vw;
+	color : #ffffff;
+	vertical-align: top;
+	margin: 2em;
+}

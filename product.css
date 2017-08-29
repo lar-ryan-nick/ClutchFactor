@@ -11,8 +11,10 @@
 
 .productInfoDiv {
 	display: inline-block;
-	width: 50%;
+	width: calc(50% - 4em);
 	vertical-align: top;
+	padding: 2em;
+	background-color: #000000
 }
 
 .productInfoTitle {
@@ -48,4 +50,28 @@
 	background-color: #000000;
 	color: #ffffff;
 	border-radius: 10px;
+}
+
+.responseDiv {
+	margin: 2em;
+}
+
+.icon {
+	display: inline-block;
+	height: 1em;
+	margin: 0em 0em 0em 1em;
+}
+
+.successText {
+	display: inline-block;
+	font-size: 1.5vw;
+	margin: 0em 0em 0em .5em;
+	color: #ffffff;
+}
+
+.errorText {
+	display: inline-block;
+	font-size: 1.5vw;
+	margin: 0em 0em 0em .5em;
+	color: #ff0000;
 }

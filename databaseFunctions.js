@@ -250,14 +250,23 @@ function addToCart(userID, parameters, cb) {
 				console.log(error);
 				cb("Sorry an error occured please try adding to your cart again");
 			} else {
-				client.query("INSERT INTO Orders (userid, productid) VALUES ('" + userID + "', '" + parameters.product + "');", (err, result) => {
+				client.query("SELECT id FROM Orders WHERE userid = " + userID + " AND productid = " + parameters.product + ";", (err, result) => {
 					if (err) {
 						console.log(err);
 						cb("Sorry an error occured please try adding to your cart again");
+					} else if (parseInt(result.rowCount) == 0) {
+						client.query("INSERT INTO Orders (userid, productid) VALUES ('" + userID + "', '" + parameters.product + "');", (er, res) => {
+							if (er) {
+								console.log(er);
+								cb("Sorry an error occured please try adding to your cart again");
+							} else {
+								cb("The item was successfully added to your cart");
+							}
+							client.end();
+						});
 					} else {
-						cb("The item was successfully added to your cart");
+						cb("You already have added that item to your cart. If you would like to increase your quantity of that item you can do so at checkout by clicking on the cart icon");
 					}
-					client.end();
 				});
 			}
 		});
@@ -266,4 +275,39 @@ function addToCart(userID, parameters, cb) {
 	}
 }
 
-module.exports =  {checkEmail, checkPassword, getUserInfo, createAccount, getMerchandiseInfo, getProductInfo, addToCart};
+function getCartItemInfo(userID, parameters, cb) {
+	if (parseInt(userID) > 0 && parameters != null && parseInt(parameters.index) >= 0) {
+		let client = new pg.Client(config);
+		client.connect((error) => {
+			if (error) {
+				console.log(error);
+				cb({});
+			} else {
+				client.query("SELECT productid FROM Orders WHERE userid = " + userID + ";", (err, result) => {
+					if (err) {
+						console.log(err);
+						cb({});
+					} else if (parseInt(result.rowCount) > parameters.index) {
+						client.query("SELECT * FROM Merchandise WHERE id = " + result.rows[parameters.index].productid + ";", (er, res) => {
+							if (er) {
+								console.log(er);
+								cb({});
+							} else if (parseInt(res.rowCount) > 0) {
+								cb(res.rows[0]);
+							} else {
+								cb({});
+							}
+							client.end();
+						});
+					} else {
+						cb({});
+					}
+				});
+			}
+		});
+	} else {
+		cb(false);
+	}
+}
+
+module.exports =  {checkEmail, checkPassword, getUserInfo, createAccount, getMerchandiseInfo, getProductInfo, addToCart, getCartItemInfo};

@@ -27,7 +27,9 @@ class ProductInfo extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {};
+		this.state = {
+			response: ""
+		};
 		this.addToCart = this.addToCart.bind(this);
 	}
 
@@ -36,6 +38,9 @@ class ProductInfo extends React.Component {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == 4 && xhttp.status == 200) {
 				console.log(xhttp.responseText);
+				let newState = this.state;
+				newState.response = xhttp.responseText;
+				this.setState(newState);
 			}
 		}.bind(this);
 		xhttp.open("GET", "/addToCart?product=" + this.props.data.id, true);
@@ -56,6 +61,14 @@ class ProductInfo extends React.Component {
 		for (let i = 0; i < this.props.data.colors.length; ++i) {
 			colors.push(<img key={i} className="colorPreview" onMouseOver={this.props.changeImage.bind(this.props.parent, i)} src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + ".png"}/>)
 		}
+		let cartResponse = [];
+		if (this.state.response == "The item was successfully added to your cart") {
+			cartResponse.push(<img key="1" className="icon" src="images/GreenCheckIcon.png"/>);
+			cartResponse.push(<p key="2" className="successText">{this.state.response}</p>);
+		} else if (this.state.response != "") {
+			cartResponse.push(<img key="1" className="icon" src="images/RedXIcon.png"/>);
+			cartResponse.push(<p key="2" className="errorText">{this.state.response}</p>);
+		}
 		return (
 			<div className="productInfoDiv">
 				<p className="productInfoTitle">{this.props.data.modelname + " " + this.props.data.articletype + " - " + this.props.data.color}</p>
@@ -63,6 +76,9 @@ class ProductInfo extends React.Component {
 				{colors}
 				<p className="priceTitle">{"Price: $" + this.props.data.price}</p>
 				<button className="addToCartButton" onClick={this.addToCart}>Add to Cart</button>
+				<div className="responseDiv">
+					{cartResponse}
+				</div>
 			</div>
 		);
 	}
