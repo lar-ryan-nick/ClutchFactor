@@ -20,7 +20,7 @@ class CartItem extends React.Component {
 				<img className="productImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.color + ".png"}/>
 				<div className="TitleAndOptionsDiv">
 					<p className="productTitle">{this.props.data.modelname + " " + this.props.data.articletype + " - " + this.props.data.color}</p>
-					<button className="removeProductButton">Remove from cart</button>
+					<button className="removeProductButton" onClick={this.props.removeItem}>Remove from cart</button>
 				</div>
 				<p className="priceTitle">{"$" + this.props.data.price}</p>
 			</div>
@@ -55,10 +55,26 @@ class CartPage extends React.Component {
 		xhttp.send();
 	}
 
+	removeCartItem(id) {
+		let xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				console.log(xhttp.responseText);
+				if (xhttp.responseText == "true") {
+					let newState = this.state;
+					newState.data[index] = null;
+					this.setState(newState);
+				}
+			}
+		}.bind(this);
+		xhttp.open("GET", "/removeCartItem?id=" + id, true);
+		xhttp.send();
+	}
+
 	render() {
 		let cartItems = [];
 		for (let i = 0; i < this.state.data.length; ++i) {
-			cartItems.push(<CartItem key={i} data={this.state.data[i]}/>);
+			cartItems.push(<CartItem key={i} data={this.state.data[i]} removeItem={this.removeCart.bind(this, this.state.data[i].id)}/>);
 		}
 		return (
 			<div>

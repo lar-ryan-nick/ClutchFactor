@@ -4,7 +4,7 @@ const fs = require('fs');
 const qs = require('querystring');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const {checkEmail, checkPassword, getUserInfo, createAccount, getMerchandiseInfo, getProductInfo, addToCart, getCartItemInfo} = require('./databaseFunctions.js');
+const {checkEmail, checkPassword, getUserInfo, createAccount, getMerchandiseInfo, getProductInfo, addToCart, getCartItemInfo, removeCartItem} = require('./databaseFunctions.js');
 
 const transporter = nodemailer.createTransport({
 	service: 'Gmail',
@@ -219,6 +219,22 @@ const server = http.createServer(function (request, response) {
 				});
 			} else {
 				response.write("You must log in first to add something to your cart");
+				response.end();
+			}
+			break;
+		case '/removeCartItem':
+			response.writeHead(200, {"Content-Type": "text/plain"});
+			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null && parameters != null && parameters.id != null) {
+				removeCartItem(sessions[cookies.sessionid].userID, parameters, (deleted) => {
+					if (deleted) {
+						response.write("Remove the cart item successfully");
+					} else {
+						response.write("Was not able to remove from the cart");
+					}
+					response.end();
+				});
+			} else {
+				response.write("Please log in or enter a valid order id");
 				response.end();
 			}
 			break;

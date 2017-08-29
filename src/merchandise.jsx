@@ -114,13 +114,13 @@ class ShoppingPage extends React.Component {
 		this.state = {
 			data: []
 		};
-		this.getProductInfo = this.getProductInfo.bind(this);
+		this.getMerchandiseInfo = this.getMerchandiseInfo.bind(this);
 		for (let i = 0; i < 3; ++i) {
-			this.getProductInfo(i);
+			this.getMerchandiseInfo(i);
 		}
 	}
 
-	getProductInfo(index) {
+	getMerchandiseInfo(index) {
 		let xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == 4 && xhttp.status == 200) {

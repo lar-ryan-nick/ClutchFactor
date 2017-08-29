@@ -310,4 +310,28 @@ function getCartItemInfo(userID, parameters, cb) {
 	}
 }
 
-module.exports =  {checkEmail, checkPassword, getUserInfo, createAccount, getMerchandiseInfo, getProductInfo, addToCart, getCartItemInfo};
+function removeCartItem(userID, parameters, cb) {
+	if (parseInt(userID) > 0 && parameters != null) {
+		let client = new pg.Client(config);
+		client.connect((error) => {
+			if (error) {
+				console.log(error);
+				cb(false);
+			} else {
+				client.query("DELETE * FROM Orders WHERE userid = " + userID + " AND id = " + parameters.id + ";", (err, result) => {
+					if (err) {
+						console.log(err);
+						cb(false);
+					} else {
+						cb(true);
+					}
+					client.end();
+				});
+			}
+		});
+	} else {
+		cb(false);
+	}
+}
+
+module.exports =  {checkEmail, checkPassword, getUserInfo, createAccount, getMerchandiseInfo, getProductInfo, addToCart, getCartItemInfo, removeCartItem};
