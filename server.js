@@ -227,7 +227,7 @@ const server = http.createServer(function (request, response) {
 			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null && parameters != null && parameters.id != null) {
 				removeCartItem(sessions[cookies.sessionid].userID, parameters, (deleted) => {
 					if (deleted) {
-						response.write("Remove the cart item successfully");
+						response.write("Removed the cart item successfully");
 					} else {
 						response.write("Was not able to remove from the cart");
 					}
