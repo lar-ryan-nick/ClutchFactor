@@ -75,17 +75,16 @@ function checkPassword(parameters, cb) {
 }
 
 function getUserInfo(userID, cb) {
-	userID = parseInt(userID);
-	if (userID != NaN) {
+	if (parseInt(userID) > 0) {
 		let client = new pg.Client(config);
 		client.connect((error) => {
 			if (error) {
 				console.log(error);
 				cb({});
 			} else {
-				client.query("SELECT Email, FirstName, LastName, TimeCreated FROM Users WHERE ID = " + userID + ";", (error, result) => {
-					if (error) {
-						console.log(error);
+				client.query("SELECT Email, FirstName, LastName, TimeCreated FROM Users WHERE ID = " + userID + ";", (err, result) => {
+					if (err) {
+						console.log(err);
 						cb({});
 					} else {
 						if (parseInt(result.rowCount) == 1) {
@@ -123,7 +122,7 @@ function createAccount(parameters, cb) {
 							} else {
 								client.query("INSERT INTO Users (Email, Password, FirstName, LastName) VALUES ('" + parameters.email + "', '" + hash + "', '" + parameters.firstName + "', '" + parameters.lastName + "');", (e, result) => {
 									if (e) {
-										console.log(error);
+										console.log(e);
 										cb(false);
 									} else {
 										cb(true);
@@ -141,6 +140,26 @@ function createAccount(parameters, cb) {
 	}
 }
 
+function getNumMerchandise(cb) {
+	let client = new pg.Client(config);
+	client.connect((error) => {
+		if (error) {
+			console.log(error);
+			cb("0");
+		} else {
+			client.query("SELECT DISTINCT modelname FROM Merchandise;", (err, result) => {
+				if (err) {
+					console.log(err);
+					cb("0");
+				} else {
+					cb(result.rowCount);
+				}
+				client.end();
+			});
+		}
+	});
+}
+
 function getMerchandiseInfo(parameters, cb) {
 	if (parameters != null && parameters.index != null) {
 		let client = new pg.Client(config);
@@ -151,13 +170,13 @@ function getMerchandiseInfo(parameters, cb) {
 			} else {
 				client.query("SELECT DISTINCT modelname FROM Merchandise;", (err, result) => {
 					if (err) {
-						console.log(error);
+						console.log(err);
 						cb({});
 					} else {
 						if (parseInt(result.rowCount) > parameters.index) {
 							client.query("SELECT * FROM Merchandise WHERE modelname = '" + result.rows[parameters.index].modelname + "';", (er, res) => {
 								if (er) {
-									console.log(error);
+									console.log(er);
 									cb({});
 								} else {
 									if (parseInt(res.rowCount) > 0) {
@@ -202,13 +221,13 @@ function getProductInfo(parameters, cb) {
 			} else {
 				client.query("SELECT * FROM Merchandise WHERE id = " + parameters.id + ";", (err, result) => {
 					if (err) {
-						console.log(error);
+						console.log(err);
 						cb({});
 					} else {
 						if (parseInt(result.rowCount) > 0) {
 							client.query("SELECT id, color FROM Merchandise WHERE modelname = '" + result.rows[0].modelname + "';", (er, res) => {
 								if (er) {
-									console.log(error);
+									console.log(er);
 									cb({});
 								} else {
 									if (parseInt(res.rowCount) > 0) {
@@ -275,6 +294,30 @@ function addToCart(userID, parameters, cb) {
 	}
 }
 
+function getNumCartItems(userID, cb) {
+	if (parseInt(userID) > 0) {
+		let client = new pg.Client(config);
+		client.connect((error) => {
+			if (error) {
+				console.log(error);
+				cb("0");
+			} else {
+				client.query("SELECT id FROM Orders WHERE userid = " + userID + ";", (err, result) => {
+					if (err) {
+						console.log(err);
+						cb("0");
+					} else {
+						cb(result.rowCount);
+					}
+					client.end();
+				});
+			}
+		});
+	} else {
+		cb("0");
+	}
+}
+
 function getCartItemInfo(userID, parameters, cb) {
 	if (parseInt(userID) > 0 && parameters != null && parseInt(parameters.index) >= 0) {
 		let client = new pg.Client(config);
@@ -283,7 +326,7 @@ function getCartItemInfo(userID, parameters, cb) {
 				console.log(error);
 				cb({});
 			} else {
-				client.query("SELECT productid FROM Orders WHERE userid = " + userID + ";", (err, result) => {
+				client.query("SELECT id, userid, productid FROM Orders WHERE userid = " + userID + " AND paid = false;", (err, result) => {
 					if (err) {
 						console.log(err);
 						cb({});
@@ -293,7 +336,11 @@ function getCartItemInfo(userID, parameters, cb) {
 								console.log(er);
 								cb({});
 							} else if (parseInt(res.rowCount) > 0) {
-								cb(res.rows[0]);
+								let data = res.rows[0];
+								data.id = result.rows[parseInt(parameters.index)].id;
+								data.userid = result.rows[parseInt(parameters.index)].userid;
+								data.productid = result.rows[parseInt(parameters.index)].productid;
+								cb(data);
 							} else {
 								cb({});
 							}
@@ -311,19 +358,21 @@ function getCartItemInfo(userID, parameters, cb) {
 }
 
 function removeCartItem(userID, parameters, cb) {
-	if (parseInt(userID) > 0 && parameters != null && parameters.productID != null) {
+	if (parseInt(userID) > 0 && parameters != null && parameters.id != null) {
 		let client = new pg.Client(config);
 		client.connect((error) => {
 			if (error) {
 				console.log(error);
 				cb(false);
 			} else {
-				client.query("DELETE FROM Orders WHERE userid = " + userID + " AND productid = " + parameters.productID + ";", (err, result) => {
+				client.query("DELETE FROM Orders WHERE userid = " + userID + " AND id = " + parameters.id + ";", (err, result) => {
 					if (err) {
 						console.log(err);
 						cb(false);
-					} else {
+					} else if (parseInt(result.rowCount) > 0) {
 						cb(true);
+					} else {
+						cb(false);
 					}
 					client.end();
 				});
@@ -334,4 +383,4 @@ function removeCartItem(userID, parameters, cb) {
 	}
 }
 
-module.exports =  {checkEmail, checkPassword, getUserInfo, createAccount, getMerchandiseInfo, getProductInfo, addToCart, getCartItemInfo, removeCartItem};
+module.exports =  {checkEmail, checkPassword, getUserInfo, createAccount, getNumMerchandise, getMerchandiseInfo, getProductInfo, addToCart, getNumCartItems, getCartItemInfo, removeCartItem};

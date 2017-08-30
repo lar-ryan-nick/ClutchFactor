@@ -4,7 +4,7 @@ const fs = require('fs');
 const qs = require('querystring');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-const {checkEmail, checkPassword, getUserInfo, createAccount, getMerchandiseInfo, getProductInfo, addToCart, getCartItemInfo, removeCartItem} = require('./databaseFunctions.js');
+const {checkEmail, checkPassword, getUserInfo, createAccount, getNumMerchandise, getMerchandiseInfo, getProductInfo, addToCart, getNumCartItems, getCartItemInfo, removeCartItem} = require('./databaseFunctions.js');
 
 const transporter = nodemailer.createTransport({
 	service: 'Gmail',
@@ -198,6 +198,18 @@ const server = http.createServer(function (request, response) {
 				response.end();
 			}
 			break;
+		case '/getNumCartItems':
+			response.writeHead(200, {"Content-Type": "text/plain"});
+			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null) {
+				getNumCartItems(sessions[cookies.sessionid].userID, (num) => {
+					response.write("" + num);
+					response.end();
+				});
+			} else {
+				response.write("Please log in before trying to look at your cart");
+				response.end();
+			}
+			break;
 		case '/getCartItemInfo':
 			response.writeHead(200, {"Content-Type": "text/plain"});
 			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null && parameters != null && parseInt(parameters.index) >= 0) {
@@ -224,7 +236,7 @@ const server = http.createServer(function (request, response) {
 			break;
 		case '/removeCartItem':
 			response.writeHead(200, {"Content-Type": "text/plain"});
-			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null && parameters != null && parameters.productID != null) {
+			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null && parameters != null && parameters.id != null) {
 				removeCartItem(sessions[cookies.sessionid].userID, parameters, (deleted) => {
 					if (deleted) {
 						response.write("Removed the cart item successfully");
@@ -237,6 +249,13 @@ const server = http.createServer(function (request, response) {
 				response.write("Please log in or enter a valid order id");
 				response.end();
 			}
+			break;
+		case '/getNumMerchandise':
+			response.writeHead(200, {"Content-Type": "text/plain"});
+			getNumMerchandise((num) => {
+				response.write("" + num);
+				response.end();
+			});
 			break;
 		case '/getMerchandiseInfo':
 			response.writeHead(200, {"Content-Type": "text/plain"});

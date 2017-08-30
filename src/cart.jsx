@@ -33,11 +33,32 @@ class CartPage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			numCartItems: 0,
 			data: []
 		};
+		this.getNumCartItems = this.getNumCartItems.bind(this);
 		this.getCartItemInfo = this.getCartItemInfo.bind(this);
 		this.removeCartItem = this.removeCartItem.bind(this);
-		this.getCartItemInfo(0);
+		this.getNumCartItems(function() {
+			for (let i = 0; i < this.state.numCartItems; ++i) {
+				this.getCartItemInfo(i);
+			}
+		}.bind(this));
+	}
+
+	getNumCartItems(cb) {
+		let xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				console.log(xhttp.responseText);
+				let newState = this.state;
+				newState.numCartItems = parseInt(xhttp.responseText);
+				this.setState(newState);
+				cb();
+			}
+		}.bind(this);
+		xhttp.open("GET", "/getNumCartItems", true);
+		xhttp.send();
 	}
 
 	getCartItemInfo(index) {
@@ -68,7 +89,7 @@ class CartPage extends React.Component {
 				}
 			}
 		}.bind(this);
-		xhttp.open("GET", "/removeCartItem?productID=" + this.state.data[index].id, true);
+		xhttp.open("GET", "/removeCartItem?id=" + this.state.data[index].id, true);
 		xhttp.send();
 	}
 
