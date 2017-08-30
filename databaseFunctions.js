@@ -19,9 +19,9 @@ function checkEmail(parameters, cb) {
 				console.log(error);
 				cb(false);
 			} else {
-				client.query("SELECT ID FROM Users WHERE Email = '" + parameters.email + "';", (error, result) => {
-					if (error) {
-						console.log(error);
+				client.query("SELECT ID FROM Users WHERE Email = '" + parameters.email + "';", (err, result) => {
+					if (err) {
+						console.log(err);
 						cb(false);
 					} else {
 						if (parseInt(result.rowCount) == 1) {
@@ -47,15 +47,15 @@ function checkPassword(parameters, cb) {
 				console.log(error);
 				cb(0, false);
 			} else {
-				client.query("SELECT ID, Password FROM Users WHERE Email = '" + parameters.email + "';", (error, result) => {
-					if (error) {
-						console.log(error);
+				client.query("SELECT ID, Password FROM Users WHERE Email = '" + parameters.email + "';", (err, result) => {
+					if (err) {
+						console.log(err);
 						cb(0, false);
 					} else {
 						if (parseInt(result.rowCount) == 1) {
-							bcrypt.compare(parameters.password, result.rows[0].password, function(err, res) {
-								if (err) {
-									console.log(error);
+							bcrypt.compare(parameters.password, result.rows[0].password, function(er, res) {
+								if (er) {
+									console.log(er);
 									cb(0, false);
 								} else {
 									cb(parseInt(result.rows[0].id), res);
@@ -311,14 +311,14 @@ function getCartItemInfo(userID, parameters, cb) {
 }
 
 function removeCartItem(userID, parameters, cb) {
-	if (parseInt(userID) > 0 && parameters != null) {
+	if (parseInt(userID) > 0 && parameters != null && parameters.productID != null) {
 		let client = new pg.Client(config);
 		client.connect((error) => {
 			if (error) {
 				console.log(error);
 				cb(false);
 			} else {
-				client.query("DELETE * FROM Orders WHERE userid = " + userID + " AND id = " + parameters.id + ";", (err, result) => {
+				client.query("DELETE FROM Orders WHERE userid = " + userID + " AND productid = " + parameters.productID + ";", (err, result) => {
 					if (err) {
 						console.log(err);
 						cb(false);

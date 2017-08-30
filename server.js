@@ -224,7 +224,7 @@ const server = http.createServer(function (request, response) {
 			break;
 		case '/removeCartItem':
 			response.writeHead(200, {"Content-Type": "text/plain"});
-			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null && parameters != null && parameters.id != null) {
+			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null && parameters != null && parameters.productID != null) {
 				removeCartItem(sessions[cookies.sessionid].userID, parameters, (deleted) => {
 					if (deleted) {
 						response.write("Removed the cart item successfully");

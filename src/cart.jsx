@@ -36,6 +36,7 @@ class CartPage extends React.Component {
 			data: []
 		};
 		this.getCartItemInfo = this.getCartItemInfo.bind(this);
+		this.removeCartItem = this.removeCartItem.bind(this);
 		this.getCartItemInfo(0);
 	}
 
@@ -55,26 +56,26 @@ class CartPage extends React.Component {
 		xhttp.send();
 	}
 
-	removeCartItem(id) {
+	removeCartItem(index) {
 		let xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == 4 && xhttp.status == 200) {
 				console.log(xhttp.responseText);
-				if (xhttp.responseText == "true") {
+				if (xhttp.responseText == "Removed the cart item successfully") {
 					let newState = this.state;
-					newState.data[index] = null;
+					delete newState.data[index];
 					this.setState(newState);
 				}
 			}
 		}.bind(this);
-		xhttp.open("GET", "/removeCartItem?id=" + id, true);
+		xhttp.open("GET", "/removeCartItem?productID=" + this.state.data[index].id, true);
 		xhttp.send();
 	}
 
 	render() {
 		let cartItems = [];
 		for (let i = 0; i < this.state.data.length; ++i) {
-			cartItems.push(<CartItem key={i} data={this.state.data[i]} removeItem={this.removeCartItem.bind(this, this.state.data[i].id)}/>);
+			cartItems.push(<CartItem key={i} data={this.state.data[i]} removeItem={this.removeCartItem.bind(this, i)}/>);
 		}
 		return (
 			<div>
