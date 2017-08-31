@@ -234,11 +234,11 @@ class CreateAccountForm extends React.Component {
 			} else if (this.state.passwordError == false) {
 				passwordError.push(<img key="1" className="icon" src="images/GreenCheckIcon.png"/>);
 			}
-			let submit = [];
+			let formBottom = [];
 			if (this.state.submitDisabled) {
-				submit.push(<input className="logInButton" key="1" type="submit" name="createAccount" value="Create Account" disabled/>);
+				formBottom.push(<div key="1" className="loader"></div>);
 			} else {
-				submit.push(<input className="logInButton" key="1" type="submit" name="createAccount" value="Create Account"/>);
+				formBottom.push(<input key="1" className="logInButton" type="submit" name="logIn" value="Log In"/>);
 			}
 			return (
 				<div>
@@ -257,7 +257,7 @@ class CreateAccountForm extends React.Component {
 						<input className="textInput" type="text" name="firstName" value={this.state.firstName} onChange={this.handleChange}/>
 						<p className="label">Last Name:</p>
 						<input className="textInput" type="text" name="lastName" value={this.state.lastName} onChange={this.handleChange}/>
-						{submit}
+						{formBottom}
 					</form>
 				</div>
 			);
