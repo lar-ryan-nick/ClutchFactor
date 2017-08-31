@@ -47,7 +47,7 @@ form {
 }
 
 .loader {
-	border: 16px solid #ffffff;
+	border: 16px solid transparent;
 	border-top: 16px solid navy;
 	border-bottom: 16px solid #ff0000;
 	border-radius: 50%;

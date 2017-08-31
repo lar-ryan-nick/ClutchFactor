@@ -43,7 +43,7 @@
 }
 
 .loader {
-	border: 16px solid #000000;
+	border: 16px solid transparent;
 	border-top: 16px solid navy;
 	border-bottom: 16px solid #ff0000;
 	border-radius: 50%;

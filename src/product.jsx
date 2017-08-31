@@ -67,19 +67,16 @@ class ProductInfo extends React.Component {
 		for (let i = 0; i < this.props.data.colors.length; ++i) {
 			colors.push(<img key={i} className="colorPreview" onMouseOver={this.props.changeImage.bind(this.props.parent, i)} src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + ".png"}/>)
 		}
-		let cartResponse = [];
-		if (this.state.response == "The item was successfully added to your cart") {
-			cartResponse.push(<img key="1" className="icon" src="images/GreenCheckIcon.png"/>);
-			cartResponse.push(<p key="2" className="successText">{this.state.response}</p>);
-		} else if (this.state.response != "") {
-			cartResponse.push(<img key="1" className="icon" src="images/RedXIcon.png"/>);
-			cartResponse.push(<p key="2" className="errorText">{this.state.response}</p>);
-		}
 		let bottom = [];
 		if (this.state.loading) {
-			bottom.push(<div className="loader"></div>);
+			bottom.push(<div key="1" className="loader"></div>);
 		} else {
-			bottom.push(<button className="addToCartButton" onClick={this.addToCart}>Add to Cart</button>);
+			bottom.push(<button key="1" className="addToCartButton" onClick={this.addToCart}>Add to Cart</button>);
+			if (this.state.response == "The item was successfully added to your cart") {
+				bottom.push(<div key="2" className="responseDiv"><img key="3" className="icon" src="images/GreenCheckIcon.png"/><p key="4" className="successText">{this.state.response}</p></div>);
+			} else if (this.state.response != "") {
+				bottom.push(<div key="2" className="responseDiv"><img key="3" className="icon" src="images/RedXIcon.png"/><p key="4" className="successText">{this.state.response}</p></div>);
+			}
 		}
 		return (
 			<div className="productInfoDiv">
@@ -88,9 +85,6 @@ class ProductInfo extends React.Component {
 				{colors}
 				<p className="priceTitle">{"Price: $" + this.props.data.price}</p>
 				{bottom}
-				<div className="responseDiv">
-					{cartResponse}
-				</div>
 			</div>
 		);
 	}

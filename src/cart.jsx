@@ -15,12 +15,21 @@ class CartItem extends React.Component {
 				<div></div>
 			);
 		}
+		let remove = [];
+		if (this.props.data.loading == true) {
+			remove.push(<div key="1" className="loader"></div>);
+		} else {
+			remove.push(<button key="1" className="removeProductButton" onClick={this.props.removeItem}>Remove from cart</button>);
+			if (this.props.data.response != null) {
+				remove.push(<div key="2"><img key="3" className="icon" src="images/RedXIcon.png"/><p key="4" className="errorLabel">{this.props.data.response}</p></div>);
+			}
+		}
 		return (
 			<div className="cartDiv">
 				<img className="productImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.color + ".png"}/>
 				<div className="TitleAndOptionsDiv">
 					<p className="productTitle">{this.props.data.modelname + " " + this.props.data.articletype + " - " + this.props.data.color}</p>
-					<button className="removeProductButton" onClick={this.props.removeItem}>Remove from cart</button>
+					{remove}	
 				</div>
 				<p className="priceTitle">{"$" + this.props.data.price}</p>
 			</div>
@@ -78,6 +87,10 @@ class CartPage extends React.Component {
 	}
 
 	removeCartItem(index) {
+		let newState = this.state;
+		newState.data[index].loading = true;
+		delete newState.data[index].response;
+		this.setState(newState);
 		let xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == 4 && xhttp.status == 200) {
@@ -85,6 +98,11 @@ class CartPage extends React.Component {
 				if (xhttp.responseText == "Removed the cart item successfully") {
 					let newState = this.state;
 					delete newState.data[index];
+					this.setState(newState);
+				} else {
+					let newState = this.state;
+					newState.data[index].loading = false;
+					newState.data[index].response = xhttp.responseText;
 					this.setState(newState);
 				}
 			}
