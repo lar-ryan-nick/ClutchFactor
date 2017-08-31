@@ -21,12 +21,10 @@ class LogInForm extends React.Component {
 		if (event) {
 			let newState = this.state;
 			newState[event.target.name] = event.target.value;
+			newState.passwordError = false;
 			this.setState(newState);
 			if (event.target.name == "email") {
 				this.checkEmail();
-			} else if (event.target.name == "password") {
-				newState.passwordError = false;
-				this.setState(newState);
 			}
 		}
 	}
@@ -63,7 +61,7 @@ class LogInForm extends React.Component {
 			if (xhttp.readyState == 4 && xhttp.status == 200) {
 				if (xhttp.responseText == "true") {
 					window.location = "index.html";
-				} else if (this.state.emailError == true) {
+				} else {
 					let newState = this.state;
 					newState.passwordError = true;
 					this.setState(newState);
