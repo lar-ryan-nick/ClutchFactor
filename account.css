@@ -46,6 +46,22 @@ form {
 	-webkit-appearance: button;
 }
 
+.loader {
+	border: 16px solid #ffffff;
+	border-top: 16px solid navy;
+	border-bottom: 16px solid #ff0000;
+	border-radius: 50%;
+	margin: .5em auto 1em auto;
+	width: 75px;
+	height: 75px;
+	animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
 .icon {
 	display: inline-block;
 	height: 1em;

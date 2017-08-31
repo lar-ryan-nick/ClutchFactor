@@ -10,7 +10,8 @@ class LogInForm extends React.Component {
 			email: "",
 			password: "",
 			emailError: "",
-			passwordError: false
+			passwordError: false,
+			checkingPassword: false
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.checkEmail = this.checkEmail.bind(this);
@@ -56,6 +57,9 @@ class LogInForm extends React.Component {
 
 	checkPassword(event) {
 		event.preventDefault();
+		let newState = this.state;
+		newState.checkingPassword = true;
+		this.setState(newState);
 		let xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == 4 && xhttp.status == 200) {
@@ -64,6 +68,7 @@ class LogInForm extends React.Component {
 				} else {
 					let newState = this.state;
 					newState.passwordError = true;
+					newState.checkingPassword = false;
 					this.setState(newState);
 				}
 			}
@@ -87,6 +92,12 @@ class LogInForm extends React.Component {
 			emailError.push(<img key="1" className="icon" src="images/RedXIcon.png"/>);
 			emailError.push(<p key="2" className="errorLabel">{this.state.emailError}</p>);
 		}
+		let formBottom = [];
+		if (this.state.checkingPassword) {
+			formBottom.push(<div key="1" className="loader"></div>);
+		} else {
+			formBottom.push(<input key="1" className="logInButton" type="submit" name="logIn" value="Log In"/>);
+		}
 		return (
 			<div>
 				<form onSubmit={this.checkPassword}>
@@ -100,7 +111,7 @@ class LogInForm extends React.Component {
 						{passwordError}
 					</div>
 					<input className="textInput" type="password" name="password" value={this.state.password} onChange={this.handleChange}/>
-					<input className="logInButton" type="submit" name="logIn" value="Log In"/>
+					{formBottom}
 				</form>
 			</div>
 		);

@@ -54,6 +54,13 @@ class MerchandiseItem extends React.Component {
 		this.setState(newState);
 	}
 
+	componentDidUpdate() {
+		if (this.colorLabel != null && this.hoveredImage != null) {
+			this.colorLabel.style.top = this.hoveredImage.offsetTop;
+			this.colorLabel.style.left = this.hoveredImage.offsetLeft + this.hoveredImage.offsetWidth + 5;
+		}
+	}
+
 	render() {
 		if (this.props.data == null) {
 			return (
@@ -77,19 +84,18 @@ class MerchandiseItem extends React.Component {
 			for (let i = 0; i < this.props.data.colors.length; ++i) {
 				if (this.state.indexHovered == i) {
 					otherColors.push(
-						<div key={-i - 1} className="previewImageDiv">
-							<img key={i} className="previewImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + ".png"} onMouseOver={this.handlePreviewOnMouseOver.bind(this, i)} onMouseLeave={this.handlePreviewOnMouseLeave}/>
-							<p key={this.props.data.colors.length} className="colorText">{this.props.data.colors[i]}</p>
-						</div>
+						<img key={i} ref={(input) => {this.hoveredImage = input;}} className="previewImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + ".png"} onMouseOver={this.handlePreviewOnMouseOver.bind(this, i)} onMouseLeave={this.handlePreviewOnMouseLeave}/>
 					);
 				} else {
 					otherColors.push(
-						<div key={-i - 1} className="previewImageDiv">
-							<img key={i} className="previewImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + ".png"} onMouseOver={this.handlePreviewOnMouseOver.bind(this, i)} onMouseLeave={this.handlePreviewOnMouseLeave}/>
-						</div>
+						<img key={i} className="previewImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + ".png"} onMouseOver={this.handlePreviewOnMouseOver.bind(this, i)} onMouseLeave={this.handlePreviewOnMouseLeave}/>
 					);
 				}
 			}
+		}
+		let colorLabel = [];
+		if (this.state.indexHovered >= 0) {
+			colorLabel.push(<p key="1" ref={(input) => {this.colorLabel = input;}} className="colorLabel">{this.props.data.colors[this.state.indexHovered]}</p>);
 		}
 		return (
 			<div className={merchandiseDivClass} onMouseOver={this.handleDivOnMouseOver} onMouseLeave={this.handleDivOnMouseLeave} onClick={this.handleOnClick}>
@@ -102,6 +108,7 @@ class MerchandiseItem extends React.Component {
 				<div className="previewDiv">
 					{otherColors}
 				</div>
+				{colorLabel}
 			</div>
 		);
 	}
