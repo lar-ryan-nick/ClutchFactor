@@ -9,9 +9,11 @@ class MerchandiseItem extends React.Component {
 		this.state = {
 			index: 0,
 			hovered: false,
-			indexHovered: -1
+			indexHovered: -1,
+			loadingImage: true
 		}
 		this.changeImage = this.changeImage.bind(this);
+		this.handleImageOnLoad = this.handleImageOnLoad.bind(this);
 		this.handleDivOnMouseOver = this.handleDivOnMouseOver.bind(this);
 		this.handleDivOnMouseLeave = this.handleDivOnMouseLeave.bind(this);
 		this.handleOnClick = this.handleOnClick.bind(this);
@@ -22,6 +24,12 @@ class MerchandiseItem extends React.Component {
 	changeImage(index) {
 		let newState = this.state;
 		newState.index = index;
+		this.setState(newState);
+	}
+
+	handleImageOnLoad() {
+		let newState = this.state;
+		newState.loadingImage = false;
 		this.setState(newState);
 	}
 
@@ -64,9 +72,7 @@ class MerchandiseItem extends React.Component {
 	render() {
 		if (this.props.data == null) {
 			return (
-				<div className="merchandiseDiv">
-					<div className="loader"></div>
-				</div>
+				<div></div>
 			);
 		}
 		let colorText = " colors";
@@ -77,6 +83,13 @@ class MerchandiseItem extends React.Component {
 		let merchandiseTitleClass = "merchandiseTitle";
 		let numColorsTitleClass = "numColorsTitle";
 		let priceTitleClass = "priceTitle";
+		let image = [];
+		if (this.state.loadingImage) {
+			image.push(<img key="1" className="invisible" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[this.state.index] + ".png"} onLoad={this.handleImageOnLoad}/>);
+			image.push(<div key="2" className="loader"></div>);
+		} else {
+			image.push(<img key="1" className="merchandiseImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[this.state.index] + ".png"}/>);
+		}
 		let otherColors = [];
 		if (this.state.hovered == true) {
 			merchandiseDivClass = "merchandiseDivHovered";
@@ -102,7 +115,7 @@ class MerchandiseItem extends React.Component {
 		return (
 			<div className={merchandiseDivClass} onMouseOver={this.handleDivOnMouseOver} onMouseLeave={this.handleDivOnMouseLeave} onClick={this.handleOnClick}>
 				<div className="productDiv">
-					<img className="merchandiseImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[this.state.index] + ".png"}/>
+					{image}
 					<p className={merchandiseTitleClass}>{this.props.data.modelname + " " + this.props.data.articletype}</p>
 					<p className={numColorsTitleClass}>{this.props.data.colors.length + colorText}</p>
 					<p className={priceTitleClass}>{"$" + this.props.data.price}</p>
@@ -127,9 +140,6 @@ class ShoppingPage extends React.Component {
 		this.getMerchandiseInfo = this.getMerchandiseInfo.bind(this);
 		this.getNumMerchandise = this.getNumMerchandise.bind(this);
 		this.getNumMerchandise(function() {
-			let newState = this.state;
-			newState.data.fill(null, 0, this.numMerchandise);
-			this.setState(newState);
 			for (let i = 0; i < this.state.numMerchandise; ++i) {
 				this.getMerchandiseInfo(i);
 			}

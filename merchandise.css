@@ -49,6 +49,10 @@
 	vertical-align: top;
 }
 
+.invisible {
+	display: none;
+}
+
 .merchandiseTitle {
 	width: 100%;
 	margin: 0px;

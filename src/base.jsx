@@ -51,6 +51,9 @@ class Header extends React.Component {
 					lastname: "",
 					timecreated: ""
 				});
+				if (this.props.refresh != null) {
+					this.props.refresh();
+				}
 			}
 		}.bind(this);
 		xhttp.open("GET", "/logOut", true);

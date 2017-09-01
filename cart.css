@@ -1,11 +1,45 @@
-.cartTitle {
-	margin: 0px;
-	font-size: 5vw;
+.checkoutDiv {
+	vertical-align: top;
+	display: inline-block;
+	width: 25%;
+	background-color: #000000;
+}
+
+.checkoutTitle {
+	margin: .5em 0em;
+	font-size: 4vw;
 	color: #ffffff;
+	text-align: center;
+}
+
+.subtotalPrice {
+	font-size: 2vw;
+	color: #ffffff;
+	text-align: center;
+}
+
+.payButton {
+	display: block;
+	margin: auto;
+	-webkit-appearance: button;
+	font-size: 1.5vw;
 }
 
 .cartDiv {
-	margin: 4em 2em 0em 2em;
+	vertical-align: top;
+	display: inline-block;
+	width: 75%;
+}
+
+.cartTitle {
+	margin: .5em 0em;
+	font-size: 5vw;
+	color: #ffffff;
+	text-align: center;
+}
+
+.cartItemDiv {
+	margin: 2em;
 	padding: 1em;
 	background-color: #000000;
 }
@@ -23,11 +57,12 @@
 .productTitle {
 	font-size: 3vw;
 	color: #ffffff;
+	margin: .5em 0em;
 }
 
 .removeProductButton {
 	display: block;
-	webkit-appearance: button;
+	-webkit-appearance: button;
 	font-size: 2vw
 }
 
@@ -36,6 +71,7 @@
 	font-size: 3vw;
 	color : #ffffff;
 	vertical-align: top;
+	margin: .5em;
 }
 
 .loader {

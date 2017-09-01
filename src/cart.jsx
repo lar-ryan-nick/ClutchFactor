@@ -25,7 +25,7 @@ class CartItem extends React.Component {
 			}
 		}
 		return (
-			<div className="cartDiv">
+			<div className="cartItemDiv">
 				<img className="productImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.color + ".png"}/>
 				<div className="TitleAndOptionsDiv">
 					<p className="productTitle">{this.props.data.modelname + " " + this.props.data.articletype + " - " + this.props.data.color}</p>
@@ -36,6 +36,34 @@ class CartItem extends React.Component {
 		);
 	}
 }
+
+class Checkout extends React.Component {
+
+	constructor(props) {
+		super(props);
+		this.state = {};
+	}
+
+	render() {
+		if (this.props.data.length < 1) {
+			return (<div></div>);
+		}
+		let total = 0;
+		for (let i = 0; i < this.props.data.length; ++i) {
+			if (this.props.data[i] != null) {
+				total += this.props.data[i].price;
+			}
+		}
+		return (
+			<div className="checkoutDiv">
+				<p className="checkoutTitle">Checkout</p>
+				<p className="subtotalPrice">{"Your subtotal is $" + total}</p>
+				<button className="payButton">Click here to finish your orders</button>
+			</div>
+		);
+	}
+}
+
 
 class CartPage extends React.Component {
 
@@ -110,7 +138,11 @@ class CartPage extends React.Component {
 		this.getNumCartItems(function() {
 			if (this.state.data.length > this.state.numCartItems) {
 				let newState = this.state;
-				newState.data.splice(this.state.numCartItems, this.state.data.length - this.state.numCartItems);
+				if (this.state.numCartItems < 1) {
+					newState.data = [];
+				} else {
+					newState.data.splice(this.state.numCartItems, this.state.data.length - this.state.numCartItems);
+				}
 				this.setState(newState);
 			}
 			for (let i = 0; i < this.state.numCartItems; ++i) {
@@ -139,13 +171,18 @@ class CartPage extends React.Component {
 		return (
 			<div>
 				<MainBackground/>
-				{top}
-				{cartItems}
+				<div className="cartDiv">
+					{top}
+					{cartItems}
+				</div>
+				<Checkout data={this.state.data}/>
 			</div>
 		);
 	}
 }
 
-ReactDom.render(<Header/>, document.getElementById("header"));
+var cart = null;
+
+ReactDom.render(<CartPage ref={(input) => {cart = input}}/>, document.getElementById("main"));
+ReactDom.render(<Header refresh={cart.refresh}/>, document.getElementById("header"));
 ReactDom.render(<Footer/>, document.getElementById("footer"));
-ReactDom.render(<CartPage/>, document.getElementById("main"));
