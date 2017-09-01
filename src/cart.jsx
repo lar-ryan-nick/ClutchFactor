@@ -69,14 +69,51 @@ class CartPage extends React.Component {
 
 	constructor(props) {
 		super(props);
+		this.state = {};
+	}
+
+	render() {
+		let top = [];
+		if (this.props.numCartItems != null) {
+			if (this.props.numCartItems < 0) {
+				top.push(<p key="1" className="cartTitle">You must log in to view your cart</p>);
+			} else {
+				let text = " items";
+				if (this.props.numCartItems == 1) {
+					text = " item";
+				}
+				top.push(<p key="1" className="cartTitle">{"You have " + this.props.numCartItems + text + " in your cart"}</p>);
+			}
+		}
+		let cartItems = [];
+		for (let i = 0; i < this.props.data.length; ++i) {
+			cartItems.push(<CartItem key={i} data={this.props.data[i]} removeItem={this.props.removeCartItem.bind(this, i)}/>);
+		}
+		return (
+			<div>
+				<div className="cartDiv">
+					{top}
+					{cartItems}
+				</div>
+				<Checkout data={this.props.data}/>
+			</div>
+		);
+	}
+}
+
+class Page extends React.Component {
+
+	constructor(props) {
+		super(props);
 		this.state = {
 			numCartItems: null,
 			data: []
-		};
+		}
 		this.getNumCartItems = this.getNumCartItems.bind(this);
 		this.getCartItemInfo = this.getCartItemInfo.bind(this);
 		this.removeCartItem = this.removeCartItem.bind(this);
 		this.refresh = this.refresh.bind(this);
+		this.resize = this.resize.bind(this);
 		this.refresh();
 	}
 
@@ -122,6 +159,9 @@ class CartPage extends React.Component {
 				console.log(xhttp.responseText);
 				if (xhttp.responseText == "Removed the cart item successfully") {
 					this.refresh();
+					if (this.props.refresh) {
+						this.props.refresh();
+					}
 				} else {
 					let newState = this.state;
 					newState.data[index].loading = false;
@@ -151,38 +191,40 @@ class CartPage extends React.Component {
 		}.bind(this));
 	}
 
-	render() {
-		let top = [];
-		if (this.state.numCartItems != null) {
-			if (this.state.numCartItems < 0) {
-				top.push(<p key="1" className="cartTitle">You must log in to view your cart</p>);
+	resize() {
+		if (this.main != null) {
+			if (window.innerHeight - 251 <= 0 || window.innerWidth / (window.innerHeight - 251) > 8 / 5) {
+				this.main.style.minHeight = window.innerWidth * 5 / 8;
 			} else {
-				let text = " items";
-				if (this.state.numCartItems == 1) {
-					text = " item";
-				}
-				top.push(<p key="1" className="cartTitle">{"You have " + this.state.numCartItems + text + " in your cart"}</p>);
+				this.main.style.minHeight = "calc(100% - 251px)";
 			}
 		}
-		let cartItems = [];
-		for (let i = 0; i < this.state.data.length; ++i) {
-			cartItems.push(<CartItem key={i} data={this.state.data[i]} removeItem={this.removeCartItem.bind(this, i)}/>);
-		}
+	}
+
+	componentDidMount() {
+		this.resize();
+	}
+
+	render() {
 		return (
 			<div>
-				<MainBackground/>
-				<div className="cartDiv">
-					{top}
-					{cartItems}
+				<div ref={(input) => {this.main = input;}} className="main">
+					<MainBackground/>
+					<CartPage numCartItems={this.state.numCartItems} data={this.state.data} removeCartItem={this.removeCartItem}/>
 				</div>
-				<Checkout data={this.state.data}/>
+				<div className="footer">
+					<Footer/>
+				</div>
+				<div className="header">
+					<Header refresh={this.refresh} numCartItems={this.state.numCartItems}/>
+				</div>
 			</div>
 		);
 	}
 }
 
-var cart = null;
+var page;
 
-ReactDom.render(<CartPage ref={(input) => {cart = input}}/>, document.getElementById("main"));
-ReactDom.render(<Header refresh={cart.refresh}/>, document.getElementById("header"));
-ReactDom.render(<Footer/>, document.getElementById("footer"));
+ReactDom.render(<Page ref={(input) => {page = input;}}/>, document.getElementById("page"));
+
+window.onresize = page.resize;

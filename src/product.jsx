@@ -47,6 +47,9 @@ class ProductInfo extends React.Component {
 				newState.response = xhttp.responseText;
 				newState.loading = false;
 				this.setState(newState);
+				if (this.props.refresh != null) {
+					this.props.refresh();
+				}
 			}
 		}.bind(this);
 		xhttp.open("GET", "/addToCart?product=" + this.props.data.id, true);
@@ -139,12 +142,72 @@ class ProductPage extends React.Component {
 			<div>
 				<MainBackground/>
 				<ProductPreview data={this.state.data}/>
-				<ProductInfo data={this.state.data} parent={this} changeImage={this.changeImage}/>
+				<ProductInfo data={this.state.data} parent={this} changeImage={this.changeImage} refresh={this.props.refresh}/>
 			</div>
 		);
 	}
 }
 
-ReactDom.render(<Header/>, document.getElementById("header"));
-ReactDom.render(<Footer/>, document.getElementById("footer"));
-ReactDom.render(<ProductPage/>, document.getElementById("main"));
+class Page extends React.Component {
+
+	constructor(props) {
+		super(props);
+		this.state = {
+			numCartItems: null
+		}
+		this.getNumCartItems = this.getNumCartItems.bind(this);
+		this.resize = this.resize.bind(this);
+		this.getNumCartItems();
+	}
+
+	getNumCartItems() {
+		let xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				console.log(xhttp.responseText);
+				let newState = this.state;
+				newState.numCartItems = parseInt(xhttp.responseText);
+				this.setState(newState);
+			}
+		}.bind(this);
+		xhttp.open("GET", "/getNumCartItems", true);
+		xhttp.send();
+	}
+
+	resize() {
+		if (this.main != null) {
+			if (window.innerHeight - 251 <= 0 || window.innerWidth / (window.innerHeight - 251) > 8 / 5) {
+				this.main.style.minHeight = window.innerWidth * 5 / 8;
+			} else {
+				this.main.style.minHeight = "calc(100% - 251px)";
+			}
+		}
+	}
+
+	componentDidMount() {
+		this.resize();
+	}
+
+	render() {
+		return (
+			<div>
+				<div ref={(input) => {this.main = input;}} className="main">
+					<MainBackground/>
+					<ProductPage refresh={this.getNumCartItems}/>
+				</div>
+				<div className="footer">
+					<Footer/>
+				</div>
+				<div className="header">
+					<Header numCartItems={this.state.numCartItems}/>
+				</div>
+			</div>
+		);
+	}
+}
+
+var page;
+
+ReactDom.render(<Page ref={(input) => {page = input;}}/>, document.getElementById("page"));
+
+window.onresize = page.resize;

@@ -5,10 +5,7 @@ class Header extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			email: null,
-			firstname: null,
-			lastname: null,
-			timecreated: null
+			userData: {},
 		};
 		this.goToMain = this.goToMain.bind(this);
 		this.getUserInfo = this.getUserInfo.bind(this);
@@ -26,14 +23,15 @@ class Header extends React.Component {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == 4 && xhttp.status == 200) {
 				if (xhttp.responseText != "{}") {
-					this.setState(JSON.parse(xhttp.responseText));
+					let newState = this.state;
+					newState.userData = JSON.parse(xhttp.responseText);
+					this.setState(newState);
 				} else {
-					this.setState({
-						email: "",
-						firstname: "",
-						lastname: "",
-						timecreated: ""
-					});
+					let newState = this.state;
+					newState.userData = {
+						email: ""
+					};
+					this.setState(newState);
 				}
 			}
 		}.bind(this);
@@ -45,12 +43,11 @@ class Header extends React.Component {
 		let xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == 4 && xhttp.status == 200) {
-				this.setState({
-					email: "",
-					firstname: "",
-					lastname: "",
-					timecreated: ""
-				});
+				let newState = this.state;
+				newState.userData = {
+					email: ""
+				};
+				this.setState(newState);
 				if (this.props.refresh != null) {
 					this.props.refresh();
 				}
@@ -66,17 +63,21 @@ class Header extends React.Component {
 
 	render() {
 		let accountStuff = [];
-		if (this.state.email == "") {
+		if (this.state.userData.email == "") {
 			accountStuff.push(<a className="headerAccountLink" key="1" href="account.html">Log In/Create an Account</a>);
-		} else if (this.state.email != null) {
-			let name = this.state.email;
-			if (this.state.firstname != "") {
-				name = this.state.firstname;
-			} else if (this.state.lastname != "") {
-				name = this.state.lastname;
+		} else if (this.state.userData.email != null) {
+			let name = this.state.userData.email;
+			if (this.state.userData.firstname != "") {
+				name = this.state.userData.firstname;
+			} else if (this.state.userData.lastname != "") {
+				name = this.state.userData.lastname;
 			}
 			accountStuff.push(<p key ="1" className="headerGreeting">{"Hello " + name}</p>);
-			accountStuff.push(<img key="2" className="cartIcon" src="images/CartIcon.png" onClick={this.goToCart}/>);
+			if (this.props.numCartItems > 0) {
+				accountStuff.push(<div key="2" className="cartIconDiv"><img key="3" className="cartIcon" src="images/CartIcon.png" onClick={this.goToCart}/><p key="4" className="cartNumBadge">{this.props.numCartItems}</p></div>);
+			} else {
+				accountStuff.push(<div key="2" className="cartIconDiv"><img key="3" className="cartIcon" src="images/CartIcon.png" onClick={this.goToCart}/></div>);
+			}
 			accountStuff.push(<button key="3" className="headerLogOutButton" onClick={this.logOut}>Log Out</button>);
 		}
 		return (
