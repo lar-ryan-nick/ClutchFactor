@@ -26,7 +26,7 @@ class CartItem extends React.Component {
 		}
 		return (
 			<div className="cartItemDiv">
-				<img className="productImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.color + ".png"}/>
+				<img className="productImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.color + "Low.png"}/>
 				<div className="TitleAndOptionsDiv">
 					<p className="productTitle">{this.props.data.modelname + " " + this.props.data.articletype + " - " + this.props.data.color}</p>
 					{remove}	

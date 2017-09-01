@@ -10,7 +10,6 @@ class MerchandiseItem extends React.Component {
 			index: 0,
 			hovered: false,
 			indexHovered: -1,
-			loadingImage: true
 		}
 		this.changeImage = this.changeImage.bind(this);
 		this.handleImageOnLoad = this.handleImageOnLoad.bind(this);
@@ -83,13 +82,6 @@ class MerchandiseItem extends React.Component {
 		let merchandiseTitleClass = "merchandiseTitle";
 		let numColorsTitleClass = "numColorsTitle";
 		let priceTitleClass = "priceTitle";
-		let image = [];
-		if (this.state.loadingImage) {
-			image.push(<img key="1" className="invisible" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[this.state.index] + ".png"} onLoad={this.handleImageOnLoad}/>);
-			image.push(<div key="2" className="loader"></div>);
-		} else {
-			image.push(<img key="1" className="merchandiseImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[this.state.index] + ".png"}/>);
-		}
 		let otherColors = [];
 		if (this.state.hovered == true) {
 			merchandiseDivClass = "merchandiseDivHovered";
@@ -99,11 +91,11 @@ class MerchandiseItem extends React.Component {
 			for (let i = 0; i < this.props.data.colors.length; ++i) {
 				if (this.state.indexHovered == i) {
 					otherColors.push(
-						<img key={i} ref={(input) => {this.hoveredImage = input;}} className="previewImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + ".png"} onMouseOver={this.handlePreviewOnMouseOver.bind(this, i)} onMouseLeave={this.handlePreviewOnMouseLeave}/>
+						<img key={i} ref={(input) => {this.hoveredImage = input;}} className="previewImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + "Low.png"} onMouseOver={this.handlePreviewOnMouseOver.bind(this, i)} onMouseLeave={this.handlePreviewOnMouseLeave}/>
 					);
 				} else {
 					otherColors.push(
-						<img key={i} className="previewImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + ".png"} onMouseOver={this.handlePreviewOnMouseOver.bind(this, i)} onMouseLeave={this.handlePreviewOnMouseLeave}/>
+						<img key={i} className="previewImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + "Low.png"} onMouseOver={this.handlePreviewOnMouseOver.bind(this, i)} onMouseLeave={this.handlePreviewOnMouseLeave}/>
 					);
 				}
 			}
@@ -115,7 +107,7 @@ class MerchandiseItem extends React.Component {
 		return (
 			<div className={merchandiseDivClass} onMouseOver={this.handleDivOnMouseOver} onMouseLeave={this.handleDivOnMouseLeave} onClick={this.handleOnClick}>
 				<div className="productDiv">
-					{image}
+					<img className="merchandiseImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[this.state.index] + "Low.png"}/>
 					<p className={merchandiseTitleClass}>{this.props.data.modelname + " " + this.props.data.articletype}</p>
 					<p className={numColorsTitleClass}>{this.props.data.colors.length + colorText}</p>
 					<p className={priceTitleClass}>{"$" + this.props.data.price}</p>
