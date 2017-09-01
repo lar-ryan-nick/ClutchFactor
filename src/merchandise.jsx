@@ -127,6 +127,9 @@ class ShoppingPage extends React.Component {
 		this.getMerchandiseInfo = this.getMerchandiseInfo.bind(this);
 		this.getNumMerchandise = this.getNumMerchandise.bind(this);
 		this.getNumMerchandise(function() {
+			let newState = this.state;
+			newState.data.fill(null, 0, this.numMerchandise);
+			this.setState(newState);
 			for (let i = 0; i < this.state.numMerchandise; ++i) {
 				this.getMerchandiseInfo(i);
 			}
