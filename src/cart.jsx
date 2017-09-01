@@ -42,17 +42,14 @@ class CartPage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			numCartItems: 0,
+			numCartItems: null,
 			data: []
 		};
 		this.getNumCartItems = this.getNumCartItems.bind(this);
 		this.getCartItemInfo = this.getCartItemInfo.bind(this);
 		this.removeCartItem = this.removeCartItem.bind(this);
-		this.getNumCartItems(function() {
-			for (let i = 0; i < this.state.numCartItems; ++i) {
-				this.getCartItemInfo(i);
-			}
-		}.bind(this));
+		this.refresh = this.refresh.bind(this);
+		this.refresh();
 	}
 
 	getNumCartItems(cb) {
@@ -96,9 +93,7 @@ class CartPage extends React.Component {
 			if (xhttp.readyState == 4 && xhttp.status == 200) {
 				console.log(xhttp.responseText);
 				if (xhttp.responseText == "Removed the cart item successfully") {
-					let newState = this.state;
-					delete newState.data[index];
-					this.setState(newState);
+					this.refresh();
 				} else {
 					let newState = this.state;
 					newState.data[index].loading = false;
@@ -111,7 +106,32 @@ class CartPage extends React.Component {
 		xhttp.send();
 	}
 
+	refresh() {
+		this.getNumCartItems(function() {
+			if (this.state.data.length > this.state.numCartItems) {
+				let newState = this.state;
+				newState.data.splice(this.state.numCartItems, this.state.data.length - this.state.numCartItems);
+				this.setState(newState);
+			}
+			for (let i = 0; i < this.state.numCartItems; ++i) {
+				this.getCartItemInfo(i);
+			}
+		}.bind(this));
+	}
+
 	render() {
+		let top = [];
+		if (this.state.numCartItems != null) {
+			if (this.state.numCartItems < 0) {
+				top.push(<p key="1" className="cartTitle">You must log in to view your cart</p>);
+			} else {
+				let text = " items";
+				if (this.state.numCartItems == 1) {
+					text = " item";
+				}
+				top.push(<p key="1" className="cartTitle">{"You have " + this.state.numCartItems + text + " in your cart"}</p>);
+			}
+		}
 		let cartItems = [];
 		for (let i = 0; i < this.state.data.length; ++i) {
 			cartItems.push(<CartItem key={i} data={this.state.data[i]} removeItem={this.removeCartItem.bind(this, i)}/>);
@@ -119,6 +139,7 @@ class CartPage extends React.Component {
 		return (
 			<div>
 				<MainBackground/>
+				{top}
 				{cartItems}
 			</div>
 		);

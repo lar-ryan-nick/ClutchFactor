@@ -64,7 +64,9 @@ class MerchandiseItem extends React.Component {
 	render() {
 		if (this.props.data == null) {
 			return (
-				<div></div>
+				<div className="merchandiseDiv">
+					<div className="loader"></div>
+				</div>
 			);
 		}
 		let colorText = " colors";

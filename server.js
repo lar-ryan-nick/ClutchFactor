@@ -206,7 +206,7 @@ const server = http.createServer(function (request, response) {
 					response.end();
 				});
 			} else {
-				response.write("Please log in before trying to look at your cart");
+				response.write("-1");
 				response.end();
 			}
 			break;

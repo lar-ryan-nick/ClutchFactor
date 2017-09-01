@@ -1,4 +1,11 @@
+.cartTitle {
+	margin: 0px;
+	font-size: 5vw;
+	color: #ffffff;
+}
+
 .cartDiv {
+	margin: 4em 2em 0em 2em;
 	padding: 1em;
 	background-color: #000000;
 }

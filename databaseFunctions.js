@@ -314,7 +314,7 @@ function getNumCartItems(userID, cb) {
 			}
 		});
 	} else {
-		cb("0");
+		cb("-1");
 	}
 }
 
