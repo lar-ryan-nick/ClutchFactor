@@ -17,7 +17,7 @@ class ProductPreview extends React.Component {
 		}
 		return (
 			<div className="productPreviewDiv">
-				<img className="productPreviewImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.color + "Full.png"}/>
+				<img className="productPreviewImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.color + "Med.png"}/>
 			</div>
 		);
 	}
