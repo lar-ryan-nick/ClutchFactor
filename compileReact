@@ -1,11 +1,11 @@
 #!/bin/bash
 cp webpack.config1.js webpack.config.js;
-./node_modules/.bin/webpack -d;
+./node_modules/.bin/webpack -p;
 cp webpack.config2.js webpack.config.js;
-./node_modules/.bin/webpack -d;
+./node_modules/.bin/webpack -p;
 cp webpack.config3.js webpack.config.js;
-./node_modules/.bin/webpack -d;
+./node_modules/.bin/webpack -p;
 cp webpack.config4.js webpack.config.js;
-./node_modules/.bin/webpack -d;
+./node_modules/.bin/webpack -p;
 cp webpack.config5.js webpack.config.js;
-./node_modules/.bin/webpack -d;
+./node_modules/.bin/webpack -p;

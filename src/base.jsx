@@ -81,7 +81,7 @@ class Header extends React.Component {
 			accountStuff.push(<button key="3" className="headerLogOutButton" onClick={this.logOut}>Log Out</button>);
 		}
 		return (
-			<div>
+			<div className="header">
 				<img className="headerLogo" src="images/ClutchFactor.png" onClick={this.goToMain}/>
 				<a className="headerMerchandise" href="merchandise.html">Merchandise</a>
 				{accountStuff}
@@ -99,7 +99,7 @@ class Footer extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<div className="footer">
 				<div className="footerTop">
 					<img className="footerLogo" src="images/CFLogo.png"/>
 				</div>
@@ -111,20 +111,39 @@ class Footer extends React.Component {
 	}
 }
 
-class MainBackground extends React.Component {
+class Main extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state= {};
+		this.state = {};
+		this.resize = this.resize.bind(this);
+		window.onresize = this.resize;
+	}
+
+	resize() {
+		if (this.main != null) {
+			if (window.innerHeight - 251 <= 0 || window.innerWidth / (window.innerHeight - 251) > 8 / 5) {
+				this.main.style.minHeight = window.innerWidth * 5 / 8;
+			} else {
+				this.main.style.minHeight = "calc(100% - 251px)";
+			}
+		}
+	}
+
+	componentDidMount() {
+		this.resize();
 	}
 
 	render() {
 		return (
-			<div className="backgroundImageDiv">
-				<img className="backgroundImage" src="images/BackgroundImage.jpg"/>
+			<div className="main" ref={(input) => {this.main = input;}}>
+				<div className="backgroundImageDiv">
+					<img className="backgroundImage" src="images/BackgroundImage.jpg"/>
+				</div>
+				{this.props.inside}
 			</div>
 		);
 	}
 }
 
-export {Header, Footer, MainBackground};
+export {Header, Footer, Main};

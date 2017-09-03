@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import {Header, Footer, MainBackground} from './base.jsx';
+import {Header, Footer, Main} from './base.jsx';
 
 class MerchandiseItem extends React.Component {
 
@@ -190,7 +190,6 @@ class Page extends React.Component {
 			numCartItems: null
 		}
 		this.getNumCartItems = this.getNumCartItems.bind(this);
-		this.resize = this.resize.bind(this);
 		this.getNumCartItems();
 	}
 
@@ -208,40 +207,15 @@ class Page extends React.Component {
 		xhttp.send();
 	}
 
-	resize() {
-		if (this.main != null) {
-			if (window.innerHeight - 251 <= 0 || window.innerWidth / (window.innerHeight - 251) > 8 / 5) {
-				this.main.style.minHeight = window.innerWidth * 5 / 8;
-			} else {
-				this.main.style.minHeight = "calc(100% - 251px)";
-			}
-		}
-	}
-
-	componentDidMount() {
-		this.resize();
-	}
-
 	render() {
 		return (
 			<div>
-				<div ref={(input) => {this.main = input;}} className="main">
-					<MainBackground/>
-					<ShoppingPage/>
-				</div>
-				<div className="footer">
-					<Footer/>
-				</div>
-				<div className="header">
-					<Header numCartItems={this.state.numCartItems}/>
-				</div>
+				<Main inside={<ShoppingPage/>}/>
+				<Footer/>
+				<Header numCartItems={this.state.numCartItems}/>
 			</div>
 		);
 	}
 }
 
-var page;
-
-ReactDom.render(<Page ref={(input) => {page = input}}/>, document.getElementById("page"));
-
-window.onresize = page.resize;
+ReactDom.render(<Page/>, document.getElementById("page"));

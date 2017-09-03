@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import {Header, Footer, MainBackground} from './base.jsx';
+import {Header, Footer, Main} from './base.jsx';
 
 class CartItem extends React.Component {
 
@@ -113,7 +113,6 @@ class Page extends React.Component {
 		this.getCartItemInfo = this.getCartItemInfo.bind(this);
 		this.removeCartItem = this.removeCartItem.bind(this);
 		this.refresh = this.refresh.bind(this);
-		this.resize = this.resize.bind(this);
 		this.refresh();
 	}
 
@@ -191,40 +190,15 @@ class Page extends React.Component {
 		}.bind(this));
 	}
 
-	resize() {
-		if (this.main != null) {
-			if (window.innerHeight - 251 <= 0 || window.innerWidth / (window.innerHeight - 251) > 8 / 5) {
-				this.main.style.minHeight = window.innerWidth * 5 / 8;
-			} else {
-				this.main.style.minHeight = "calc(100% - 251px)";
-			}
-		}
-	}
-
-	componentDidMount() {
-		this.resize();
-	}
-
 	render() {
 		return (
 			<div>
-				<div ref={(input) => {this.main = input;}} className="main">
-					<MainBackground/>
-					<CartPage numCartItems={this.state.numCartItems} data={this.state.data} removeCartItem={this.removeCartItem}/>
-				</div>
-				<div className="footer">
-					<Footer/>
-				</div>
-				<div className="header">
-					<Header refresh={this.refresh} numCartItems={this.state.numCartItems}/>
-				</div>
+				<Main inside={<CartPage numCartItems={this.state.numCartItems} data={this.state.data} removeCartItem={this.removeCartItem}/>}/>
+				<Footer/>
+				<Header refresh={this.refresh} numCartItems={this.state.numCartItems}/>
 			</div>
 		);
 	}
 }
 
-var page;
-
-ReactDom.render(<Page ref={(input) => {page = input;}}/>, document.getElementById("page"));
-
-window.onresize = page.resize;
+ReactDom.render(<Page/>, document.getElementById("page"));
