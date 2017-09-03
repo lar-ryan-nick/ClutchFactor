@@ -68,7 +68,7 @@ class ProductInfo extends React.Component {
 		}
 		let colors = [];
 		for (let i = 0; i < this.props.data.colors.length; ++i) {
-			colors.push(<img key={i} className="colorPreview" onMouseOver={this.props.changeImage.bind(this.props.parent, i)} src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + "Low.png"}/>)
+			colors.push(<img key={i} className="colorPreview" onMouseOver={this.props.changeImage.bind(this.props.parent, i)} src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + "Med.png"}/>)
 		}
 		let bottom = [];
 		if (this.state.loading) {
