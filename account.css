@@ -17,6 +17,8 @@ form {
 	font-size: 3vw;
 	margin: 0px;
 	-webkit-appearance: button;
+	-webkit-border-radius: 0px;
+	border-radius: 0px;
 }
 
 .changeFormLabel {
