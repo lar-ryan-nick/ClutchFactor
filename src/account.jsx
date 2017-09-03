@@ -295,10 +295,10 @@ class AccountPage extends React.Component {
 		if (this.state.loggingIn) {
 			form.push(<LogInForm key="1"/>);
 			topButtons.push(<p className="changeFormLabel" key="1">Log In</p>);
-			topButtons.push(<button className="changeFormButton" key="2" onClick={this.goToCreateAccountForm}>Create Account</button>);
+			topButtons.push(<button className="changeFormButtonRight" key="2" onClick={this.goToCreateAccountForm}>Create Account</button>);
 		} else {
 			form.push(<CreateAccountForm key="2"/>);
-			topButtons.push(<button className="changeFormButton" key="1" onClick={this.goToLogInForm}>Log In</button>);
+			topButtons.push(<button className="changeFormButtonLeft" key="1" onClick={this.goToLogInForm}>Log In</button>);
 			topButtons.push(<p className="changeFormLabel" key="2">Create Account</p>);
 		}
 		return (

@@ -11,13 +11,28 @@ form {
 	background-color: #ffffff;
 }
 
-.changeFormButton {
+.changeFormButtonLeft {
 	display: inline-block;
 	width: 50%;
 	font-size: 3vw;
 	margin: 0px;
 	-webkit-appearance: none;
 	border-radius: 0px;
+	border: solid 2px #aaaaaa;
+	border-top: none;
+	border-left: none;
+}
+
+.changeFormButtonRight {
+	display: inline-block;
+	width: 50%;
+	font-size: 3vw;
+	margin: 0px;
+	-webkit-appearance: none;
+	border-radius: 0px;
+	border: solid 2px #aaaaaa;
+	border-top: none;
+	border-right: none;
 }
 
 .changeFormLabel {
