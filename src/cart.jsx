@@ -28,7 +28,7 @@ class CartItem extends React.Component {
 			<div className="cartItemDiv">
 				<img className="productImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.color + "Low.png"}/>
 				<div className="TitleAndOptionsDiv">
-					<p className="productTitle">{this.props.data.modelname + " " + this.props.data.articletype + " - " + this.props.data.color}</p>
+					<a className="productTitle" href={"/product.html?id=" + this.props.data.productid}>{this.props.data.modelname + " " + this.props.data.articletype + " - " + this.props.data.color}</a>
 					{remove}	
 				</div>
 				<p className="priceTitle">{"$" + this.props.data.price}</p>
