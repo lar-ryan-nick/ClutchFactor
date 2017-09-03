@@ -16,8 +16,7 @@ form {
 	width: 50%;
 	font-size: 3vw;
 	margin: 0px;
-	-webkit-appearance: button;
-	-webkit-border-radius: 0px;
+	-webkit-appearance: none;
 	border-radius: 0px;
 }
 

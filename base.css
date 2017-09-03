@@ -88,8 +88,7 @@ body {
 	right: 0px;
 	top: 0px;
 	margin: 5px 5px 0px 0px;
-	-webkit-appearance: button;
-	-webkit-border-radius: 0px;
+	-webkit-appearance: none;
 	border-radius: 0px;
 	font-size: 1.2em;
 	color: #000000;
