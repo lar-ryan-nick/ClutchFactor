@@ -4,6 +4,7 @@ const fs = require('fs');
 const qs = require('querystring');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
+const braintree = require('braintree');
 const {checkEmail, checkPassword, getUserInfo, createAccount, getNumMerchandise, getMerchandiseInfo, getProductInfo, addToCart, getNumCartItems, getCartItemInfo, removeCartItem} = require('./databaseFunctions.js');
 
 const transporter = nodemailer.createTransport({
@@ -12,6 +13,13 @@ const transporter = nodemailer.createTransport({
 		user: 'ryanl.wiener@gmail.com',
 		pass: 'P@trick421'
 	}
+});
+
+const gateway = braintree.connect({
+	environment: braintree.Environment.Sandbox,
+	merchantId: "rg9qk5pr8gxzrjtv",
+	publicKey: "f253vqj59cdsj9pj",
+	privateKey: "9663ac111bcb05346919975681960d75"
 });
 
 function parseCookie(cookie) {
@@ -141,6 +149,37 @@ const server = http.createServer(function (request, response) {
 					console.log("Email and password not valid");
 					response.end();
 				}
+			});
+			break;
+		case '/getClientToken':
+			response.writeHead(200, {"Content-Type": "text/plain"});
+			gateway.clientToken.generate({}, function(error, res) {
+				if (error != null) {
+					console.log(error);
+				} else {
+					response.write(res.clientToken);
+				}
+				response.end();
+			});
+			break;
+		case '/checkout':
+			response.writeHead(200, {"Content-Type": "text/plain"});
+			request.on("end", function() {
+				body = parseBody(body);
+				let nonceFromClient = body.payment_method_nonce;
+				gateway.transaction.sale({
+					amount: "10.00",
+					paymentMethodNonce: nonceFromTheClient,
+					options: {
+						submitForSettlement: true
+					}
+				}, function (error, res) {
+					if (error != null) {
+						console.log(error);
+					} else {
+						console.log(res);
+					}
+				});
 			});
 			break;
 		case '/checkEmail':
