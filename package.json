@@ -4,8 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "./compileReactDev; node server.js",
-    "start": "./compileReactProd; node server.js"
+    "test": "exit 1",
+    "start": "./compileReactDev; node server.js"
   },
   "author": "",
   "license": "ISC",

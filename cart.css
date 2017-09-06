@@ -105,6 +105,9 @@
 	color: #ff0000;
 }
 
-.invisible {
-	display: none;
+.paymentButton {
+	display: block;
+	margin: auto;
+	-webkit-appearance: button;
+	font-size: 3vw;
 }

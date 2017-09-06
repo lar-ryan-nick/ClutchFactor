@@ -204,13 +204,13 @@ class Page extends React.Component {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == 4 && xhttp.status == 200) {
 				console.log(xhttp.responseText);
+				newState = this.state;
+				newState.checkOutLoading = false;
+				this.setState(newState);
 				dropin.create({
 					authorization: xhttp.responseText,
 					container: this.dropinContainer
 				}, function(error, instance) {
-					newState = this.state;
-					newState.checkOutLoading = false;
-					this.setState(newState);
 					if (error) {
 						console.log(error);
 					} else {
