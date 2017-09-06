@@ -109,7 +109,8 @@ class Page extends React.Component {
 		this.state = {
 			numCartItems: null,
 			data: [],
-			checkingOut: false
+			checkingOut: false,
+			checkOutLoading: false
 		}
 		this.getNumCartItems = this.getNumCartItems.bind(this);
 		this.getCartItemInfo = this.getCartItemInfo.bind(this);
@@ -197,6 +198,7 @@ class Page extends React.Component {
 	setCheckingOut() {
 		let newState = this.state;
 		newState.checkingOut = true;
+		newState.checkOutLoading = true;
 		this.setState(newState);
 		let xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
@@ -206,6 +208,9 @@ class Page extends React.Component {
 					authorization: xhttp.responseText,
 					container: this.dropinContainer
 				}, function(error, instance) {
+					newState = this.state;
+					newState.checkOutLoading = false;
+					this.setState(newState);
 					if (error) {
 						console.log(error);
 					} else {
@@ -239,24 +244,23 @@ class Page extends React.Component {
 				console.log(nonce);
 			}
 		}.bind(this));
-
 	}
 
 	render() {
+		let inside = [];
 		if (this.state.checkingOut == true) {
-			return (
-				<div>
-					<div ref={(input) => {this.dropinContainer = input;}}></div>
-					<Main inside={<div><div ref={(input) => {this.dropinContainer = input;}}></div><button className="paymentButton" onClick={this.checkout}>Finish purchase</button></div>}/>
-					<Footer/>
-					<Header refresh={this.refresh} numCartItems={this.state.numCartItems}/>
-				</div>
-			);
+			if (this.state.checkOutLoading == true) {
+				inside.push(<div key="1"><div key="2" ref={(input) => {this.dropinContainer = input;}}></div><div key="3" className="loader"></div></div>);
+			} else {
+				inside.push(<div key="1"><div key="2" ref={(input) => {this.dropinContainer = input;}}></div><button key="3" className="paymentButton" onClick={this.checkout}>Finish purchase</button></div>);
+			}
+		} else {
+			inside.push(<div key="1"><div key="2" ref={(input) => {this.dropinContainer = input;}}></div><CartPage key="3" numCartItems={this.state.numCartItems} data={this.state.data} removeCartItem={this.removeCartItem} setCheckingOut={this.setCheckingOut}/></div>);
 		}
 		return (
 			<div>
-				<div ref={(input) => {this.dropinContainer = input;}}></div>
-				<Main inside={<CartPage numCartItems={this.state.numCartItems} data={this.state.data} removeCartItem={this.removeCartItem} setCheckingOut={this.setCheckingOut}/>}/>
+				
+				<Main inside={inside}/>
 				<Footer/>
 				<Header refresh={this.refresh} numCartItems={this.state.numCartItems}/>
 			</div>
