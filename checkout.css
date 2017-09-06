@@ -1,0 +1,11 @@
+.payButton {
+	display: block;
+	margin: auto;
+	-webkit-appearance: button;
+	font-size: 3vw;
+}
+
+.notLoggedInError {
+	color: #ffffff;
+	font-size: 4vw;
+}

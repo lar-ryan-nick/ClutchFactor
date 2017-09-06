@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import dropin from 'braintree-web-drop-in';
 import {Header, Footer, Main} from './base.jsx';
 
 class CartItem extends React.Component {
@@ -59,7 +58,7 @@ class Checkout extends React.Component {
 			<div className="checkoutDiv">
 				<p className="checkoutTitle">Checkout</p>
 				<p className="subtotalPrice">{"Your subtotal is $" + total}</p>
-				<button className="payButton" onClick={this.props.setCheckingOut}>Click here to finish your orders</button>
+				<button className="CheckoutButton" onClick={function() {window.location = "/checkout.html";}}>Click here to finish your orders</button>
 			</div>
 		);
 	}
@@ -96,7 +95,7 @@ class CartPage extends React.Component {
 					{top}
 					{cartItems}
 				</div>
-				<Checkout data={this.props.data} setCheckingOut={this.props.setCheckingOut}/>
+				<Checkout data={this.props.data}/>
 			</div>
 		);
 	}
@@ -109,15 +108,11 @@ class Page extends React.Component {
 		this.state = {
 			numCartItems: null,
 			data: [],
-			checkingOut: false,
-			checkOutLoading: false
 		}
 		this.getNumCartItems = this.getNumCartItems.bind(this);
 		this.getCartItemInfo = this.getCartItemInfo.bind(this);
 		this.removeCartItem = this.removeCartItem.bind(this);
 		this.refresh = this.refresh.bind(this);
-		this.setCheckingOut = this.setCheckingOut.bind(this);
-		this.checkout = this.checkout.bind(this);
 		this.refresh();
 	}
 
@@ -195,72 +190,10 @@ class Page extends React.Component {
 		}.bind(this));
 	}
 
-	setCheckingOut() {
-		let newState = this.state;
-		newState.checkingOut = true;
-		newState.checkOutLoading = true;
-		this.setState(newState);
-		let xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (xhttp.readyState == 4 && xhttp.status == 200) {
-				console.log(xhttp.responseText);
-				newState = this.state;
-				newState.checkOutLoading = false;
-				this.setState(newState);
-				dropin.create({
-					authorization: xhttp.responseText,
-					container: this.dropinContainer
-				}, function(error, instance) {
-					if (error) {
-						console.log(error);
-					} else {
-						this.instance = instance;
-					}
-				}.bind(this));
-			}
-		}.bind(this);
-		xhttp.open("GET", "/getClientToken", true);
-		xhttp.send();
-
-	}
-
-	checkout(payload) {
-		let newState = this.state;
-		newState.checkingOut = false;
-		this.setState(newState);
-		this.instance.requestPaymentMethod(function(error, payload) {
-			if (error) {
-				console.log(error);
-			} else {
-				let xhttp = new XMLHttpRequest();
-				xhttp.onreadystatechange = function() {
-					if (xhttp.readyState == 4 && xhttp.status == 200) {
-						console.log(xhttp.responseText);
-					}
-				}.bind(this);
-				xhttp.open("POST", "/checkout", true);
-				xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-				xhttp.send("nonce=" + payload.nonce);
-				console.log(nonce);
-			}
-		}.bind(this));
-	}
-
 	render() {
-		let inside = [];
-		if (this.state.checkingOut == true) {
-			if (this.state.checkOutLoading == true) {
-				inside.push(<div key="1"><div key="2" ref={(input) => {this.dropinContainer = input;}}></div><div key="3" className="loader"></div></div>);
-			} else {
-				inside.push(<div key="1"><div key="2" ref={(input) => {this.dropinContainer = input;}}></div><button key="3" className="paymentButton" onClick={this.checkout}>Finish purchase</button></div>);
-			}
-		} else {
-			inside.push(<div key="1"><div key="2" ref={(input) => {this.dropinContainer = input;}}></div><CartPage key="3" numCartItems={this.state.numCartItems} data={this.state.data} removeCartItem={this.removeCartItem} setCheckingOut={this.setCheckingOut}/></div>);
-		}
 		return (
 			<div>
-				
-				<Main inside={inside}/>
+				<Main inside={<CartPage numCartItems={this.state.numCartItems} data={this.state.data} removeCartItem={this.removeCartItem}/>}/>
 				<Footer/>
 				<Header refresh={this.refresh} numCartItems={this.state.numCartItems}/>
 			</div>

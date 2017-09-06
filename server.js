@@ -166,10 +166,10 @@ const server = http.createServer(function (request, response) {
 			response.writeHead(200, {"Content-Type": "text/plain"});
 			request.on("end", function() {
 				body = parseBody(body);
-				let nonceFromClient = body.payment_method_nonce;
+				let nonce = body.nonce;
 				gateway.transaction.sale({
-					amount: "10.00",
-					paymentMethodNonce: nonceFromTheClient,
+					amount: "0.00",
+					paymentMethodNonce: nonce,
 					options: {
 						submitForSettlement: true
 					}
@@ -178,7 +178,9 @@ const server = http.createServer(function (request, response) {
 						console.log(error);
 					} else {
 						console.log(res);
+						response.write("successful");
 					}
+					response.end();
 				});
 			});
 			break;
