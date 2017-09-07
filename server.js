@@ -5,7 +5,7 @@ const qs = require('querystring');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const braintree = require('braintree');
-const {checkEmail, checkPassword, getUserInfo, createAccount, getNumMerchandise, getMerchandiseInfo, getProductInfo, addToCart, getNumCartItems, getCartItemInfo, removeCartItem} = require('./databaseFunctions.js');
+const {checkEmail, checkPassword, getUserInfo, createAccount, getNumMerchandise, getMerchandiseInfo, getProductInfo, addToCart, getNumCartItems, getCartItemInfo, removeCartItem, getOrderTotal} = require('./databaseFunctions.js');
 
 const transporter = nodemailer.createTransport({
 	service: 'Gmail',
@@ -164,25 +164,37 @@ const server = http.createServer(function (request, response) {
 			break;
 		case '/checkout':
 			response.writeHead(200, {"Content-Type": "text/plain"});
-			request.on("end", function() {
-				body = parseBody(body);
-				let nonce = body.nonce;
-				gateway.transaction.sale({
-					amount: "0.00",
-					paymentMethodNonce: nonce,
-					options: {
-						submitForSettlement: true
-					}
-				}, function (error, res) {
-					if (error != null) {
-						console.log(error);
-					} else {
-						console.log(res);
-						response.write("successful");
-					}
-					response.end();
+			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null) {
+				request.on("end", function() {
+					body = parseBody(body);
+					let nonce = body.nonce;
+					getOrderTotal(sessions[cookies.sessionid].userID, function(total) {
+						if (total > 0) {
+							gateway.transaction.sale({
+								amount: total,
+								paymentMethodNonce: nonce,
+								options: {
+									submitForSettlement: true
+								}
+							}, function (error, res) {
+								if (error != null) {
+									console.log(error);
+								} else {
+									console.log(res);
+									if (res.success) {
+										response.write("successful. User has been charged $" + total);
+									} else {
+										response.write("We were unable to charge your card properly. Please try again");
+									}
+								}
+								response.end();
+							});
+						}
+					});
 				});
-			});
+			} else {
+				response.end();
+			}
 			break;
 		case '/checkEmail':
 			response.writeHead(200, {"Content-Type": "text/plain"});

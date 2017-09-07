@@ -3,6 +3,23 @@ import ReactDom from 'react-dom';
 import dropin from 'braintree-web-drop-in';
 import {Header, Footer, Main} from './base.jsx';
 
+class ShippingInfo extends React.Component {
+
+	constructor(props) {
+		super(props);
+		this.state = {
+			addressLine1: "",
+			addressLine2: "",
+			city: "",
+			state: "",
+			zip: ""
+		}
+		this.getInfo = this.getInfo.bind(this);
+		this.updateInfo = this.updateInfo.bind(this);
+		this.getInfo();
+	}
+}
+
 class CardInfo extends React.Component {
 
 	constructor(props) {
@@ -25,6 +42,8 @@ class CardInfo extends React.Component {
 					if (error) {
 						console.log(error);
 					} else {
+						console.log("Hi");
+						console.log(instance);
 						this.instance = instance
 					}
 				}.bind(this));
@@ -43,6 +62,12 @@ class CardInfo extends React.Component {
 				xhttp.onreadystatechange = function() {
 					if (xhttp.readyState == 4 && xhttp.status == 200) {
 						console.log(xhttp.responseText);
+						this.instance.teardown((error) => {
+							if (error != null) {
+								console.log(error);
+							}
+						});
+						this.instance = null;
 					}
 				}.bind(this);
 				xhttp.open("POST", "/checkout", true);

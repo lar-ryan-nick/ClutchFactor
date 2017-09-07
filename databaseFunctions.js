@@ -383,4 +383,32 @@ function removeCartItem(userID, parameters, cb) {
 	}
 }
 
-module.exports =  {checkEmail, checkPassword, getUserInfo, createAccount, getNumMerchandise, getMerchandiseInfo, getProductInfo, addToCart, getNumCartItems, getCartItemInfo, removeCartItem};
+function getOrderTotal(userID, cb) {
+	if (parseInt(userID) > 0) {
+		let client = new pg.Client(config);
+		client.connect((error) => {
+			if (error) {
+				console.log(error);
+				cb("-1");
+			} else {
+				client.query("SELECT price FROM Merchandise WHERE id = (SELECT productid FROM Orders WHERE userid = " + userID + " AND paid = false);", (err, result) => {
+					if (err) {
+						console.log(err);
+						cb("-1");
+					} else {
+						let total = 0;
+						for (let i = 0; i < result.rowCount; ++i) {
+							total += parseInt(result.rows[i].price);
+						}
+						cb(total);
+					}
+					client.end();
+				});
+			}
+		});
+	} else {
+		cb("-1");
+	}
+}
+
+module.exports =  {checkEmail, checkPassword, getUserInfo, createAccount, getNumMerchandise, getMerchandiseInfo, getProductInfo, addToCart, getNumCartItems, getCartItemInfo, removeCartItem, getOrderTotal};
