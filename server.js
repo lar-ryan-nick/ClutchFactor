@@ -400,7 +400,7 @@ const server = http.createServer(function (request, response) {
 			response.end();
 			break;
 		case '/':
-			fs.readFile(__dirname + "/index.html", function(error, data){
+			fs.readFile(__dirname + "/html" + "/index.html", function(error, data){
 				if (error) {
 					response.writeHead(404);
 					response.write("Sorry this page does not exist")
@@ -413,7 +413,7 @@ const server = http.createServer(function (request, response) {
 			});
 			break;
 		default:
-			fs.readFile(__dirname + path, function(error, data){
+			fs.readFile(__dirname + "/html" + path, function(error, data){
 				if (error) {
 					response.writeHead(404);
 					response.write("Sorry this page does not exist")
