@@ -1,5 +1,5 @@
 #!/bin/bash
-scripts/compileReact.sh -p;
+./node_modules/.bin/webpack -p;
 git add .;
 git commit -am "Reorganized";
 git push heroku master;

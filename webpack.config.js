@@ -5,10 +5,17 @@ var APP_DIR = path.resolve(__dirname, 'client/jsx');
 var BUILD_DIR = path.resolve(__dirname, 'client/js');
 
 var config = {
-	entry: APP_DIR + '/checkout.jsx',
+	entry: {
+		index: APP_DIR + '/index.jsx',
+		merchandise: APP_DIR + '/merchandise.jsx',
+		account: APP_DIR + '/account.jsx',
+		product: APP_DIR + '/product.jsx',
+		cart: APP_DIR + '/cart.jsx',
+		checkout: APP_DIR + '/checkout.jsx'
+	},
 	output: {
 		path: BUILD_DIR,
-		filename: 'checkout.js'
+		filename: '[name].js'
 	},
 	module : {
 		loaders : [

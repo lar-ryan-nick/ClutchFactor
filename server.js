@@ -5,7 +5,7 @@ const qs = require('querystring');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const braintree = require('braintree');
-const {checkEmail, checkPassword, getUserInfo, createAccount, getNumMerchandise, getMerchandiseInfo, getProductInfo, addToCart, getNumCartItems, getCartItemInfo, removeCartItem, getOrderTotal, addAddress, getNumAddresses, getAddressInfo, removeAddress} = require('./databaseFunctions.js');
+const {checkEmail, checkPassword, getUserInfo, createAccount, getNumMerchandise, getMerchandiseInfo, getProductInfo, addToCart, getNumCartItems, getCartItemInfo, removeCartItem, getOrderTotal, addAddress, getNumAddresses, getAddressInfo, removeAddress} = require('./server/databaseFunctions.js');
 
 const transporter = nodemailer.createTransport({
 	service: 'Gmail',
