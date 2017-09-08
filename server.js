@@ -417,6 +417,7 @@ const server = http.createServer(function (request, response) {
 			if (folder == "/jpg" || folder == "/jpeg" || folder == "/png") {
 				folder = "/images";
 			}
+			folder = "/client" + folder;
 			fs.readFile(__dirname + folder + path, function(error, data){
 				if (error) {
 					response.writeHead(404);
