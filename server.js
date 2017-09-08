@@ -431,6 +431,8 @@ const server = http.createServer(function (request, response) {
 						type = "image/" + type;
 					} else if (type == "jpg") {
 						type = "image/jpeg"
+					} else if (type == "jsx") {
+						type = "text/plain";
 					} else {
 						type = "text/" + type;
 					}
