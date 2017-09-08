@@ -10,8 +10,8 @@ const {checkEmail, checkPassword, getUserInfo, createAccount, getNumMerchandise,
 const transporter = nodemailer.createTransport({
 	service: 'Gmail',
 	auth: {
-		user: 'ryanl.wiener@gmail.com',
-		pass: 'P@trick421'
+		user: process.env.CLUTCH_FACTOR_EMAIL,
+		pass: process.env.CLUTCH_FACTOR_EMAIL_PASSWORD
 	}
 });
 

@@ -3,12 +3,7 @@ const bcrypt = require('bcrypt-nodejs');
 const saltRounds = 10;
 
 const config = {
-	"user": "abkqttfnvdbkyi",
-	"password": "2e0e89d1e55bafaf04a9eea0045827e5fc0724e8d865796e7796ac3b79534b41",
-	"database": "dcccv3fip4tsjm",
-	"port": 5432,
-	"host": "ec2-107-22-211-182.compute-1.amazonaws.com",
-	"ssl": true
+	ssl: true
 }
 
 function checkEmail(parameters, cb) {
