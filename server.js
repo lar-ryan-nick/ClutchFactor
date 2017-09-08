@@ -5,7 +5,7 @@ const qs = require('querystring');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const braintree = require('braintree');
-const {checkEmail, checkPassword, getUserInfo, createAccount, getNumMerchandise, getMerchandiseInfo, getProductInfo, addToCart, getNumCartItems, getCartItemInfo, removeCartItem, getOrderTotal} = require('./databaseFunctions.js');
+const {checkEmail, checkPassword, getUserInfo, createAccount, getNumMerchandise, getMerchandiseInfo, getProductInfo, addToCart, getNumCartItems, getCartItemInfo, removeCartItem, getOrderTotal, addAddress, getNumAddresses, getAddressInfo, removeAddress} = require('./databaseFunctions.js');
 
 const transporter = nodemailer.createTransport({
 	service: 'Gmail',
@@ -331,6 +331,61 @@ const server = http.createServer(function (request, response) {
 				});
 			} else {
 				response.write("Please enter the correct information");
+				response.end();
+			}
+			break;
+		case '/getNumAddresses':
+			response.writeHead(200, {"Content-Type": "text/plain"});
+			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null) {
+				getNumAddresses(sessions[cookies.sessionid].userID, (num) => {
+					response.write("" + num);
+					response.end();
+				});
+			} else {
+				response.write("-1");
+				response.end();
+			}
+			break;
+		case '/getAddressInfo':
+			response.writeHead(200, {"Content-Type": "text/plain"});
+			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null && parameters != null && parseInt(parameters.index) >= 0) {
+				getAddressInfo(sessions[cookies.sessionid].userID, parameters, (info) => {
+					response.write(JSON.stringify(info));
+					response.end();
+				});
+			} else {
+				response.write(JSON.stringify({}));
+				response.end();
+			}
+			break;
+		case '/addAddress':
+			response.writeHead(200, {"Content-Type": "text/plain"});
+			request.on("end", function() {
+				body = parseBody(body);
+				if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null && body != null) {
+						addAddress(sessions[cookies.sessionid].userID, body, (result) => {
+						response.write(result);
+						response.end();
+					});
+				} else {
+					response.write("You must log in first to add an address");
+					response.end();
+				}
+			});
+			break;
+		case '/removeAddress':
+			response.writeHead(200, {"Content-Type": "text/plain"});
+			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null && parameters != null && parameters.id != null) {
+				removeAddress(sessions[cookies.sessionid].userID, parameters, (deleted) => {
+					if (deleted) {
+						response.write("Removed the address successfully");
+					} else {
+						response.write("Was not able to remove the address");
+					}
+					response.end();
+				});
+			} else {
+				response.write("Please log in or enter a valid address");
 				response.end();
 			}
 			break;
