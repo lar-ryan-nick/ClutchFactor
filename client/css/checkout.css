@@ -1,3 +1,22 @@
+.stageHeader {
+	background-color: #aaaaaa;
+	color: #000000;
+	padding: .5em;
+	font-size: 3vw;
+}
+
+.addressOptionDiv {
+	display: inline-block;
+	padding: 1em;
+	margin: 2em;
+	background-color: #aaaaaa;
+}
+
+.addressLabel {
+	color: #000000;
+	margin: 0px;
+}
+
 .infoDiv {
 	width: 50%;
 	margin: auto;
