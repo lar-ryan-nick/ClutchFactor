@@ -348,7 +348,7 @@ function getCartItemInfo(userID, parameters, cb) {
 			}
 		});
 	} else {
-		cb(false);
+		cb({});
 	}
 }
 
@@ -406,4 +406,113 @@ function getOrderTotal(userID, cb) {
 	}
 }
 
-module.exports =  {checkEmail, checkPassword, getUserInfo, createAccount, getNumMerchandise, getMerchandiseInfo, getProductInfo, addToCart, getNumCartItems, getCartItemInfo, removeCartItem, getOrderTotal};
+function addAddress(userID, parameters, cb) {
+	if (parseInt(userID) > 0 && parameters != null) {
+		let client = new pg.Client(config);
+		client.connect((error) => {
+			if (error) {
+				console.log(error);
+				cb("Sorry an error occured please try adding your address again");
+			} else {
+				client.query("SELECT id FROM Addresses WHERE userid = " + userID + ";", (err, result) => {
+					if (err) {
+						console.log(err);
+						cb("Sorry an error occured please try adding your address again");
+					} else if (parseInt(result.rowCount) < 5) {
+						client.query("INSERT INTO Addresses (userid, receiver, addressline1, addressline2, city, state, zip) VALUES (" + userID + ", '" + parameters.receiver + "', '" + parameters.addressLine1 + "', '" + parameters.addressLine2 + "', '" + parameters.city + "', '" + parameters.state + "', '" + parameters.zip + "');", (er, res) => {
+							if (er) {
+								console.log(er);
+								cb("Sorry an error occured please try adding your address again");
+							} else {
+								cb("The address was successfully added to your list");
+							}
+							client.end();
+						});
+					} else {
+						cb("You can't add more than 5 different addresses under the same account");
+					}
+				});
+			}
+		});
+	} else {
+		cb("Must supply more information");
+	}
+}
+
+function getNumAddresses(userID, cb) {
+	if (parseInt(userID) > 0) {
+		let client = new pg.Client(config);
+		client.connect((error) => {
+			if (error) {
+				console.log(error);
+				cb("0");
+			} else {
+				client.query("SELECT id FROM Addresses WHERE userid = " + userID + ";", (err, result) => {
+					if (err) {
+						console.log(err);
+						cb("0");
+					} else {
+						cb(result.rowCount);
+					}
+					client.end();
+				});
+			}
+		});
+	} else {
+		cb("-1");
+	}
+}
+
+function getAddressInfo(userID, parameters, cb) {
+	if (parseInt(userID) > 0 && parameters != null && parseInt(parameters.index) >= 0) {
+		let client = new pg.Client(config);
+		client.connect((error) => {
+			if (error) {
+				console.log(error);
+				cb({});
+			} else {
+				client.query("SELECT * FROM Addresses WHERE userid = " + userID + ";", (err, result) => {
+					if (err) {
+						console.log(err);
+						cb({});
+					} else if (parseInt(result.rowCount) > parameters.index) {
+						cb(result.rows[parameters.index]);
+					} else {
+						cb({});
+					}
+					client.end();
+				});
+			}
+		});
+	} else {
+		cb({});
+	}
+}
+
+function removeAddress(userID, parameters, cb) {
+	if (parseInt(userID) > 0 && parameters != null && parameters.id != null) {
+		let client = new pg.Client(config);
+		client.connect((error) => {
+			if (error) {
+				console.log(error);
+				cb(false);
+			} else {
+				client.query("DELETE FROM Addresses WHERE userid = " + userID + " AND id = " + parameters.id + ";", (err, result) => {
+					if (err) {
+						console.log(err);
+						cb(false);
+					} else if (parseInt(result.rowCount) > 0) {
+						cb(true);
+					} else {
+						cb(false);
+					}
+					client.end();
+				});
+			}
+		});
+	} else {
+		cb(false);
+	}
+}
+
+module.exports =  {checkEmail, checkPassword, getUserInfo, createAccount, getNumMerchandise, getMerchandiseInfo, getProductInfo, addToCart, getNumCartItems, getCartItemInfo, removeCartItem, getOrderTotal, addAddress, getNumAddresses, getAddressInfo, removeAddress};

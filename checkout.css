@@ -1,3 +1,30 @@
+.infoDiv {
+	width: 50%;
+	margin: auto;
+	padding: 1em;
+	background-color: #ffffff;
+}
+
+.formTitle {
+	margin: auto;
+	font-size: 4vw;
+	text-align: center;
+}
+
+.textInput {
+	display: block;
+	width: 90%;
+	margin: .5em auto;
+	font-size: 2vw;
+}
+
+.submitInfo {
+	display: block;
+	margin: auto;
+	-webkit-appearance: button;
+	font-size: 2vw;
+}
+
 .payButton {
 	display: block;
 	margin: auto;

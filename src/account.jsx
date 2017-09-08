@@ -207,6 +207,7 @@ class CreateAccountForm extends React.Component {
 				}
 			}.bind(this);
 			xhttp.open("POST", "/sendAccountCreationEmail", true);
+			xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			xhttp.send("email=" + this.state.email + "&password=" + this.state.password + "&firstName=" + this.state.firstName + "&lastName=" + this.state.lastName);
 		}
 	}
