@@ -400,7 +400,7 @@ const server = http.createServer(function (request, response) {
 			response.end();
 			break;
 		case '/':
-			fs.readFile(__dirname + "/html" + "/index.html", function(error, data){
+			fs.readFile(__dirname + "/html/index.html", function(error, data){
 				if (error) {
 					response.writeHead(404);
 					response.write("Sorry this page does not exist")
@@ -413,13 +413,27 @@ const server = http.createServer(function (request, response) {
 			});
 			break;
 		default:
-			fs.readFile(__dirname + "/html" + path, function(error, data){
+			let folder = "/" + path.substr(path.lastIndexOf(".") + 1);
+			if (folder == "/jpg" || folder == "/jpeg" || folder == "/png") {
+				folder = "/images";
+			}
+			fs.readFile(__dirname + folder + path, function(error, data){
 				if (error) {
 					response.writeHead(404);
 					response.write("Sorry this page does not exist")
 					response.end();
 				} else {
-					response.writeHead(200, {"Content-Type": "text/html"});
+					let type = path.substr(path.lastIndexOf(".") + 1);
+					if (type == "js") {
+						type = "text/javascript";
+					} else if (type == "jpeg" || type == "png") {
+						type = "image/" + type;
+					} else if (type == "jpg") {
+						type = "image/jpeg"
+					} else {
+						type = "text/" + type;
+					}
+					response.writeHead(200, {"Content-Type": type});
 					response.write(data, "utf8");
 					response.end();
 				}

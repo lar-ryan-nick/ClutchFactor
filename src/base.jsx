@@ -74,15 +74,15 @@ class Header extends React.Component {
 			}
 			accountStuff.push(<p key ="1" className="headerGreeting">{"Hello " + name}</p>);
 			if (this.props.numCartItems > 0) {
-				accountStuff.push(<div key="2" className="cartIconDiv"><img key="3" className="cartIcon" src="images/CartIcon.png" onClick={this.goToCart}/><p key="4" className="cartNumBadge">{this.props.numCartItems}</p></div>);
+				accountStuff.push(<div key="2" className="cartIconDiv"><img key="3" className="cartIcon" src="CartIcon.png" onClick={this.goToCart}/><p key="4" className="cartNumBadge">{this.props.numCartItems}</p></div>);
 			} else {
-				accountStuff.push(<div key="2" className="cartIconDiv"><img key="3" className="cartIcon" src="images/CartIcon.png" onClick={this.goToCart}/></div>);
+				accountStuff.push(<div key="2" className="cartIconDiv"><img key="3" className="cartIcon" src="CartIcon.png" onClick={this.goToCart}/></div>);
 			}
 			accountStuff.push(<button key="3" className="headerLogOutButton" onClick={this.logOut}>Log Out</button>);
 		}
 		return (
 			<div className="header">
-				<img className="headerLogo" src="images/ClutchFactor.png" onClick={this.goToMain}/>
+				<img className="headerLogo" src="ClutchFactor.png" onClick={this.goToMain}/>
 				<a className="headerMerchandise" href="merchandise.html">Merchandise</a>
 				{accountStuff}
 			</div>
@@ -101,7 +101,7 @@ class Footer extends React.Component {
 		return (
 			<div className="footer">
 				<div className="footerTop">
-					<img className="footerLogo" src="images/CFLogo.png"/>
+					<img className="footerLogo" src="CFLogo.png"/>
 				</div>
 				<div className="footerBottom">
 					<p className="footerCopyright">© 2017 Clutch Factor, All Rights Reserved</p>
@@ -138,7 +138,7 @@ class Main extends React.Component {
 		return (
 			<div className="main" ref={(input) => {this.main = input;}}>
 				<div className="backgroundImageDiv">
-					<img className="backgroundImage" src="images/BackgroundImage.jpg"/>
+					<img className="backgroundImage" src="BackgroundImage.jpg"/>
 				</div>
 				{this.props.inside}
 			</div>

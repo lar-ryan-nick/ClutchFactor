@@ -83,13 +83,13 @@ class LogInForm extends React.Component {
 		let passwordError = [];
 		//keep == so -1 does not count as true
 		if (this.state.emailError == "That email has already been registered") {
-			emailError.push(<img key="1" className="icon" src="images/GreenCheckIcon.png"/>);
+			emailError.push(<img key="1" className="icon" src="/GreenCheckIcon.png"/>);
 			if (this.state.passwordError) {
-				passwordError.push(<img key="1" className="icon" src="images/RedXIcon.png"/>);
+				passwordError.push(<img key="1" className="icon" src="/RedXIcon.png"/>);
 				passwordError.push(<p key="2" className="errorLabel">That password is incorrect</p>);
 			}
 		} else if (this.state.emailError != "") {
-			emailError.push(<img key="1" className="icon" src="images/RedXIcon.png"/>);
+			emailError.push(<img key="1" className="icon" src="/RedXIcon.png"/>);
 			emailError.push(<p key="2" className="errorLabel">{this.state.emailError}</p>);
 		}
 		let formBottom = [];
@@ -216,24 +216,24 @@ class CreateAccountForm extends React.Component {
 		if (this.state.sentEmail) {
 			return (
 				<div>
-					<img className="largeIcon" src="images/GreenCheckIcon.png"/>
+					<img className="largeIcon" src="/GreenCheckIcon.png"/>
 					<p className="emailSentNotfication">An email has been sent to the address that you supplied</p>
 				</div>
 			);
 		} else {
 			let emailError = [];
 			if (this.state.emailError == "That email has not been registered yet") {
-				emailError.push(<img key="1" className="icon" src="images/GreenCheckIcon.png"/>);
+				emailError.push(<img key="1" className="icon" src="/GreenCheckIcon.png"/>);
 			} else if (this.state.emailError != "") {
-				emailError.push(<img key="1" className="icon" src="images/RedXIcon.png"/>);
+				emailError.push(<img key="1" className="icon" src="/RedXIcon.png"/>);
 				emailError.push(<p key="2" className="errorLabel">{this.state.emailError}</p>);
 			}
 			let passwordError = [];
 			if (this.state.passwordError == true) {
-				passwordError.push(<img key="1" className="icon" src="images/RedXIcon.png"/>);
+				passwordError.push(<img key="1" className="icon" src="/RedXIcon.png"/>);
 				passwordError.push(<p key="2" className="errorLabel">Password must be at least 8 characters</p>);
 			} else if (this.state.passwordError == false) {
-				passwordError.push(<img key="1" className="icon" src="images/GreenCheckIcon.png"/>);
+				passwordError.push(<img key="1" className="icon" src="/GreenCheckIcon.png"/>);
 			}
 			let formBottom = [];
 			if (this.state.submitDisabled) {

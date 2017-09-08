@@ -17,7 +17,7 @@ class ProductPreview extends React.Component {
 		}
 		return (
 			<div className="productPreviewDiv">
-				<img className="productPreviewImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.color + "Med.png"}/>
+				<img className="productPreviewImage" src={"/" + this.props.data.modelname + this.props.data.articletype + this.props.data.color + "Med.png"}/>
 			</div>
 		);
 	}
@@ -68,7 +68,7 @@ class ProductInfo extends React.Component {
 		}
 		let colors = [];
 		for (let i = 0; i < this.props.data.colors.length; ++i) {
-			colors.push(<img key={i} className="colorPreview" onMouseOver={this.props.changeImage.bind(this.props.parent, i)} src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + "Med.png"}/>)
+			colors.push(<img key={i} className="colorPreview" onMouseOver={this.props.changeImage.bind(this.props.parent, i)} src={"/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + "Med.png"}/>)
 		}
 		let bottom = [];
 		if (this.state.loading) {
@@ -76,9 +76,9 @@ class ProductInfo extends React.Component {
 		} else {
 			bottom.push(<button key="1" className="addToCartButton" onClick={this.addToCart}>Add to Cart</button>);
 			if (this.state.response == "The item was successfully added to your cart") {
-				bottom.push(<div key="2" className="responseDiv"><img key="3" className="icon" src="images/GreenCheckIcon.png"/><p key="4" className="successText">{this.state.response}</p></div>);
+				bottom.push(<div key="2" className="responseDiv"><img key="3" className="icon" src="/GreenCheckIcon.png"/><p key="4" className="successText">{this.state.response}</p></div>);
 			} else if (this.state.response != "") {
-				bottom.push(<div key="2" className="responseDiv"><img key="3" className="icon" src="images/RedXIcon.png"/><p key="4" className="successText">{this.state.response}</p></div>);
+				bottom.push(<div key="2" className="responseDiv"><img key="3" className="icon" src="/RedXIcon.png"/><p key="4" className="successText">{this.state.response}</p></div>);
 			}
 		}
 		return (

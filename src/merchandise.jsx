@@ -91,11 +91,11 @@ class MerchandiseItem extends React.Component {
 			for (let i = 0; i < this.props.data.colors.length; ++i) {
 				if (this.state.indexHovered == i) {
 					otherColors.push(
-						<img key={i} ref={(input) => {this.hoveredImage = input;}} className="previewImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + "Low.png"} onMouseOver={this.handlePreviewOnMouseOver.bind(this, i)} onMouseLeave={this.handlePreviewOnMouseLeave}/>
+						<img key={i} ref={(input) => {this.hoveredImage = input;}} className="previewImage" src={"/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + "Low.png"} onMouseOver={this.handlePreviewOnMouseOver.bind(this, i)} onMouseLeave={this.handlePreviewOnMouseLeave}/>
 					);
 				} else {
 					otherColors.push(
-						<img key={i} className="previewImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + "Low.png"} onMouseOver={this.handlePreviewOnMouseOver.bind(this, i)} onMouseLeave={this.handlePreviewOnMouseLeave}/>
+						<img key={i} className="previewImage" src={"/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[i] + "Low.png"} onMouseOver={this.handlePreviewOnMouseOver.bind(this, i)} onMouseLeave={this.handlePreviewOnMouseLeave}/>
 					);
 				}
 			}
@@ -107,7 +107,7 @@ class MerchandiseItem extends React.Component {
 		return (
 			<div className={merchandiseDivClass} onMouseOver={this.handleDivOnMouseOver} onMouseLeave={this.handleDivOnMouseLeave} onClick={this.handleOnClick}>
 				<div className="productDiv">
-					<img className="merchandiseImage" src={"images/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[this.state.index] + "Low.png"}/>
+					<img className="merchandiseImage" src={"/" + this.props.data.modelname + this.props.data.articletype + this.props.data.colors[this.state.index] + "Low.png"}/>
 					<p className={merchandiseTitleClass}>{this.props.data.modelname + " " + this.props.data.articletype}</p>
 					<p className={numColorsTitleClass}>{this.props.data.colors.length + colorText}</p>
 					<p className={priceTitleClass}>{"$" + this.props.data.price}</p>
