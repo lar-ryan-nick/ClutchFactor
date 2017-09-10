@@ -135,11 +135,16 @@ class ShippingInfo extends React.Component {
 		for (let i = 0; i < this.state.addresses.length; ++i) {
 			options.push(<ShippingOption key={i} info={this.state.addresses[i]}/>);
 		}
+		let or = <p className="orLabel">Or Add a new shipping address</p>;
+		if (this.state.numAddresses < 0 || this.state.numAddresses > 4) {
+			or = null;
+		}
 		return (
 			<div>
 				<div>
 					{options}
 				</div>
+				{or}
 				<div className="infoDiv">
 					<p className="formTitle">Add a New Address</p>
 					<form onSubmit={this.addAddress}>

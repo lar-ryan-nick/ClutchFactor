@@ -2,6 +2,8 @@
 	background-color: #aaaaaa;
 	color: #000000;
 	padding: .5em;
+	margin: 0px;
+	border: solid 2px #000000;
 	font-size: 3vw;
 }
 
