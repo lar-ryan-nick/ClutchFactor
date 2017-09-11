@@ -321,7 +321,7 @@ function getCartItemInfo(userID, parameters, cb) {
 				console.log(error);
 				cb({});
 			} else {
-				client.query("SELECT id, userid, productid FROM Cart WHERE userid = " + userID + " AND paid = false;", (err, result) => {
+				client.query("SELECT id, userid, productid FROM Cart WHERE userid = " + userID + ";", (err, result) => {
 					if (err) {
 						console.log(err);
 						cb({});
