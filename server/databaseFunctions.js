@@ -264,12 +264,12 @@ function addToCart(userID, parameters, cb) {
 				console.log(error);
 				cb("Sorry an error occured please try adding to your cart again");
 			} else {
-				client.query("SELECT id FROM Orders WHERE userid = " + userID + " AND productid = " + parameters.product + ";", (err, result) => {
+				client.query("SELECT id FROM Cart WHERE userid = " + userID + " AND productid = " + parameters.product + ";", (err, result) => {
 					if (err) {
 						console.log(err);
 						cb("Sorry an error occured please try adding to your cart again");
 					} else if (parseInt(result.rowCount) == 0) {
-						client.query("INSERT INTO Orders (userid, productid) VALUES ('" + userID + "', '" + parameters.product + "');", (er, res) => {
+						client.query("INSERT INTO Cart (userid, productid) VALUES ('" + userID + "', '" + parameters.product + "');", (er, res) => {
 							if (er) {
 								console.log(er);
 								cb("Sorry an error occured please try adding to your cart again");
@@ -297,7 +297,7 @@ function getNumCartItems(userID, cb) {
 				console.log(error);
 				cb("0");
 			} else {
-				client.query("SELECT id FROM Orders WHERE userid = " + userID + ";", (err, result) => {
+				client.query("SELECT id FROM Cart WHERE userid = " + userID + ";", (err, result) => {
 					if (err) {
 						console.log(err);
 						cb("0");
@@ -321,7 +321,7 @@ function getCartItemInfo(userID, parameters, cb) {
 				console.log(error);
 				cb({});
 			} else {
-				client.query("SELECT id, userid, productid FROM Orders WHERE userid = " + userID + " AND paid = false;", (err, result) => {
+				client.query("SELECT id, userid, productid FROM Cart WHERE userid = " + userID + " AND paid = false;", (err, result) => {
 					if (err) {
 						console.log(err);
 						cb({});
@@ -360,7 +360,7 @@ function removeCartItem(userID, parameters, cb) {
 				console.log(error);
 				cb(false);
 			} else {
-				client.query("DELETE FROM Orders WHERE userid = " + userID + " AND id = " + parameters.id + ";", (err, result) => {
+				client.query("DELETE FROM Cart WHERE userid = " + userID + " AND id = " + parameters.id + ";", (err, result) => {
 					if (err) {
 						console.log(err);
 						cb(false);
@@ -386,7 +386,7 @@ function getOrderTotal(userID, cb) {
 				console.log(error);
 				cb("-1");
 			} else {
-				client.query("SELECT price FROM Merchandise WHERE id = (SELECT productid FROM Orders WHERE userid = " + userID + " AND paid = false);", (err, result) => {
+				client.query("SELECT price FROM Merchandise WHERE id = (SELECT productid FROM Cart WHERE userid = " + userID + " AND paid = false);", (err, result) => {
 					if (err) {
 						console.log(err);
 						cb("-1");
