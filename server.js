@@ -400,7 +400,7 @@ const server = http.createServer(function (request, response) {
 			response.end();
 			break;
 		case '/':
-			fs.readFile(__dirname + "/html/index.html", function(error, data){
+			fs.readFile(__dirname + "/client/html/index.html", function(error, data){
 				if (error) {
 					response.writeHead(404);
 					response.write("Sorry this page does not exist")

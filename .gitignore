@@ -1,4 +1,5 @@
 node_modules/
 client/js/
+scripts/setUpEnvironment.sh
 DS_Store
 package-lock.json

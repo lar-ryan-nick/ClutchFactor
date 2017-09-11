@@ -7,7 +7,28 @@ class ShippingOption extends React.Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {};
+		this.state = {
+			hovered: "false"
+		};
+		this.handleOnMouseOver = this.handleOnMouseOver.bind(this);
+		this.handleOnMouseLeave = this.handleOnMouseLeave.bind(this);
+		this.handleOnClick = this.handleOnClick.bind(this);
+	}
+
+	handleOnMouseOver() {
+		let newState = this.state;
+		newState.hovered = true;
+		this.setState(newState);
+	}
+
+	handleOnMouseLeave() {
+		let newState = this.state;
+		newState.hovered = false;
+		this.setState(newState);
+	}
+
+	handleOnClick() {
+		this.props.setAddress(this.props.info);
 	}
 
 	render() {
@@ -16,12 +37,49 @@ class ShippingOption extends React.Component {
 				<div></div>
 			);
 		}
+		let divClass = "addressOptionDiv";
+		let textClass = "addressLabel";
+		if (this.state.hovered == true) {
+			divClass += "Hovered";
+			textClass += "Hovered";
+		}
 		return (
-			<div className="AddressOptionDiv">
-				<p className="addressLabel">{this.props.info.receiver}</p>
-				<p className="addressLabel">{this.props.info.addressline1}</p>
-				<p className="addressLabel">{this.props.info.addressline2}</p>
-				<p className="addressLabel">{this.props.info.city + ", " + this.props.info.state + " " + this.props.info.zip}</p>
+			<div className={divClass} onMouseOver={this.handleOnMouseOver} onMouseLeave={this.handleOnMouseLeave} onClick={this.handleOnClick}>
+				<p className={textClass}>{this.props.info.receiver}</p>
+				<p className={textClass}>{this.props.info.addressline1}</p>
+				<p className={textClass}>{this.props.info.addressline2}</p>
+				<p className={textClass}>{this.props.info.city + ", " + this.props.info.state + " " + this.props.info.zip}</p>
+			</div>
+		);
+	}
+}
+
+class ShippingForm extends React.Component {
+
+	constructor(props) {
+		super(props);
+		this.state = {};
+	}
+
+	render() {
+		return (
+			<div className="infoDiv">
+				<p className="formTitle">Add a New Address</p>
+				<form onSubmit={this.props.addAddress}>
+					<p className="textInput">Receiver</p>
+					<input className="textInput" type="text" name="receiver" value={this.props.info.receiver} onChange={this.props.handleChange}/>
+					<p className="textInput">Address Line 1</p>
+					<input className="textInput" type="text" name="addressline1" value={this.props.info.addressline1} onChange={this.props.handleChange}/>
+					<p className="textInput">Address Line 2</p>
+					<input className="textInput" type="text" name="addressline2" value={this.props.info.addressline2} onChange={this.props.handleChange}/>
+					<p className="textInput">City</p>
+					<input className="textInput" type="text" name="city" value={this.props.info.city} onChange={this.props.handleChange}/>
+					<p className="textInput">State</p>
+					<input className="textInput" type="text" name="state" value={this.props.info.state} onChange={this.props.handleChange}/>
+					<p className="textInput">Zip Code</p>
+					<input className="textInput" type="number" name="zip" value={this.props.info.zip} onChange={this.props.handleChange}/>
+					<input className="submitInfo" type="submit" name="submit" value="Ship here"/>
+				</form>
 			</div>
 		);
 	}
@@ -43,13 +101,19 @@ class ShippingInfo extends React.Component {
 				zip: ""
 			}
 		}
+		this.handleChange = this.handleChange.bind(this);
 		this.getNumAddresses = this.getNumAddresses.bind(this);
 		this.getAddressInfo = this.getAddressInfo.bind(this);
 		this.removeAddress = this.removeAddress.bind(this)
-		this.handleChange = this.handleChange.bind(this);
 		this.addAddress = this.addAddress.bind(this);
 		this.refresh = this.refresh.bind(this);
 		this.refresh();
+	}
+
+	handleChange(event) {
+		let newState = this.state;
+		newState.info[event.target.name] = event.target.value;
+		this.setState(newState);
 	}
 
 	getNumAddresses(cb) {
@@ -93,12 +157,6 @@ class ShippingInfo extends React.Component {
 		xhttp.send();
 	}
 
-	handleChange(event) {
-		let newState = this.state;
-		newState.info[event.target.name] = event.target.value;
-		this.setState(newState);
-	}
-
 	addAddress(event) {
 		event.preventDefault();
 		let xhttp = new XMLHttpRequest();
@@ -110,6 +168,7 @@ class ShippingInfo extends React.Component {
 		xhttp.open("POST", "/addAddress", true);
 		xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 		xhttp.send("receiver=" + this.state.info.receiver + "&addressLine1=" + this.state.info.addressline1 + "&addressLine2=" + this.state.info.addressline2 + "&city=" + this.state.info.city + "&state=" + this.state.info.state + "&zip=" + this.state.info.zip);
+		this.props.setAddress(this.state.info);
 	}
 
 	refresh() {
@@ -133,42 +192,32 @@ class ShippingInfo extends React.Component {
 		}
 		let options = [];
 		for (let i = 0; i < this.state.addresses.length; ++i) {
-			options.push(<ShippingOption key={i} info={this.state.addresses[i]}/>);
+			options.push(<ShippingOption key={i} info={this.state.addresses[i]} setAddress={this.props.setAddress}/>);
 		}
-		let or = <p className="orLabel">Or Add a new shipping address</p>;
-		if (this.state.numAddresses < 0 || this.state.numAddresses > 4) {
+		let optionsTitle = <p className="orLabel">Choose one of your previously entered addresses</p>;
+		let or = <p className="orLabel">– OR –</p>;
+		let add = <ShippingForm addAddress={this.addAddress} handleChange={this.handleChange} info={this.state.info}/>;
+		if (this.state.numAddresses > 4) {
+			add = null;
 			or = null;
+		} else if (this.state.numAddresses < 1) {
+			or = null;
+			optionsTitle = null;
 		}
 		return (
 			<div>
+				{optionsTitle}
 				<div>
 					{options}
 				</div>
 				{or}
-				<div className="infoDiv">
-					<p className="formTitle">Add a New Address</p>
-					<form onSubmit={this.addAddress}>
-						<p className="textInput">Receiver</p>
-						<input className="textInput" type="text" name="receiver" value={this.state.info.receiver} onChange={this.handleChange}/>
-						<p className="textInput">Address Line 1</p>
-						<input className="textInput" type="text" name="addressline1" value={this.state.info.addressline1} onChange={this.handleChange}/>
-						<p className="textInput">Address Line 2</p>
-						<input className="textInput" type="text" name="addressline2" value={this.state.info.addressline2} onChange={this.handleChange}/>
-						<p className="textInput">City</p>
-						<input className="textInput" type="text" name="city" value={this.state.info.city} onChange={this.handleChange}/>
-						<p className="textInput">State</p>
-						<input className="textInput" type="text" name="state" value={this.state.info.state} onChange={this.handleChange}/>
-						<p className="textInput">Zip Code</p>
-						<input className="textInput" type="number" name="zip" value={this.state.info.zip} onChange={this.handleChange}/>
-						<input className="submitInfo" type="submit" name="submit" value="Ship here"/>
-					</form>
-				</div>
+				{add}
 			</div>
 		);
 	}
 }
 
-class CardInfo extends React.Component {
+class PaymentInfo extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -239,21 +288,32 @@ class CheckoutPage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			stage: 0
+			stage: 0,
+			address: null
 		};
+		this.setAddress = this.setAddress.bind(this);
+	}
+
+	setAddress(address) {
+		let newState = this.state;
+		newState.address = address;
+		newState.stage = 1;
+		this.setState(newState);
 	}
 
 	render() {
 		let stuff = [];
 		stuff.push(<p key="1" className="stageHeader">1. Enter your shipping info</p>);
 		if (this.state.stage == 0) {
-			stuff.push(<ShippingInfo key="2"/>);
+			stuff.push(<ShippingInfo key="2"i setAddress={this.setAddress}/>);
+		} else {
+			stuff.push(<p key="3" className="stageHeader">2. Enter your payment info</p>);
+			if (this.state.stage == 1) {
+				stuff.push(<PaymentInfo key="4"/>);
+			} else {
+				stuff.push(<p key="5" className="stageHeader">3. Confirm</p>);
+			}
 		}
-		stuff.push(<p key="3" className="stageHeader">2. Enter your payment info</p>);
-		if (this.state.stage == 1) {
-			stuff.push(<PaymentInfo key="4"/>);
-		}
-		stuff.push(<p key="5" className="stageHeader">3. Confirm</p>);
 		return (
 			<div>
 				{stuff}
