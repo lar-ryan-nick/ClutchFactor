@@ -515,4 +515,143 @@ function removeAddress(userID, parameters, cb) {
 	}
 }
 
+function addOrder(userID, parameters, cb) {
+	if (parseInt(userID) > 0 && parameters != null) {
+		let client = new pg.Client(config);
+		client.connect((error) => {
+			if (error) {
+				console.log(error);
+				cb("Sorry an error occured please try adding your order again");
+			} else {
+				client.query("DELETE FROM Cart WHERE userid = " + userID + " RETURNING productid;", (err, result) => {
+					if (err) {
+						console.log(err);
+						cb("Sorry an error occured please try adding your Order again");
+					} else if (parseInt(result.rowCount) > 0) {
+						let completionCount = 0;
+						for (let i = 0; i < result.rows.length; ++i) {
+							client.query("INSERT INTO Orders (userid, productid, payment) VALUES (" + userID + ", " + result.rows[i].productid + ", '" + parameters.payment + "');", (er, res) => {
+								if (er) {
+									console.log(er);
+									cb("Sorry an error occured please try adding your order again");
+								} else {
+									cb("The order was successfully created");
+								}
+								++completionCount;
+								if (completionCount >= result.rows.length) {
+									client.end();
+								}
+							});
+						}
+					} else {
+						cb("There is nothing in your cart to finalize an order for");
+					}
+				});
+			}
+		});
+	} else {
+		cb("Must supply more information");
+	}
+}
+
+function getNumUserOrders(userID, cb) {
+	if (parseInt(userID) > 0) {
+		let client = new pg.Client(config);
+		client.connect((error) => {
+			if (error) {
+				console.log(error);
+				cb("0");
+			} else {
+				client.query("SELECT id FROM Orders WHERE userid = " + userID + ";", (err, result) => {
+					if (err) {
+						console.log(err);
+						cb("0");
+					} else {
+						cb(result.rowCount);
+					}
+					client.end();
+				});
+			}
+		});
+	} else {
+		cb("-1");
+	}
+}
+
+function getNumOrders(userID, cb) {
+	if (parseInt(userID) > 0) {
+		let client = new pg.Client(config);
+		client.connect((error) => {
+			if (error) {
+				console.log(error);
+				cb("0");
+			} else {
+				client.query("SELECT id FROM Orders;", (err, result) => {
+					if (err) {
+						console.log(err);
+						cb("0");
+					} else {
+						cb(result.rowCount);
+					}
+					client.end();
+				});
+			}
+		});
+	} else {
+		cb("-1");
+	}
+}
+
+function getUserOrderInfo(userID, parameters, cb) {
+	if (parseInt(userID) > 0 && parameters != null && parseInt(parameters.index) >= 0) {
+		let client = new pg.Client(config);
+		client.connect((error) => {
+			if (error) {
+				console.log(error);
+				cb({});
+			} else {
+				client.query("SELECT * FROM Orders WHERE userid = " + userID + ";", (err, result) => {
+					if (err) {
+						console.log(err);
+						cb({});
+					} else if (parseInt(result.rowCount) > parameters.index) {
+						cb(result.rows[parameters.index]);
+					} else {
+						cb({});
+					}
+					client.end();
+				});
+			}
+		});
+	} else {
+		cb({});
+	}
+}
+
+function getOrderInfo(userID, parameters, cb) {
+	if (parseInt(userID) > 0 && parameters != null && parseInt(parameters.index) >= 0) {
+		let client = new pg.Client(config);
+		client.connect((error) => {
+			if (error) {
+				console.log(error);
+				cb({});
+			} else {
+				client.query("SELECT * FROM Orders;", (err, result) => {
+					if (err) {
+						console.log(err);
+						cb({});
+					} else if (parseInt(result.rowCount) > parameters.index) {
+						cb(result.rows[parameters.index]);
+					} else {
+						cb({});
+					}
+					client.end();
+				});
+			}
+		});
+	} else {
+		cb({});
+	}
+}
+
 module.exports =  {checkEmail, checkPassword, getUserInfo, createAccount, getNumMerchandise, getMerchandiseInfo, getProductInfo, addToCart, getNumCartItems, getCartItemInfo, removeCartItem, getOrderTotal, addAddress, getNumAddresses, getAddressInfo, removeAddress};
