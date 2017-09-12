@@ -386,7 +386,7 @@ function getOrderTotal(userID, cb) {
 				console.log(error);
 				cb("-1");
 			} else {
-				client.query("SELECT price FROM Merchandise WHERE id = (SELECT productid FROM Cart WHERE userid = " + userID + " AND paid = false);", (err, result) => {
+				client.query("SELECT price FROM Merchandise WHERE id = (SELECT productid FROM Cart WHERE userid = " + userID + ");", (err, result) => {
 					if (err) {
 						console.log(err);
 						cb("-1");

@@ -167,12 +167,12 @@ const server = http.createServer(function (request, response) {
 			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null) {
 				request.on("end", function() {
 					body = parseBody(body);
-					let nonce = body.nonce;
+					let payload = JSON.parse(body.payload);
 					getOrderTotal(sessions[cookies.sessionid].userID, function(total) {
 						if (total > 0) {
 							gateway.transaction.sale({
 								amount: total,
-								paymentMethodNonce: nonce,
+								paymentMethodNonce: payload.nonce,
 								options: {
 									submitForSettlement: true
 								}
