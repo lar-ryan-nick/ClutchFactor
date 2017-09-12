@@ -42,7 +42,7 @@
 	font-size: 4vw;
 }
 
-.infoDiv {
+.shippingInfoDiv {
 	width: 50%;
 	margin: auto;
 	padding: 1em;
@@ -80,3 +80,30 @@
 	color: #ffffff;
 	font-size: 4vw;
 }
+
+.confirmationInfoDiv {
+	display: inline-block;
+	background-color: #ffffff;
+	margin: 1em auto;
+}
+
+.inlineDiv {
+	display: inline-block;
+	padding: 2em;
+	vertical-align: top;
+}
+
+.confirmationLabel {
+	color: #000000;
+	font-size: 2vw;
+	margin: 0px;
+	text-align: left;
+}
+
+.finalizeCheckoutButton {
+	display: block;
+	margin: auto;
+	-webkit-appearance: button;
+	font-size: 2vw;
+}
+

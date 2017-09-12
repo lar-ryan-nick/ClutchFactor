@@ -63,7 +63,7 @@ class ShippingForm extends React.Component {
 
 	render() {
 		return (
-			<div className="infoDiv">
+			<div className="shippingInfoDiv">
 				<p className="formTitle">Add a New Address</p>
 				<form onSubmit={this.props.addAddress}>
 					<p className="textInput">Receiver</p>
@@ -223,7 +223,7 @@ class PaymentInfo extends React.Component {
 		super(props);
 		this.state = {};
 		this.setup = this.setup.bind(this);
-		this.checkout = this.checkout.bind(this);
+		this.handleOnClick = this.handleOnClick.bind(this);
 		this.setup();
 	}
 
@@ -248,27 +248,13 @@ class PaymentInfo extends React.Component {
 		xhttp.send();
 	}
 
-	checkout(payload) {
+	handleOnClick() {
 		this.instance.requestPaymentMethod(function(error, payload) {
 			if (error) {
 				console.log(error);
 			} else {
-				let xhttp = new XMLHttpRequest();
-				xhttp.onreadystatechange = function() {
-					if (xhttp.readyState == 4 && xhttp.status == 200) {
-						console.log(xhttp.responseText);
-						this.instance.teardown((error) => {
-							if (error != null) {
-								console.log(error);
-							}
-						});
-						this.instance = null;
-					}
-				}.bind(this);
-				xhttp.open("POST", "/checkout", true);
-				xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-				xhttp.send("nonce=" + payload.nonce);
-				console.log(payload.nonce);
+				console.log(payload);
+				this.props.setPayload(payload);
 			}
 		}.bind(this));
 	}
@@ -277,8 +263,37 @@ class PaymentInfo extends React.Component {
 		return (
 			<div>
 				<div ref={(input) => {this.dropinContainer = input;}}></div>
-				<button className="payButton" onClick={this.checkout}>Complete Order</button>
+				<button className="payButton" onClick={this.handleOnClick}>Choose payment option</button>
 			</div>
+		);
+	}
+}
+
+class ConfirmationInfo extends React.Component {
+
+	constructor(props) {
+		super(props);
+		this.state = {};
+	}
+
+	render() {
+		return (
+			<center>
+				<div className="confirmationInfoDiv">
+					<div className="inlineDiv">
+						<p className="confirmationLabel">Ship to:</p>
+						<p className="confirmationLabel">{this.props.address.receiver}</p>
+						<p className="confirmationLabel">{this.props.address.addressline1}</p>
+						<p className="confirmationLabel">{this.props.address.addressline2}</p>
+						<p className="confirmationLabel">{this.props.address.city + ", " + this.props.address.state + " " + this.props.address.zip}</p>
+					</div>
+					<div className="inlineDiv">
+						<p className="confirmationLabel">Paying with:</p>
+						<p className="confirmationLabel">{this.props.payload.type + " " + this.props.payload.description}</p>
+					</div>
+				</div>
+				<button className="finalizeCheckoutButton">Finish checking out</button>
+			</center>
 		);
 	}
 }
@@ -289,9 +304,12 @@ class CheckoutPage extends React.Component {
 		super(props);
 		this.state = {
 			stage: 0,
-			address: null
+			address: null,
+			payload: null
 		};
 		this.setAddress = this.setAddress.bind(this);
+		this.setPayload = this.setPayload.bind(this);
+		this.finalize = this.finalize.bind(this);
 	}
 
 	setAddress(address) {
@@ -299,6 +317,32 @@ class CheckoutPage extends React.Component {
 		newState.address = address;
 		newState.stage = 1;
 		this.setState(newState);
+	}
+
+	setPayload(payload) {
+		let newState = this.state;
+		newState.payload = payload;
+		newState.stage = 2;
+		this.setState(newState);
+	}
+
+	finalize() {
+		let xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				console.log(xhttp.responseText);
+				this.instance.teardown((err) => {
+					if (err != null) {
+						console.log(err);
+					}
+				});
+				this.instance = null;
+			}
+		}.bind(this);
+		xhttp.open("POST", "/checkout", true);
+		xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		xhttp.send("nonce=" + this.state.payload.nonce);
+		console.log(this.state.payload.nonce);
 	}
 
 	render() {
@@ -309,9 +353,10 @@ class CheckoutPage extends React.Component {
 		} else {
 			stuff.push(<p key="3" className="stageHeader">2. Enter your payment info</p>);
 			if (this.state.stage == 1) {
-				stuff.push(<PaymentInfo key="4"/>);
+				stuff.push(<PaymentInfo key="4" setPayload={this.setPayload}/>);
 			} else {
 				stuff.push(<p key="5" className="stageHeader">3. Confirm</p>);
+				stuff.push(<ConfirmationInfo key="6" address={this.state.address} payload={this.state.payload}/>);
 			}
 		}
 		return (
