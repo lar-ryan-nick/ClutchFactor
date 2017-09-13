@@ -5,7 +5,7 @@ const qs = require('querystring');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 const braintree = require('braintree');
-const {checkEmail, checkPassword, getUserInfo, createAccount, getNumMerchandise, getMerchandiseInfo, getProductInfo, addToCart, getNumCartItems, getCartItemInfo, removeCartItem, getOrderTotal, addAddress, getNumAddresses, getAddressInfo, removeAddress} = require('./server/databaseFunctions.js');
+const {dbAccessor} = require('./server/databaseFunctions.js');
 
 const transporter = nodemailer.createTransport({
 	service: 'Gmail',
@@ -76,7 +76,7 @@ const server = http.createServer(function (request, response) {
 	switch (path) {
 		case '/createAccount':
 			if (parameters != null && accountIDs[parameters.accountID] != null) {
-				createAccount(accountIDs[parameters.accountID], function(success) {
+				dbAccaessor.createAccount(accountIDs[parameters.accountID], function(success) {
 					if (success) {
 						inverseAccountIDs[accountIDs[parameters.accountID].email] = null;
 						accountIDs[parameters.accountID] = null;
@@ -168,7 +168,7 @@ const server = http.createServer(function (request, response) {
 				request.on("end", function() {
 					body = parseBody(body);
 					let payload = JSON.parse(body.payload);
-					getOrderTotal(sessions[cookies.sessionid].userID, function(total) {
+					dbAccessor.getOrderTotal(sessions[cookies.sessionid].userID, function(total) {
 						if (total > 0) {
 							gateway.transaction.sale({
 								amount: total,
@@ -200,7 +200,7 @@ const server = http.createServer(function (request, response) {
 			response.writeHead(200, {"Content-Type": "text/plain"});
 			let pattern = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 			if (parameters != null && pattern.test(parameters.email)) {
-				checkEmail(parameters, (taken) => {
+				dbAccessor.checkEmail(parameters, (taken) => {
 					if (taken) {
 						response.write("That email has already been registered");
 					} else {
@@ -216,7 +216,7 @@ const server = http.createServer(function (request, response) {
 		case '/checkPassword':
 			request.on("end", function() {
 				body = parseBody(body);
-				checkPassword(body, (userID, valid) => {
+				dbAccessor.checkPassword(body, (userID, valid) => {
 					if ((cookies == null || cookies.sessionid == null || sessions[cookies.sessionid] == null) && parseInt(userID) > 0 && valid) {
 						let sessionID = crypto.randomBytes(Math.floor(Math.random() * 50 + 5)).toString('hex');
 						while (sessions[sessionID] != null) {
@@ -242,7 +242,7 @@ const server = http.createServer(function (request, response) {
 		case '/getUserInfo':
 			response.writeHead(200, {"Content-Type": "text/plain"});
 			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null) {
-				getUserInfo(sessions[cookies.sessionid].userID, (info) => {
+				dbAccessor.getUserInfo(sessions[cookies.sessionid].userID, (info) => {
 					response.write(JSON.stringify(info));
 					response.end();
 				});
@@ -254,7 +254,7 @@ const server = http.createServer(function (request, response) {
 		case '/getNumCartItems':
 			response.writeHead(200, {"Content-Type": "text/plain"});
 			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null) {
-				getNumCartItems(sessions[cookies.sessionid].userID, (num) => {
+				dbAccessor.getNumCartItems(sessions[cookies.sessionid].userID, (num) => {
 					response.write("" + num);
 					response.end();
 				});
@@ -266,7 +266,7 @@ const server = http.createServer(function (request, response) {
 		case '/getCartItemInfo':
 			response.writeHead(200, {"Content-Type": "text/plain"});
 			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null && parameters != null && parseInt(parameters.index) >= 0) {
-				getCartItemInfo(sessions[cookies.sessionid].userID, parameters, (info) => {
+				dbAccessor.getCartItemInfo(sessions[cookies.sessionid].userID, parameters, (info) => {
 					response.write(JSON.stringify(info));
 					response.end();
 				});
@@ -278,7 +278,7 @@ const server = http.createServer(function (request, response) {
 		case '/addToCart':
 			response.writeHead(200, {"Content-Type": "text/plain"});
 			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null && parameters != null && parameters.product != null) {
-				addToCart(sessions[cookies.sessionid].userID, parameters, (result) => {
+				dbAccessor.addToCart(sessions[cookies.sessionid].userID, parameters, (result) => {
 					response.write(result);
 					response.end();
 				});
@@ -290,7 +290,7 @@ const server = http.createServer(function (request, response) {
 		case '/removeCartItem':
 			response.writeHead(200, {"Content-Type": "text/plain"});
 			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null && parameters != null && parameters.id != null) {
-				removeCartItem(sessions[cookies.sessionid].userID, parameters, (deleted) => {
+				dbAccessor.removeCartItem(sessions[cookies.sessionid].userID, parameters, (deleted) => {
 					if (deleted) {
 						response.write("Removed the cart item successfully");
 					} else {
@@ -305,7 +305,7 @@ const server = http.createServer(function (request, response) {
 			break;
 		case '/getNumMerchandise':
 			response.writeHead(200, {"Content-Type": "text/plain"});
-			getNumMerchandise((num) => {
+			dbAccessor.getNumMerchandise((num) => {
 				response.write("" + num);
 				response.end();
 			});
@@ -313,7 +313,7 @@ const server = http.createServer(function (request, response) {
 		case '/getMerchandiseInfo':
 			response.writeHead(200, {"Content-Type": "text/plain"});
 			if (parameters != null) {
-				getMerchandiseInfo(parameters, (info) => {
+				dbAccessor.getMerchandiseInfo(parameters, (info) => {
 					response.write(JSON.stringify(info));
 					response.end();
 				});
@@ -325,7 +325,7 @@ const server = http.createServer(function (request, response) {
 		case '/getProductInfo':
 			response.writeHead(200, {"Content-Type": "text/plain"});
 			if (parameters != null) {
-				getProductInfo(parameters, (info) => {
+				dbAccessor.getProductInfo(parameters, (info) => {
 					response.write(JSON.stringify(info));
 					response.end();
 				});
@@ -337,7 +337,7 @@ const server = http.createServer(function (request, response) {
 		case '/getNumAddresses':
 			response.writeHead(200, {"Content-Type": "text/plain"});
 			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null) {
-				getNumAddresses(sessions[cookies.sessionid].userID, (num) => {
+				dbAccessor.getNumAddresses(sessions[cookies.sessionid].userID, (num) => {
 					response.write("" + num);
 					response.end();
 				});
@@ -349,7 +349,7 @@ const server = http.createServer(function (request, response) {
 		case '/getAddressInfo':
 			response.writeHead(200, {"Content-Type": "text/plain"});
 			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null && parameters != null && parseInt(parameters.index) >= 0) {
-				getAddressInfo(sessions[cookies.sessionid].userID, parameters, (info) => {
+				dbAccessor.getAddressInfo(sessions[cookies.sessionid].userID, parameters, (info) => {
 					response.write(JSON.stringify(info));
 					response.end();
 				});
@@ -363,7 +363,7 @@ const server = http.createServer(function (request, response) {
 			request.on("end", function() {
 				body = parseBody(body);
 				if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null && body != null) {
-						addAddress(sessions[cookies.sessionid].userID, body, (result) => {
+					dbAccessor.addAddress(sessions[cookies.sessionid].userID, body, (result) => {
 						response.write(result);
 						response.end();
 					});
@@ -376,7 +376,7 @@ const server = http.createServer(function (request, response) {
 		case '/removeAddress':
 			response.writeHead(200, {"Content-Type": "text/plain"});
 			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null && parameters != null && parameters.id != null) {
-				removeAddress(sessions[cookies.sessionid].userID, parameters, (deleted) => {
+				dbAccessor.removeAddress(sessions[cookies.sessionid].userID, parameters, (deleted) => {
 					if (deleted) {
 						response.write("Removed the address successfully");
 					} else {
