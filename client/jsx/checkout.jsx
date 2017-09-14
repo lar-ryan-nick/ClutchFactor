@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 import dropin from 'braintree-web-drop-in';
-import {Header, Footer, Main} from './base.jsx';
+import {CartDisplay, Page} from './base.jsx';
 
 class ShippingOption extends React.Component {
 
@@ -367,46 +367,11 @@ class CheckoutPage extends React.Component {
 	}
 }
 
-class Page extends React.Component {
-
-	constructor(props) {
-		super(props);
-		this.state = {
-			numCartItems: null
-		}
-		this.getNumCartItems = this.getNumCartItems.bind(this);
-		this.getNumCartItems();
-	}
-
-	getNumCartItems() {
-		let xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (xhttp.readyState == 4 && xhttp.status == 200) {
-				console.log(xhttp.responseText);
-				let newState = this.state;
-				newState.numCartItems = parseInt(xhttp.responseText);
-				this.setState(newState);
-			}
-		}.bind(this);
-		xhttp.open("GET", "/getNumCartItems", true);
-		xhttp.send();
-	}
-
-	render() {
-		let inside = <CheckoutPage/>;
-		if (this.state.numCartItems == null) {
-			inside = <div></div>;
-		} else if (this.state.numCartItems < 0) {
-			inside = <p className="notLoggedInError">Must log in to checkout</p>;
-		}
-		return (
-			<div>
-				<Main inside={inside}/>
-				<Footer/>
-				<Header numCartItems={this.state.numCartItems}/>
-			</div>
-		);
-	}
+let inside = <CheckoutPage/>;
+if (this.state.numCartItems == null) {
+	inside = <div></div>;
+} else if (this.state.numCartItems < 0) {
+	inside = <p className="notLoggedInError">Must log in to checkout</p>;
 }
 
-ReactDom.render(<Page/>, document.getElementById("page"));
+ReactDom.render(<Page inside={inside}/>, document.getElementById("page"));

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import {Header, Footer, Main} from './base.jsx';
+import {Page} from './base.jsx';
 
 class ProductPreview extends React.Component {
 
@@ -147,40 +147,4 @@ class ProductPage extends React.Component {
 	}
 }
 
-class Page extends React.Component {
-
-	constructor(props) {
-		super(props);
-		this.state = {
-			numCartItems: null
-		}
-		this.getNumCartItems = this.getNumCartItems.bind(this);
-		this.getNumCartItems();
-	}
-
-	getNumCartItems() {
-		let xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
-			if (xhttp.readyState == 4 && xhttp.status == 200) {
-				console.log(xhttp.responseText);
-				let newState = this.state;
-				newState.numCartItems = parseInt(xhttp.responseText);
-				this.setState(newState);
-			}
-		}.bind(this);
-		xhttp.open("GET", "/getNumCartItems", true);
-		xhttp.send();
-	}
-
-	render() {
-		return (
-			<div>
-				<Main inside={<ProductPage refresh={this.getNumCartItems}/>}/>
-				<Footer/>
-				<Header numCartItems={this.state.numCartItems}/>
-			</div>
-		);
-	}
-}
-
-ReactDom.render(<Page/>, document.getElementById("page"));
+ReactDom.render(<Page inside={<ProductPage ref={(input) => {var page = input;}} refresh={page.getNumCartItems}/>}/>, document.getElementById("page"));

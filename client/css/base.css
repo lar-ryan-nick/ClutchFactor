@@ -144,3 +144,54 @@ body {
 .footerCopyright {
 	margin: 0px;
 }
+
+.cartDiv {
+	vertical-align: top;
+	display: inline-block;
+	width: 75%;
+}
+
+.cartTitle {
+	margin: .5em 0em;
+	font-size: 5vw;
+	color: #ffffff;
+	text-align: center;
+}
+
+.cartItemDiv {
+	margin: 2em;
+	padding: 1em;
+	background-color: #000000;
+}
+
+.productImage {
+	width: 15%;
+}
+
+.titleAndOptionsDiv {
+	display: inline-block;
+	margin: 0em 3em;
+	vertical-align: top;
+}
+
+.productTitle {
+	display: block;
+	font-size: 3vw;
+	color: #ffffff;
+	margin: .25em 0em .5em 0em;
+	text-decoration: none;
+}
+
+.removeProductButton {
+	display: block;
+	-webkit-appearance: button;
+	font-size: 2vw
+}
+
+.priceTitle {
+	display: inline-block;
+	font-size: 3vw;
+	color : #ffffff;
+	vertical-align: top;
+	margin: .25em .5em;
+}
