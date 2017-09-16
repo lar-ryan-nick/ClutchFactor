@@ -1,0 +1,17 @@
+.landingText {
+	width: 100%;
+	font-size: 5vw;
+	color: navy;
+	text-align: center;
+	margin-bottom: 2em;
+}
+
+.merchandiseLink {
+	display: block;
+	width: 25%;
+	margin: auto;
+	font-size: 4vw;
+	text-align: center;
+	color: #ff0000;
+	text-decoration: none;
+}

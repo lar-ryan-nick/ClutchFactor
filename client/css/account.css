@@ -1,0 +1,106 @@
+form {
+	margin: 0px;
+}
+
+.accountContainer {
+	position: relative;
+	top: 2em;
+	width: 50%;
+	margin: auto;
+	border: solid 1px #000000;
+	background-color: #ffffff;
+}
+
+.changeFormButtonLeft {
+	display: inline-block;
+	width: 50%;
+	font-size: 3vw;
+	margin: 0px;
+	-webkit-appearance: none;
+	border-radius: 0px;
+	border: solid 2px #aaaaaa;
+	border-top: none;
+	border-left: none;
+}
+
+.changeFormButtonRight {
+	display: inline-block;
+	width: 50%;
+	font-size: 3vw;
+	margin: 0px;
+	-webkit-appearance: none;
+	border-radius: 0px;
+	border: solid 2px #aaaaaa;
+	border-top: none;
+	border-right: none;
+}
+
+.changeFormLabel {
+	display: inline-block;
+	width: 50%;
+	font-size: 3vw;
+	margin: 0;
+	text-align: center;
+}
+
+.label {
+	font-size: 3vw;
+	margin: .5em;
+	color: #000000;
+}
+
+.textInput {
+	width: calc(100% - 1em);
+	margin: .5em;
+	font-size: 2vw;
+}
+
+.logInButton {
+	display: block;
+	font-size: 3vw;
+	margin: .5em auto 1em auto;
+	-webkit-appearance: button;
+}
+
+.loader {
+	border: 16px solid transparent;
+	border-top: 16px solid navy;
+	border-bottom: 16px solid #ff0000;
+	border-radius: 50%;
+	margin: .5em auto 1em auto;
+	width: 75px;
+	height: 75px;
+	animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
+.icon {
+	display: inline-block;
+	height: 1em;
+	margin: 0em 0em 0em 1em;
+}
+
+.errorLabel {
+	display: inline-block;
+	font-size: 1.5vw;
+	margin: 0em 0em 0em .5em;
+	color: #ff0000;
+}
+
+.largeIcon {
+	position: relative;
+	left: 35%;
+	top: 0px;
+	width: 30%;
+	margin: 1em 0em 0em 0em;
+}
+
+.emailSentNotfication {
+	font-size: 3vw;
+	text-align: center;
+	color: #000000;
+}

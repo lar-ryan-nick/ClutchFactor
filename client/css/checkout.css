@@ -1,0 +1,113 @@
+.stageHeader {
+	background-color: #aaaaaa;
+	color: #000000;
+	padding: .5em;
+	margin: 0px;
+	border: solid 2px #000000;
+	font-size: 3vw;
+	cursor: pointer;
+}
+
+.addressOptionDiv {
+	display: inline-block;
+	padding: 1em;
+	margin: 1em 2em;
+	background-color: #000000;
+	cursor: pointer;
+}
+
+.addressLabel {
+	color: #aaaaaa;
+	margin: 0px;
+	font-size: 20px;
+}
+
+.addressOptionDivHovered {
+	display: inline-block;
+	padding: 1em;
+	margin: 1em 2em;
+	background-color: #aaaaaa;
+	cursor: pointer;
+}
+
+.addressLabelHovered {
+	color: #000000;
+	margin: 0px;
+	font-size: 20px;
+}
+
+.orLabel {
+	color: #ffffff;
+	margin: 1em;
+	text-align: center;
+	font-size: 4vw;
+}
+
+.shippingInfoDiv {
+	width: 50%;
+	margin: auto;
+	padding: 1em;
+	background-color: #ffffff;
+}
+
+.formTitle {
+	margin: auto;
+	font-size: 4vw;
+	text-align: center;
+}
+
+.textInput {
+	display: block;
+	width: 90%;
+	margin: .5em auto;
+	font-size: 2vw;
+}
+
+.submitInfo {
+	display: block;
+	margin: auto;
+	-webkit-appearance: button;
+	font-size: 2vw;
+}
+
+.payButton {
+	display: block;
+	margin: 1em auto 0em auto;
+	-webkit-appearance: button;
+	font-size: 3vw;
+}
+
+.notLoggedInError {
+	color: #ffffff;
+	font-size: 4vw;
+}
+
+.confirmationInfoDiv {
+	display: inline-block;
+	background-color: #ffffff;
+	margin: 1em auto;
+}
+
+.inlineDiv {
+	display: inline-block;
+	padding: 2em;
+	vertical-align: top;
+}
+
+.confirmationLabel {
+	color: #000000;
+	font-size: 2vw;
+	margin: 0px;
+	text-align: left;
+}
+
+.finalizeCheckoutButton {
+	display: block;
+	margin: auto;
+	-webkit-appearance: button;
+	font-size: 2vw;
+}
+
+.invisible {
+	display: none;
+}

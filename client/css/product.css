@@ -1,0 +1,93 @@
+.productPreviewDiv {
+	display: inline-block;
+	width: calc(50% - 4em);
+	vertical-align: top;
+	padding: 2em;
+}
+
+.productPreviewImage {
+	width: 100%;
+}
+
+.productInfoDiv {
+	display: inline-block;
+	width: calc(50% - 4em);
+	vertical-align: top;
+	padding: 2em;
+	background-color: #000000
+}
+
+.productInfoTitle {
+	font-size: 5vw;
+	color: #ffffff;
+	margin: 0px 0px .5em 0px;
+	text-align: center;
+}
+
+.numColorsTitle {
+	display: inline-block;
+	font-size: 3vw;
+	color: #ffffff;
+	vertical-align: top;
+	margin: calc(50px - 1.5vw) 0px 0px 0px;
+}
+
+.colorPreview {
+	height: 100px;
+	margin: .5em;
+}
+
+.priceTitle {
+	font-size: 3vw;
+	color: #ffffff;
+}
+
+.loader {
+	border: 16px solid transparent;
+	border-top: 16px solid navy;
+	border-bottom: 16px solid #ff0000;
+	border-radius: 50%;
+	margin: .5em auto 1em auto;
+	width: 75px;
+	height: 75px;
+	animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
+.addToCartButton {
+	display: block;
+	font-size: 3vw;
+	margin: auto;
+	padding: 10px;
+	background-color: #000000;
+	color: #ffffff;
+	border-radius: 10px;
+}
+
+.responseDiv {
+	margin: 2em;
+}
+
+.icon {
+	display: inline-block;
+	height: 1em;
+	margin: 0em 0em 0em 1em;
+}
+
+.successText {
+	display: inline-block;
+	font-size: 1.5vw;
+	margin: 0em 0em 0em .5em;
+	color: #ffffff;
+}
+
+.errorText {
+	display: inline-block;
+	font-size: 1.5vw;
+	margin: 0em 0em 0em .5em;
+	color: #ff0000;
+}
