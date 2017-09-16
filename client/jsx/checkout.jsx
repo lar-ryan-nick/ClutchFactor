@@ -349,11 +349,23 @@ class CheckoutPage extends React.Component {
 	}
 }
 
-let inside = <CheckoutPage/>;
-if (this.state.numCartItems == null) {
-	inside = <div></div>;
-} else if (this.state.numCartItems < 0) {
-	inside = <p className="notLoggedInError">Must log in to checkout</p>;
+class PageExtension extends Page {
+
+	constructor(props) {
+		super(props);
+	}
+
+	render() {
+		let inside = <CheckoutPage/>;
+		if (this.state.numCartItems == null) {
+			inside = <div></div>;
+		} else if (this.state.numCartItems < 0) {
+			inside = <p className="notLoggedInError">Must log in to checkout</p>;
+		}
+		return (
+			<Page inside={inside}/>
+		);
+	}
 }
 
-ReactDom.render(<Page inside={inside}/>, document.getElementById("page"));
+ReactDom.render(<PageExtension/>, document.getElementById("page"));

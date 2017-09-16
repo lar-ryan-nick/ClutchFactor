@@ -1,26 +1,8 @@
-.checkoutDiv {
-	vertical-align: top;
-	display: inline-block;
-	width: 25%;
-	background-color: #000000;
-}
-
-.checkoutTitle {
-	margin: .5em 0em;
-	font-size: 4vw;
-	color: #ffffff;
-	text-align: center;
-}
-
-.subtotalPrice {
-	font-size: 2vw;
-	color: #ffffff;
-	text-align: center;
-}
-
 .checkoutButton {
+	position: relative;
+	top: 2em;
 	display: block;
 	margin: auto;
 	-webkit-appearance: button;
-	font-size: 1.5vw;
+	font-size: 3vw;
 }

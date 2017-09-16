@@ -119,7 +119,7 @@ class CartItem extends React.Component {
 					<a className="productTitle" href={"/product.html?id=" + this.props.data.productid}>{this.props.data.modelname + " " + this.props.data.articletype + " - " + this.props.data.color}</a>
 					{remove}	
 				</div>
-				<p className="priceTitle">{"$" + this.props.data.price}</p>
+				<p className="cartPriceTitle">{"$" + this.props.data.price}</p>
 			</div>
 		);
 	}
@@ -130,10 +130,22 @@ class CartDisplay extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {};
+		this.handleRemove = this.handleRemove.bind(this);
+	}
+
+	handleRemove(index) {
+		this.props.removeItem(index);
 	}
 
 	render() {
+		let cartItems = [];
+		let total = 0;
+		for (let i = 0; i < this.props.data.length; ++i) {
+			cartItems.push(<CartItem key={i} data={this.props.data[i]} removeItem={this.handleRemove.bind(this, i)}/>);
+			total += this.props.data[i].price;
+		}
 		let top = [];
+		let totalLabel = null;
 		if (this.props.numCartItems != null) {
 			if (this.props.numCartItems < 0) {
 				top.push(<p key="1" className="cartTitle">You must log in to view your cart</p>);
@@ -143,16 +155,14 @@ class CartDisplay extends React.Component {
 					text = " item";
 				}
 				top.push(<p key="1" className="cartTitle">{"You have " + this.props.numCartItems + text + " in your cart"}</p>);
+				totalLabel = <p className="totalTitle">{"Total: $" + total}</p>;
 			}
-		}
-		let cartItems = [];
-		for (let i = 0; i < this.props.data.length; ++i) {
-			cartItems.push(<CartItem key={i} data={this.props.data[i]} removeItem={this.props.removeCartItem.bind(this, i)}/>);
 		}
 		return (
 			<div className="cartDiv">
 				{top}
 				{cartItems}
+				{totalLabel}
 			</div>
 		);
 	}
@@ -271,9 +281,6 @@ class Page extends React.Component {
 				console.log(xhttp.responseText);
 				if (xhttp.responseText == "Removed the cart item successfully") {
 					this.refresh();
-					if (this.props.refresh) {
-						this.props.refresh();
-					}
 				} else {
 					let newState = this.state;
 					newState.data[index].loading = false;

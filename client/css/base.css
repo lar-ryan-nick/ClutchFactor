@@ -96,8 +96,7 @@ body {
 
 .main {
 	position: relative;
-	top: 100px;
-	left: 0px;
+	margin-top: 100px;
 	width: 100%;
 }
 
@@ -118,9 +117,6 @@ body {
 }
 
 .footer {
-	position: relative;
-	top: 100px;
-	left: 0px;
 	width: 100%;
 	height: 150px;
 	background-color: #ffffff;
@@ -146,20 +142,23 @@ body {
 }
 
 .cartDiv {
+	position: relative;
+	top: 2em;
+	margin: 0em 2em;
+	padding: 1em;
 	vertical-align: top;
-	display: inline-block;
-	width: 75%;
+	background-color: #ffffff
 }
 
 .cartTitle {
-	margin: .5em 0em;
+	margin: 0em;
 	font-size: 5vw;
-	color: #ffffff;
+	color: #000000;
 	text-align: center;
 }
 
 .cartItemDiv {
-	margin: 2em;
+	margin: 1em;
 	padding: 1em;
 	background-color: #000000;
 }
@@ -177,8 +176,8 @@ body {
 .productTitle {
 	display: block;
 	font-size: 3vw;
-	color: #ffffff;
 	margin: .25em 0em .5em 0em;
+	color: #ffffff;
 	text-decoration: none;
 }
 
@@ -188,10 +187,17 @@ body {
 	font-size: 2vw
 }
 
-.priceTitle {
+.cartPriceTitle {
 	display: inline-block;
 	font-size: 3vw;
-	color : #ffffff;
 	vertical-align: top;
+	color: #ffffff;
 	margin: .25em .5em;
+}
+
+.totalTitle {
+	margin: 0px;
+	font-size: 4vw;
+	color: #000000;
+	text-align: center;
 }
