@@ -1,4 +1,5 @@
 import React from 'react';
+import MerchandiseItem from './merchandiseItem.jsx';
 
 class MerchandisePage extends React.Component {
 

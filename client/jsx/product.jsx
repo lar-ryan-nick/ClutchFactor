@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import Page from './base.jsx';
+import Page from './page.jsx';
 import ProductPage from './productPage.jsx';
 
 class PageExtended extends Page {

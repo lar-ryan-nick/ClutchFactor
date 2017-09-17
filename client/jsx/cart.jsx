@@ -1,23 +1,7 @@
 import React from 'react';
 import ReactDom from 'react-dom';
-import {CartDisplay, Page} from './base.jsx';
-
-class CartPage extends React.Component {
-
-	constructor(props) {
-		super(props);
-		this.state = {};
-	}
-
-	render() {
-		return (
-			<div>
-				<CartDisplay numCartItems={this.props.numCartItems} data={this.props.data} removeItem={this.props.removeItem}/>
-				<button className="CheckoutButton" onClick={function() {window.location = "/checkout.html";}}>Click here to finish your order</button>
-			</div>
-		);
-	}
-}
+import Page from './page.jsx';
+import CartPage from './cartPage.jsx';
 
 class PageExtension extends Page {
 

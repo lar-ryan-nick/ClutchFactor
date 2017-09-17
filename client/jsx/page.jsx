@@ -89,10 +89,13 @@ class Page extends React.Component {
 		}.bind(this));
 	}
 
-	render() {
+	render(inside) {
+		if (inside == null) {
+			inside = this.props.inside;
+		}
 		return (
 			<div>
-				<Main inside={this.props.inside}/>
+				<Main inside={inside}/>
 				<Footer/>
 				<Header refresh={this.refresh} numCartItems={this.state.numCartItems}/>
 			</div>
