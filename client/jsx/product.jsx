@@ -3,4 +3,15 @@ import ReactDom from 'react-dom';
 import Page from './base.jsx';
 import ProductPage from './productPage.jsx';
 
-ReactDom.render(<Page inside={<ProductPage ref={(input) => {var page = input;}} refresh={page.getNumCartItems}/>}/>, document.getElementById("page"));
+class PageExtended extends Page {
+
+	constructor(props) {
+		super(props);
+	}
+
+	render() {
+		return super.render(<ProductPage refresh={this.getNumCartItems}/>);
+	}
+}
+
+ReactDom.render(<PageExtended/>, document.getElementById("page"));

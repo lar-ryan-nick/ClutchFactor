@@ -362,9 +362,7 @@ class PageExtension extends Page {
 		} else if (this.state.numCartItems < 0) {
 			inside = <p className="notLoggedInError">Must log in to checkout</p>;
 		}
-		return (
-			<Page inside={inside}/>
-		);
+		return super.render(inside);
 	}
 }
 
