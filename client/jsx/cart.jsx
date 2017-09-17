@@ -23,15 +23,10 @@ class PageExtension extends Page {
 
 	constructor(props) {
 		super(props);
-		this.getNumCartItems = this.getNumCartItems.bind(this);
-		this.getCartItemInfo = this.getCartItemInfo.bind(this);
-		this.refresh = this.refresh.bind(this);
 	}
 
 	render() {
-		return (
-			<Page inside={<CartPage numCartItems={this.state.numCartItems} data={this.state.data} removeItem={this.removeCartItem}/>}/>
-		);
+		 return super.render(<CartPage numCartItems={this.state.numCartItems} data={this.state.data} removeItem={this.removeCartItem}/>);
 	}
 }
 

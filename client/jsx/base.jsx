@@ -141,8 +141,10 @@ class CartDisplay extends React.Component {
 		let cartItems = [];
 		let total = 0;
 		for (let i = 0; i < this.props.data.length; ++i) {
-			cartItems.push(<CartItem key={i} data={this.props.data[i]} removeItem={this.handleRemove.bind(this, i)}/>);
-			total += this.props.data[i].price;
+			if (this.props.data[i] != null) {
+				cartItems.push(<CartItem key={i} data={this.props.data[i]} removeItem={this.handleRemove.bind(this, i)}/>);
+				total += this.props.data[i].price;
+			}
 		}
 		let top = [];
 		let totalLabel = null;
@@ -310,10 +312,14 @@ class Page extends React.Component {
 		}.bind(this));
 	}
 
-	render() {
+	render(thingy) {
+		let inside = this.props.inside;
+		if (thingy != null) {
+			inside = thingy;
+		}
 		return (
 			<div>
-				<Main inside={this.props.inside}/>
+				<Main inside={inside}/>
 				<Footer/>
 				<Header refresh={this.refresh} numCartItems={this.state.numCartItems}/>
 			</div>
