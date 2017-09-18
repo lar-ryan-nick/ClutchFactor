@@ -3,8 +3,6 @@
 }
 
 .checkoutButton {
-	position: relative;
-	top: 2em;
 	display: block;
 	margin: auto;
 	-webkit-appearance: button;
