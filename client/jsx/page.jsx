@@ -97,7 +97,7 @@ class Page extends React.Component {
 			<div>
 				<Main inside={inside}/>
 				<Footer/>
-				<Header refresh={this.refresh} numCartItems={this.state.numCartItems}/>
+				<Header numCartItems={this.state.numCartItems} data={this.state.data} removeItem={this.removeCartItem} refresh={this.refresh}/>
 			</div>
 		);
 	}

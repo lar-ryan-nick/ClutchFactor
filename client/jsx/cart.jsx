@@ -10,7 +10,7 @@ class PageExtension extends Page {
 	}
 
 	render() {
-		 return super.render(<CartPage numCartItems={this.state.numCartItems} data={this.state.data} removeItem={this.removeCartItem}/>);
+		 return super.render(<div className="paddedDiv"><CartPage numCartItems={this.state.numCartItems} data={this.state.data} removeItem={this.removeCartItem}/></div>);
 	}
 }
 
