@@ -10,7 +10,7 @@ class PageExtended extends Page {
 	}
 
 	render() {
-		return super.render(<ProductPage refresh={this.getNumCartItems}/>);
+		return super.render(<ProductPage refresh={this.refresh}/>);
 	}
 }
 
