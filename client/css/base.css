@@ -85,7 +85,7 @@ body {
 
 .hoveredCartDiv {
 	position: absolute;
-	top: 35px;
+	top: 31px;
 	right: -120px;
 	width: 300px;
 	max-height: 400px;

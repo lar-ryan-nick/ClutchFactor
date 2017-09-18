@@ -4,7 +4,7 @@
 
 .checkoutButton {
 	display: block;
-	margin: auto;
+	margin: 1em auto;
 	-webkit-appearance: button;
 	font-size: 3vw;
 }

@@ -27,8 +27,10 @@ class CartDisplay extends React.Component {
 		let cartItems = [];
 		let total = 0;
 		for (let i = 0; i < this.props.data.length; ++i) {
-			cartItems.push(<CartItem key={i} data={this.props.data[i]} removeItem={this.handleRemove.bind(this, i)} fontSize={this.state.descriptionFontSize}/>);
-			total += this.props.data[i].price;
+			if (this.props.data[i] != null) {
+				cartItems.push(<CartItem key={i} data={this.props.data[i]} removeItem={this.handleRemove.bind(this, i)} fontSize={this.state.descriptionFontSize}/>);
+				total += this.props.data[i].price;
+			}
 		}
 		let top = [];
 		let totalLabel = null;
