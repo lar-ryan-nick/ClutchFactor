@@ -1,3 +1,7 @@
+.paddedDiv {
+	padding: 2em;
+}
+
 .stageHeader {
 	background-color: #aaaaaa;
 	color: #000000;

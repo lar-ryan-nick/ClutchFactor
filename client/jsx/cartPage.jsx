@@ -12,7 +12,6 @@ class CartPage extends React.Component {
 		return (
 			<div>
 				<CartDisplay numCartItems={this.props.numCartItems} data={this.props.data} removeItem={this.props.removeItem}/>
-				<button className="CheckoutButton" onClick={function() {window.location = "/checkout.html";}}>Click here to finish your order</button>
 			</div>
 		);
 	}

@@ -85,17 +85,13 @@ class CheckoutPage extends React.Component {
 		let stuff = [];
 		stuff.push(<p key="1" className="stageHeader" onClick={this.setStage.bind(this, 0)}>1. Enter your shipping info</p>);
 		if (this.state.stage == 0) {
-			stuff.push(<ShippingInfo key="2" setAddress={this.setAddress}/>);
-			stuff.push(<div key="3" className="invisible" ref={(input) => {this.dropinContainer = input;}}></div>);
+			stuff.push(<div key="2" className="paddedDiv"><ShippingInfo key="3" setAddress={this.setAddress}/><div key="4" className="invisible" ref={(input) => {this.dropinContainer = input;}}></div></div>);
 		} else {
 			stuff.push(<p key="2" className="stageHeader" onClick={this.setStage.bind(this, 1)}>2. Enter your payment info</p>);
 			if (this.state.stage == 1) {
-				stuff.push(<div key="3" ref={(input) => {this.dropinContainer = input;}}></div>);
-				stuff.push(<button key="4" className="payButton" onClick={this.setPayload}>Use as payment</button>);
+				stuff.push(<div key="3" className="paddedDiv"><div key="4" ref={(input) => {this.dropinContainer = input;}}></div><button key="5" className="payButton" onClick={this.setPayload}>Use as payment</button></div>);
 			} else {
-				stuff.push(<div key="3" className="invisible" ref={(input) => {this.dropinContainer = input;}}></div>);
-				stuff.push(<p key="4" className="stageHeader" onClick={this.setStage.bind(this, 2)}>3. Confirm</p>);
-				stuff.push(<ConfirmationInfo key="5" address={this.state.address} payload={this.state.payload} finalize={this.finalize}/>);
+				stuff.push(<div key="3" className="paddedDiv"><div key="4" className="invisible" ref={(input) => {this.dropinContainer = input;}}></div><p key="5" className="stageHeader" onClick={this.setStage.bind(this, 2)}>3. Confirm</p><ConfirmationInfo key="6" address={this.state.address} payload={this.state.payload} finalize={this.finalize}/></div>);
 			}
 		}
 		return (

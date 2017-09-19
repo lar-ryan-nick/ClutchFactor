@@ -2,9 +2,11 @@ form {
 	margin: 0px;
 }
 
+.paddedDiv {
+	padding: 2em;
+}
+
 .accountContainer {
-	position: relative;
-	top: 2em;
 	width: 50%;
 	margin: auto;
 	border: solid 1px #000000;

@@ -25,9 +25,7 @@ class CreateAccountForm extends React.Component {
 			let newState = this.state;
 			newState[event.target.name] = event.target.value;
 			this.setState(newState);
-			if (event.target.name == "email") {
-				this.checkEmail();
-			} else if (event.target.name == "password") {
+			if (event.target.name == "password") {
 				this.checkPassword();
 			}
 		}
@@ -130,7 +128,7 @@ class CreateAccountForm extends React.Component {
 						<div>
 							{emailError}
 						</div>
-						<input className="textInput" type="email" name="email" value={this.state.email} onChange={this.handleChange}/>
+						<input className="textInput" type="email" name="email" value={this.state.email} onChange={this.handleChange} onBlur={this.checkEmail}/>
 						<p className="label">Password:</p>
 						<div>
 							{passwordError}

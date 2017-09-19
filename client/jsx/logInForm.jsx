@@ -22,9 +22,6 @@ class LogInForm extends React.Component {
 			newState[event.target.name] = event.target.value;
 			newState.passwordError = false;
 			this.setState(newState);
-			if (event.target.name == "email") {
-				this.checkEmail();
-			}
 		}
 	}
 
@@ -103,7 +100,7 @@ class LogInForm extends React.Component {
 					<div>
 						{emailError}
 					</div>
-					<input className="textInput" type="email" name="email" value={this.state.email} onChange={this.handleChange}/>
+					<input className="textInput" type="email" name="email" value={this.state.email} onChange={this.handleChange} onBlur={this.checkEmail}/>
 					<p className="label">Password:</p>
 					<div>
 						{passwordError}
