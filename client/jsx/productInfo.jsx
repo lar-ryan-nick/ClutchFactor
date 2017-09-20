@@ -29,7 +29,7 @@ class ProductInfo extends React.Component {
 				}
 			}
 		}.bind(this);
-		xhttp.open("GET", "/addToCart?product=" + this.props.data.id, true);
+		xhttp.open("GET", "/addToCart?productid=" + this.props.data.id, true);
 		xhttp.send();
 	}
 

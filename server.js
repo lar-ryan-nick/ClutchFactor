@@ -26,7 +26,7 @@ const gateway = braintree.connect({
 });
 
 function parseCookie(cookie) {
-	if (cookie) {
+	if (cookie != null) {
 		let vals = cookie.split(";");
 		let parsed = {};
 		for (let i = 0; i < vals.length; ++i) {
@@ -38,11 +38,11 @@ function parseCookie(cookie) {
 		}
 		return parsed;
 	}
-	return null;
+	return {};
 }
 
 function parseQuery(parameterString) {
-	if (parameterString) {
+	if (parameterString != null) {
 		let params = parameterString.split('&');
 		let parameters = {};
 		for (let i = 0; i < params.length; ++i) {
@@ -50,25 +50,26 @@ function parseQuery(parameterString) {
 		}
 		return parameters;
 	}
-	return null;
+	return {};
 }
 
 function parseBody(parameterString) {
-	if (parameterString) {
+	if (parameterString != null) {
 		return qs.parse(parameterString);
 	}
-	return null;
+	return {};
 }
 
 var sessions = {};
-var accountIDs ={};
+var accountIDs = {};
 var inverseAccountIDs = {};
 
 const server = http.createServer(function (request, response) {
 	//console.log(sessions);
 	let cookies = parseCookie(request.headers.cookie);
-	//console.log(cookies);
-	if (cookies != null && sessions[cookies.sessionid] != null) {
+	console.log(cookies.cart);
+	console.log(cookies);
+	if (sessions[cookies.sessionid] != null) {
 		clearTimeout(sessions[cookies.sessionid].timeout);
 		sessions[cookies.sessionid].timeout = setTimeout(function(sessionid) { delete sessions[sessionid]; }, 3600000, cookies.sessionid);
 	}
@@ -99,7 +100,7 @@ const server = http.createServer(function (request, response) {
 		case '/sendAccountCreationEmail':
 			request.on("end", function() {
 				body = parseBody(body);
-				if (body != null && body.email != null && body.password != null && body.password.length >= 8 && (cookies == null || cookies.sessionid == null || sessions[cookies.sessionid] == null)) {
+				if (body.email != null && body.password != null && body.password.length >= 8 && (cookies.sessionid == null || sessions[cookies.sessionid] == null)) {
 					if (inverseAccountIDs[body.email] != null) {
 						accoundIDs[inverseAccountIDs[body.email]] = null;
 						inverseAccountIDs[body.email] = null;
@@ -167,7 +168,7 @@ const server = http.createServer(function (request, response) {
 			break;
 		case '/checkout':
 			response.writeHead(200, {"Content-Type": "text/plain"});
-			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null) {
+			if (cookies.sessionid != null && sessions[cookies.sessionid] != null) {
 				request.on("end", function() {
 					body = parseBody(body);
 					let payload = JSON.parse(body.payload);
@@ -202,7 +203,7 @@ const server = http.createServer(function (request, response) {
 		case '/checkEmail':
 			response.writeHead(200, {"Content-Type": "text/plain"});
 			let pattern = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-			if (parameters != null && pattern.test(parameters.email)) {
+			if (pattern.test(parameters.email)) {
 				accountManager.checkEmail(parameters, (taken) => {
 					if (taken) {
 						response.write("That email has already been registered");
@@ -220,32 +221,66 @@ const server = http.createServer(function (request, response) {
 			request.on("end", function() {
 				body = parseBody(body);
 				accountManager.checkPassword(body, (userID, valid) => {
-					if ((cookies == null || cookies.sessionid == null || sessions[cookies.sessionid] == null) && parseInt(userID) > 0 && valid) {
+					if ((cookies.sessionid == null || sessions[cookies.sessionid] == null) && parseInt(userID) > 0 && valid) {
 						let sessionID = crypto.randomBytes(Math.floor(Math.random() * 50 + 5)).toString('hex');
 						while (sessions[sessionID] != null) {
 							sessionID = crypto.randomBytes(Math.floor(Math.random() * 50 + 5)).toString('hex');
 						}
-						response.writeHead(200, {
-							"Content-Type": "text/plain",
-							"Set-Cookie": "sessionid=" + sessionID + "; HttpOnly" 
-						});
 						let user = new User(userID);
 						let timeOut = setTimeout(function(sessionid) {delete sessions[sessionid];}, 3600000, sessionID);
 						sessions[sessionID] = {
 							user: user,
 							timeout: timeOut
 						};
+						if (cookies.cart != null) {
+							cookies.cart = JSON.parse(cookies.cart);
+							let completed = 0;
+							for (let i = 0; i < cookies.cart.length; ++i) {
+								user.addToCart({productid: cookies.cart[i]}, (result) => {
+									++completed;
+									if (completed >= cookies.cart.length) {
+										user.getCart((cart) => {
+											response.writeHead(200, {
+												"Content-Type": "text/plain",
+												"Set-Cookie": "cart=" + JSON.stringify(cart) + "; HttpOnly; Max-Age=2592000",
+												"Set-Cookie": "sessionid=" + sessionID + "; HttpOnly"
+											});
+											response.write("" + valid);
+											response.end();
+										});
+									}
+								});
+							}
+							if (cookies.cart.length == 0) {
+								user.getCart((cart) => {
+									response.writeHead(200, {
+										"Content-Type": "text/plain",
+										"Set-Cookie": "cart=" + JSON.stringify(cart) + "; HttpOnly; Max-Age=2592000",
+										"Set-Cookie": "sessionid=" + sessionID + "; HttpOnly"
+									});
+									response.write("" + valid);
+									response.end();
+								});
+							}
+						} else {
+							response.writeHead(200, {
+								"Content-Type": "text/plain",
+								"Set-Cookie": "sessionid=" + sessionID + "; HttpOnly" 
+							});
+							response.write("" + valid);
+							response.end();
+						}
 					} else {
 						response.writeHead(200, {"Content-Type": "text/plain"});
+						response.write("" + valid);
+						response.end();
 					}
-					response.write("" + valid);
-					response.end();
 				});
 			});
 			break;
 		case '/getUserInfo':
 			response.writeHead(200, {"Content-Type": "text/plain"});
-			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null) {
+			if (cookies.sessionid != null && sessions[cookies.sessionid] != null) {
 				sessions[cookies.sessionid].user.getUserInfo((info) => {
 					response.write(JSON.stringify(info));
 					response.end();
@@ -262,8 +297,12 @@ const server = http.createServer(function (request, response) {
 					response.write("" + num);
 					response.end();
 				});
+			} else if (cookies.cart != null) {
+			   cookies.cart = JSON.parse(cookies.cart);
+			   response.write("" + cookies.cart.length);
+			   response.end();
 			} else {
-				response.write("-1");
+				response.write("0");
 				response.end();
 			}
 			break;
@@ -274,26 +313,61 @@ const server = http.createServer(function (request, response) {
 					response.write(JSON.stringify(info));
 					response.end();
 				});
+			} else if (cookies.cart != null && cookies.cart.length > parameters.index) {
+				cookies.cart = JSON.parse(cookies.cart);
+				parameters.id = cookies.cart[parameters.index];
+				merchandiseManager.getProductInfo(parameters, (info) => {
+					info.productid = info.id;
+					info.id = null;
+					response.write(JSON.stringify(info));
+					response.end();
+				});			
 			} else {
 				response.write(JSON.stringify({}));
 				response.end();
 			}
 			break;
 		case '/addToCart':
-			response.writeHead(200, {"Content-Type": "text/plain"});
-			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null && parameters != null && parameters.product != null) {
+			if (cookies.cart != null) {
+				cookies.cart = JSON.parse(cookies.cart);
+				cookies.cart.push(parameters.productid);
+				response.writeHead(200, {
+					"Content-Type": "text/plain",
+					"Set-Cookie": "cart=" + JSON.stringify(cookies.cart) + "; HttpOnly; Max-Age=2592000"
+				});
+			} else {
+				response.writeHead(200, {
+					"Content-Type": "text/plain",
+					"Set-Cookie": "cart=" + JSON.stringify([parameters.productid]) + "; HttpOnly; Max-Age=2592000"
+				});
+			}
+			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null && parameters != null && parameters.productid != null) {
 				sessions[cookies.sessionid].user.addToCart(parameters, (result) => {
 					response.write(result);
 					response.end();
 				});
 			} else {
-				response.write("You must log in first to add something to your cart");
+				response.write("The item was successfully added to your cart");
 				response.end();
 			}
 			break;
 		case '/removeCartItem':
-			response.writeHead(200, {"Content-Type": "text/plain"});
-			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null && parameters != null && parameters.id != null) {
+			if (cookies.cart != null) {
+				cookies.cart = JSON.parse(cookies.cart);
+				for (let i = 0; i < cookies.cart.length; ++i) {
+					if (cookies.cart[i] == parameters.productid) {
+						cookies.cart.splice(i, 1);
+						break;
+					}
+				}
+				response.writeHead(200, {
+					"Content-Type": "text/plain",
+					"Set-Cookie": "cart=" + JSON.stringify(cookies.cart) + "; HttpOnly; Max-Age=2592000"
+				});
+			} else {
+				response.writeHead(200, {"Content-Type": "text/plain"});
+			}
+			if (cookies != null && cookies.sessionid != null && sessions[cookies.sessionid] != null && parameters != null && parameters.productid != null) {
 				sessions[cookies.sessionid].user.removeCartItem(parameters, (deleted) => {
 					if (deleted) {
 						response.write("Removed the cart item successfully");
@@ -303,7 +377,7 @@ const server = http.createServer(function (request, response) {
 					response.end();
 				});
 			} else {
-				response.write("Please log in or enter a valid order id");
+				response.write("Removed the cart item successfully");
 				response.end();
 			}
 			break;

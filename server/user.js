@@ -27,14 +27,14 @@ class User {
 	
 	addToCart(parameters, cb) {
 		if (parseInt(this.userID) > 0 && parameters != null) {
-			query("SELECT id FROM Cart WHERE userid = $1 AND productid = $2;", [this.userID, parameters.product], (error, result) => {
+			query("SELECT id FROM Cart WHERE userid = $1 AND productid = $2;", [this.userID, parameters.productid], (error, result) => {
 				if (error) {
 					console.log(error);
 					cb("Sorry an error occured please try adding to your cart again");
 					return;
 				}
 				if (parseInt(result.rowCount) == 0) {
-					query("INSERT INTO Cart (userid, productid) VALUES ($1, $2);", [this.userID, parameters.product], (err, res) => {
+					query("INSERT INTO Cart (userid, productid) VALUES ($1, $2);", [this.userID, parameters.productid], (err, res) => {
 						if (err) {
 							console.log(err);
 							cb("Sorry an error occured please try adding to your cart again");
@@ -63,6 +63,25 @@ class User {
 			});
 		} else {
 			cb("-1");
+		}
+	}
+
+	getCart(cb) {
+		if (parseInt(this.userID) > 0) {
+			query("SELECT productid FROM Cart WHERE userid = $1;", [this.userID], (error, result) => {
+				if (error) {
+					console.log(error);
+					cb([]);
+					return;
+				}
+				let cart = [];
+				for (let i = 0; i < result.rowCount; ++i) {
+					cart[i] = result.rows[i].productid;
+				}
+				cb(cart);
+			});
+		} else {
+			cb([]);
 		}
 	}
 	
@@ -101,8 +120,8 @@ class User {
 	}
 	
 	removeCartItem(parameters, cb) {
-		if (parseInt(this.userID) > 0 && parameters != null && parameters.id != null) {
-			query("DELETE FROM Cart WHERE userid = $1 AND id = $2;", [this.userID, parameters.id], (error, result) => {
+		if (parseInt(this.userID) > 0 && parameters != null && parameters.productid != null) {
+			query("DELETE FROM Cart WHERE userid = $1 AND productid = $2;", [this.userID, parameters.productid], (error, result) => {
 				if (error) {
 					console.log(error);
 					cb(false);

@@ -9,13 +9,53 @@ class Page extends React.Component {
 		super(props);
 		this.state = {
 			numCartItems: null,
-			data: [],
+			cartData: [],
+			userData: {}
 		}
+		this.getUserInfo = this.getUserInfo.bind(this);
+		this.logOut = this.logOut.bind(this);
 		this.getNumCartItems = this.getNumCartItems.bind(this);
 		this.getCartItemInfo = this.getCartItemInfo.bind(this);
 		this.removeCartItem = this.removeCartItem.bind(this);
 		this.refresh = this.refresh.bind(this);
 		this.refresh();
+	}
+
+	getUserInfo() {
+		let xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				if (xhttp.responseText != "{}") {
+					let newState = this.state;
+					newState.userData = JSON.parse(xhttp.responseText);
+					this.setState(newState);
+				} else {
+					let newState = this.state;
+					newState.userData = {
+						email: ""
+					};
+					this.setState(newState);
+				}
+			}
+		}.bind(this);
+		xhttp.open("GET", "/getUserInfo", true);
+		xhttp.send();
+	}
+
+	logOut() {
+		let xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (xhttp.readyState == 4 && xhttp.status == 200) {
+				let newState = this.state;
+				newState.userData = {
+					email: ""
+				};
+				this.setState(newState);
+				this.refresh();
+			}
+		}.bind(this);
+		xhttp.open("GET", "/logOut", true);
+		xhttp.send();
 	}
 
 	getNumCartItems(cb) {
@@ -40,7 +80,7 @@ class Page extends React.Component {
 				console.log(xhttp.responseText);
 				if (xhttp.responseText != "{}") {
 					let newState = this.state;
-					newState.data[index] = JSON.parse(xhttp.responseText);
+					newState.cartData[index] = JSON.parse(xhttp.responseText);
 					this.setState(newState);
 				}
 			}
@@ -51,8 +91,8 @@ class Page extends React.Component {
 
 	removeCartItem(index) {
 		let newState = this.state;
-		newState.data[index].loading = true;
-		delete newState.data[index].response;
+		newState.cartData[index].loading = true;
+		delete newState.cartData[index].response;
 		this.setState(newState);
 		let xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
@@ -62,24 +102,25 @@ class Page extends React.Component {
 					this.refresh();
 				} else {
 					let newState = this.state;
-					newState.data[index].loading = false;
-					newState.data[index].response = xhttp.responseText;
+					newState.cartData[index].loading = false;
+					newState.cartData[index].response = xhttp.responseText;
 					this.setState(newState);
 				}
 			}
 		}.bind(this);
-		xhttp.open("GET", "/removeCartItem?id=" + this.state.data[index].id, true);
+		xhttp.open("GET", "/removeCartItem?productid=" + this.state.cartData[index].productid, true);
 		xhttp.send();
 	}
 
 	refresh() {
+		this.getUserInfo();
 		this.getNumCartItems(function() {
-			if (this.state.data.length > this.state.numCartItems) {
+			if (this.state.cartData.length > this.state.numCartItems) {
 				let newState = this.state;
 				if (this.state.numCartItems < 1) {
-					newState.data = [];
+					newState.cartData = [];
 				} else {
-					newState.data.splice(this.state.numCartItems, this.state.data.length - this.state.numCartItems);
+					newState.cartData.splice(this.state.numCartItems, this.state.cartData.length - this.state.numCartItems);
 				}
 				this.setState(newState);
 			}
@@ -97,7 +138,7 @@ class Page extends React.Component {
 			<div>
 				<Main inside={inside}/>
 				<Footer/>
-				<Header numCartItems={this.state.numCartItems} data={this.state.data} removeItem={this.removeCartItem} refresh={this.refresh}/>
+				<Header numCartItems={this.state.numCartItems} cartData={this.state.cartData} removeItem={this.removeCartItem} userData={this.state.userData} logOut={this.logOut}/>
 			</div>
 		);
 	}

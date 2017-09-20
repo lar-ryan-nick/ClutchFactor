@@ -13,7 +13,7 @@ class PageExtension extends Page {
 		let inside = <CheckoutPage/>;
 		if (this.state.numCartItems == null) {
 			inside = <div></div>;
-		} else if (this.state.numCartItems < 0) {
+		} else if (this.state.userData.email == "") {
 			inside = <p className="notLoggedInError">Must log in to checkout</p>;
 		}
 		return super.render(inside);

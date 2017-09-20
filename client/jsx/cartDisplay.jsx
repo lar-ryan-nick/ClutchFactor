@@ -33,18 +33,14 @@ class CartDisplay extends React.Component {
 		let top = [];
 		let totalLabel = null;
 		if (this.props.numCartItems != null) {
-			if (this.props.numCartItems < 0) {
-				top.push(<p key="1" className="cartTitle" style={{fontSize: .075 * this.state.containerWidth}}>You must log in to view your cart</p>);
-			} else {
-				let text = " items";
-				if (this.props.numCartItems > 0) {
-					totalLabel = <p className="totalTitle" style={{fontSize: .06 * this.state.containerWidth}}>{"Total: $" + total}</p>;
-					if (this.props.numCartItems == 1) {
-						text = " item";
-					}
+			let text = " items";
+			if (this.props.numCartItems > 0) {
+				totalLabel = <p className="totalTitle" style={{fontSize: .06 * this.state.containerWidth}}>{"Total: $" + total}</p>;
+				if (this.props.numCartItems == 1) {
+					text = " item";
 				}
-				top.push(<p key="1" className="cartTitle" style={{fontSize: .075 * this.state.containerWidth}}>{"You have " + this.props.numCartItems + text + " in your cart"}</p>);
 			}
+			top.push(<p key="1" className="cartTitle" style={{fontSize: .075 * this.state.containerWidth}}>{"You have " + this.props.numCartItems + text + " in your cart"}</p>);
 		}
 		let button = null;
 		if (this.props.numCartItems > 0) {

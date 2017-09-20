@@ -55,10 +55,20 @@ body {
 	color: #000000;
 }
 
-.cartIconDiv {
+.loggedInCartIconDiv {
 	position: absolute;
 	top: 0px;
 	right: 125px;
+	width: 1.8em;
+	height: 1.8em;
+	margin: 4px 0px 0px 0px;
+	cursor: pointer;
+}
+
+.loggedOutCartIconDiv {
+	position: absolute;
+	top: 0px;
+	right: 220px;
 	width: 1.8em;
 	height: 1.8em;
 	margin: 4px 0px 0px 0px;
