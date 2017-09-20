@@ -238,8 +238,8 @@ const server = http.createServer(function (request, response) {
 								user.getCart((cart) => {
 									response.writeHead(200, [
 										["Content-Type", "text/plain"],
-										["Set-Cookie", "sessionid=" + sessionID + "; HttpOnly"],
-										["Set-Cookie", "cart=" + JSON.stringify(cart) + "; HttpOnly; Max-Age=2592000"]
+										["Set-Cookie", "cart=" + JSON.stringify(cart) + "; HttpOnly; Max-Age=2592000"],
+										["Set-Cookie", "sessionid=" + sessionID + "; HttpOnly"]
 									]);
 									response.write("" + valid);
 									response.end();
@@ -251,7 +251,6 @@ const server = http.createServer(function (request, response) {
 										++completed;
 										if (completed >= cookies.cart.length) {
 											user.getCart((cart) => {
-												console.log(cart);
 												response.writeHead(200, [
 													["Content-Type", "text/plain"],
 													["Set-Cookie", "cart=" + JSON.stringify(cart) + "; HttpOnly; Max-Age=2592000"],
