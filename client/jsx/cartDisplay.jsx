@@ -43,7 +43,7 @@ class CartDisplay extends React.Component {
 			top.push(<p key="1" className="cartTitle" style={{fontSize: .075 * this.state.containerWidth}}>{"You have " + this.props.numCartItems + text + " in your cart"}</p>);
 		}
 		let button = null;
-		if (this.props.numCartItems > 0) {
+		if (this.props.button == true) {
 			button = <button className="CheckoutButton" style={{fontSize: .06 * this.state.containerWidth}} onClick={function() {window.location = "/checkout.html";}}>Click here to finish your order</button>;
 		}
 		return (

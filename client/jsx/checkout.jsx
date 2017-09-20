@@ -10,7 +10,7 @@ class PageExtension extends Page {
 	}
 
 	render() {
-		let inside = <CheckoutPage/>;
+		let inside = <CheckoutPage numCartItems={this.state.numCartItems} data={this.state.cartData} removeItem={this.removeItem}/>;
 		if (this.state.numCartItems == null) {
 			inside = <div></div>;
 		} else if (this.state.userData.email == "") {

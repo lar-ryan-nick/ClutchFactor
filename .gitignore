@@ -1,5 +1,4 @@
 node_modules/
-client/js/
 scripts/
 DS_Store
 package-lock.json

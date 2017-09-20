@@ -234,33 +234,35 @@ const server = http.createServer(function (request, response) {
 						};
 						if (cookies.cart != null) {
 							cookies.cart = JSON.parse(cookies.cart);
-							let completed = 0;
-							for (let i = 0; i < cookies.cart.length; ++i) {
-								user.addToCart({productid: cookies.cart[i]}, (result) => {
-									++completed;
-									if (completed >= cookies.cart.length) {
-										user.getCart((cart) => {
-											response.writeHead(200, {
-												"Content-Type": "text/plain",
-												"Set-Cookie": "cart=" + JSON.stringify(cart) + "; HttpOnly; Max-Age=2592000",
-												"Set-Cookie": "sessionid=" + sessionID + "; HttpOnly"
-											});
-											response.write("" + valid);
-											response.end();
-										});
-									}
-								});
-							}
 							if (cookies.cart.length == 0) {
 								user.getCart((cart) => {
-									response.writeHead(200, {
-										"Content-Type": "text/plain",
-										"Set-Cookie": "cart=" + JSON.stringify(cart) + "; HttpOnly; Max-Age=2592000",
-										"Set-Cookie": "sessionid=" + sessionID + "; HttpOnly"
-									});
+									response.writeHead(200, [
+										["Content-Type", "text/plain"],
+										["Set-Cookie", "sessionid=" + sessionID + "; HttpOnly"],
+										["Set-Cookie", "cart=" + JSON.stringify(cart) + "; HttpOnly; Max-Age=2592000"]
+									]);
 									response.write("" + valid);
 									response.end();
 								});
+							} else {
+								let completed = 0;
+								for (let i = 0; i < cookies.cart.length; ++i) {
+									user.addToCart({productid: cookies.cart[i]}, (result) => {
+										++completed;
+										if (completed >= cookies.cart.length) {
+											user.getCart((cart) => {
+												console.log(cart);
+												response.writeHead(200, [
+													["Content-Type", "text/plain"],
+													["Set-Cookie", "cart=" + JSON.stringify(cart) + "; HttpOnly; Max-Age=2592000"],
+													["Set-Cookie", "sessionid=" + sessionID + "; HttpOnly"]
+												]);
+												response.write("" + valid);
+												response.end();
+											});
+										}
+									});
+								}
 							}
 						} else {
 							response.writeHead(200, {

@@ -1,5 +1,5 @@
 import React from 'react';
-import CartDisplay from './cartDisplay.jsx';
+import CartPage from './cartPage.jsx';
 
 class Header extends React.Component {
 
@@ -49,7 +49,7 @@ class Header extends React.Component {
 		}
 		let cart = null;
 		if (this.state.hovered == true) {
-			cart = <div className="hoveredCartDiv"><CartDisplay numCartItems={this.props.numCartItems} data={this.props.cartData} removeItem={this.props.removeItem}/></div>;
+			cart = <div className="hoveredCartDiv"><CartPage numCartItems={this.props.numCartItems} data={this.props.cartData} removeItem={this.props.removeItem}/></div>;
 		}
 		accountStuff.push(<div key="2" className={cartDivClass} onMouseOver={this.setHover.bind(this, true)} onMouseLeave={this.setHover.bind(this, false)}><img key="3" className="cartIcon" src="CartIcon.png" onClick={this.goToCart}/>{numBadge}{cart}</div>);
 		return (

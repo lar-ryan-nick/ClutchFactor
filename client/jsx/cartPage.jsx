@@ -9,9 +9,13 @@ class CartPage extends React.Component {
 	}
 
 	render() {
+		let button = false;
+		if (this.props.numCartItems > 0) {
+			button = true;
+		}
 		return (
 			<div>
-				<CartDisplay numCartItems={this.props.numCartItems} data={this.props.data} removeItem={this.props.removeItem}/>
+				<CartDisplay numCartItems={this.props.numCartItems} data={this.props.data} removeItem={this.props.removeItem} button={button}/>
 			</div>
 		);
 	}

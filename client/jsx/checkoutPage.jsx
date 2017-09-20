@@ -2,6 +2,7 @@ import React from 'react';
 import dropin from 'braintree-web-drop-in';
 import ShippingInfo from './shippingInfo.jsx';
 import ConfirmationInfo from './confirmationInfo.jsx';
+import CartDisplay from './cartDisplay.jsx';
 
 class CheckoutPage extends React.Component {
 
@@ -17,7 +18,6 @@ class CheckoutPage extends React.Component {
 		this.setPayload = this.setPayload.bind(this);
 		this.setStage = this.setStage.bind(this)
 		this.finalize = this.finalize.bind(this);
-		this.setUpPayments();
 	}
 
 	setUpPayments() {
@@ -81,6 +81,10 @@ class CheckoutPage extends React.Component {
 		xhttp.send("payload=" + JSON.stringify(this.state.payload));
 	}
 
+	componentDidMount() {
+		this.setUpPayments();
+	}
+
 	render() {
 		let stuff = [];
 		stuff.push(<p key="1" className="stageHeader" onClick={this.setStage.bind(this, 0)}>1. Enter your shipping info</p>);
@@ -91,7 +95,7 @@ class CheckoutPage extends React.Component {
 			if (this.state.stage == 1) {
 				stuff.push(<div key="3" className="paddedDiv"><div key="4" ref={(input) => {this.dropinContainer = input;}}></div><button key="5" className="payButton" onClick={this.setPayload}>Use as payment</button></div>);
 			} else {
-				stuff.push(<div key="3" className="paddedDiv"><div key="4" className="invisible" ref={(input) => {this.dropinContainer = input;}}></div><p key="5" className="stageHeader" onClick={this.setStage.bind(this, 2)}>3. Confirm</p><ConfirmationInfo key="6" address={this.state.address} payload={this.state.payload} finalize={this.finalize}/></div>);
+				stuff.push(<div key="3" className="paddedDiv"><div key="4" className="invisible" ref={(input) => {this.dropinContainer = input;}}></div><p key="5" className="stageHeader" onClick={this.setStage.bind(this, 2)}>3. Confirm</p><CartDisplay key="6" numCartItems={this.props.numCartItems} data={this.props.data} removeItem={this.props.removeItem} button={false}/><ConfirmationInfo key="7" address={this.state.address} payload={this.state.payload} finalize={this.finalize}/></div>);
 			}
 		}
 		return (
