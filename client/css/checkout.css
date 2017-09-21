@@ -40,9 +40,9 @@
 	font-size: 20px;
 }
 
-.orLabel {
+.shippingTitle {
 	color: #ffffff;
-	margin: 1em;
+	margin: 0em 0em .5em 0em;
 	text-align: center;
 	font-size: 4vw;
 }
