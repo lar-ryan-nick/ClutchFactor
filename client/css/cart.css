@@ -1,3 +1,5 @@
 .paddedDiv {
 	padding: 5em;
+	width: 500px;
+	margin: auto;
 }

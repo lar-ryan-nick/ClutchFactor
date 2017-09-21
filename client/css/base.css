@@ -41,7 +41,7 @@ body {
 	right: 0px;
 	top: 0px;
 	margin: 5px 5px 0px 0px;
-	font-size: 1.2em;
+	font-size: 1.3em;
 	text-decoration: none;
 	color: #000000;
 }
@@ -49,7 +49,7 @@ body {
 .headerGreeting {
 	position: absolute;
 	top: 0px;
-	right: 160px;
+	right: 155px;
 	font-size: 1.3em;
 	margin: 7px 0px 0px 0px;
 	color: #000000;
@@ -59,8 +59,8 @@ body {
 	position: absolute;
 	top: 0px;
 	right: 125px;
-	width: 1.8em;
-	height: 1.8em;
+	width: 1.5em;
+	height: 1.5em;
 	margin: 4px 0px 0px 0px;
 	cursor: pointer;
 }
@@ -68,9 +68,9 @@ body {
 .loggedOutCartIconDiv {
 	position: absolute;
 	top: 0px;
-	right: 220px;
-	width: 1.8em;
-	height: 1.8em;
+	right: 235px;
+	width: 1.5em;
+	height: 1.5em;
 	margin: 4px 0px 0px 0px;
 	cursor: pointer;
 }
@@ -97,7 +97,7 @@ body {
 	position: absolute;
 	top: 28px;
 	right: -120px;
-	width: 300px;
+	width: 400px;
 	max-height: 400px;
 	overflow: auto;
 }
@@ -170,6 +170,7 @@ body {
 	margin: 0em 0em .25em 0em;
 	color: #000000;
 	text-align: center;
+	font-size: 30px;
 }
 
 .cartItemDiv {
@@ -195,11 +196,13 @@ body {
 	color: #ffffff;
 	margin: 0em 0em .5em 0em;
 	text-decoration: none;
+	font-size: 20px;
 }
 
 .removeProductButton {
 	display: block;
 	-webkit-appearance: button;
+	font-size: 15px;
 }
 
 .cartPriceTitle {
@@ -209,18 +212,21 @@ body {
 	margin: 0px;
 	color: #ffffff;
 	text-align: right;
+	font-size: 20px;
 }
 
 .totalTitle {
-	margin: .25em 0em;
+	margin: .25em 0em .75em 0em;
 	color: #000000;
 	text-align: right;
+	font-size: 20px;
 }
 
 .checkoutButton {
 	display: block;
 	margin: auto;
 	-webkit-appearance: button;
+	font-size: 20px;
 }
 
 .loader {
