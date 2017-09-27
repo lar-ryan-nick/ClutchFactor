@@ -236,6 +236,7 @@ const server = http.createServer(function (request, response) {
 							cookies.cart = JSON.parse(cookies.cart);
 							if (cookies.cart.length == 0) {
 								user.getCart((cart) => {
+									console.log("Cart: " + cart);
 									response.writeHead(200, [
 										["Content-Type", "text/plain"],
 										["Set-Cookie", "cart=" + JSON.stringify(cart) + "; HttpOnly; Max-Age=2592000"],

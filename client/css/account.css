@@ -20,9 +20,10 @@ form {
 	margin: 0px;
 	-webkit-appearance: none;
 	border-radius: 0px;
-	border: solid 2px #aaaaaa;
+	border: solid 2px #888888;
 	border-top: none;
 	border-left: none;
+	background-color: #aaaaaa;
 }
 
 .changeFormButtonRight {
@@ -32,9 +33,10 @@ form {
 	margin: 0px;
 	-webkit-appearance: none;
 	border-radius: 0px;
-	border: solid 2px #aaaaaa;
+	border: solid 2px #888888;
 	border-top: none;
 	border-right: none;
+	background-color: #aaaaaa;
 }
 
 .changeFormLabel {
