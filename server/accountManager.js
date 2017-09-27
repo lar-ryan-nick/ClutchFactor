@@ -8,7 +8,7 @@ class AccountManager {
 	}
 
 	checkEmail(parameters, cb) {
-		if (parameters != null) {
+		if (parameters.email != null) {
 			query("SELECT ID FROM Users WHERE Email = $1;", [parameters.email], (error, result) => {
 				if (error) {
 					console.log(error);
@@ -27,7 +27,7 @@ class AccountManager {
 	}
 	
 	checkPassword(parameters, cb) {
-		if (parameters != null) {
+		if (parameters.email != null && parameters.password != null) {
 			query("SELECT ID, Password FROM Users WHERE Email = $1;", [parameters.email], (error, result) => {
 				if (error) {
 					console.log(error);
@@ -53,7 +53,7 @@ class AccountManager {
 	}
 
 	createAccount(parameters, cb) {
-		if (parameters != null) {
+		if (parameters.email != null && parameters.password != null) {
 			bcrypt.genSalt(saltRounds, function(error, salt) {
 				if (error) {
 					console.log(error);

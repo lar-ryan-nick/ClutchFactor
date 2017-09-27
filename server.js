@@ -331,11 +331,24 @@ const server = http.createServer(function (request, response) {
 		case '/addToCart':
 			if (cookies.cart != null) {
 				cookies.cart = JSON.parse(cookies.cart);
-				cookies.cart.push(parameters.productid);
-				response.writeHead(200, {
-					"Content-Type": "text/plain",
-					"Set-Cookie": "cart=" + JSON.stringify(cookies.cart) + "; HttpOnly; Max-Age=2592000"
-				});
+				let found = false;
+				for (let i = 0; i < cookies.cart.length; ++i) {
+					if (cookies.cart[i] == parameters.productid) {
+						found = true;
+						break;
+					}
+				}
+				if (found) {
+					response.writeHead(200, {"Content-Type": "text/plain"});
+					response.write("You already have added that item to your cart. If you would like to increase your quantity of that item you can do so at checkout by clicking on the cart icon");
+					response.end();
+				} else {
+					cookies.cart.push(parameters.productid);
+					response.writeHead(200, {
+						"Content-Type": "text/plain",
+						"Set-Cookie": "cart=" + JSON.stringify(cookies.cart) + "; HttpOnly; Max-Age=2592000"
+					});
+				}
 			} else {
 				response.writeHead(200, {
 					"Content-Type": "text/plain",
