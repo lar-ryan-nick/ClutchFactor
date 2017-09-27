@@ -23,7 +23,7 @@ class ShippingForm extends React.Component {
 					<p className="textInput">State</p>
 					<input className="textInput" type="text" name="state" value={this.props.info.state} onChange={this.props.handleChange}/>
 					<p className="textInput">Zip Code</p>
-					<input className="textInput" type="number" name="zip" value={this.props.info.zip} onChange={this.props.handleChange}/>
+					<input className="textInput" type="text" name="zip" value={this.props.info.zip} onChange={this.props.handleChange}/>
 					<input className="submitInfo" type="submit" name="submit" value="Ship here"/>
 				</form>
 			</div>
