@@ -343,6 +343,7 @@ const server = http.createServer(function (request, response) {
 					response.writeHead(200, {"Content-Type": "text/plain"});
 					response.write("You already have added that item to your cart. If you would like to increase your quantity of that item you can do so at checkout by clicking on the cart icon");
 					response.end();
+					break;
 				} else {
 					cookies.cart.push(parameters.productid);
 					response.writeHead(200, {
